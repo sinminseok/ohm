@@ -38,14 +38,6 @@ public class AdminService {
         return id;
     }
 
-    //제휴중인 모든 헬스장조회
-//    public List<GymDto> findall_Gym() {
-//        List<Gym> gyms = gymRepository.findAll();
-//        List<GymDto> gymDtos = new ArrayList<GymDto>();
-//        for (Gym gym : gyms) {
-//            gymDtos.add(appConfig.modelMapper().map(gym,GymDto.class));
-//        }
-//    }
 
 
 }

@@ -34,5 +34,12 @@ public class Manager{
     @OneToMany(mappedBy = "manager",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Gym> gyms = new ArrayList<Gym>();
 
+    public void update(Manager update){
+        this.id = update.id;
+        this.name = update.name;
+        this.age = update.age;
+        this.email = update.email;
+    }
+
 
 }
