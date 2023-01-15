@@ -14,14 +14,19 @@ spring:
 
   jpa:
     hibernate:
-          ddl-auto: create
+      ddl-auto: create
     properties:
       hibernate:
         #        ? ??? ???? ????? ??? ??? ???? ??? size?? IN??? ????.
         #        default_batch_fetch_size:1000
-        #        show-sql:true
+        show-sql:true
         format_sql = true
 
 logging.level:
   org.hirbernate.SQL: debug
 #  org.hibernate.type: trace
+
+jwt:
+  header: Authorization
+  secret: Z2ZkZmdkZmxrZ2pkbGZrZ2pzYXNkamtoYXNrZGphaHNka2fahgvfahvduyasdffjkhsgdfjkhasgfjkphaGRhc2Rhc2Rhc2Rhc2Rhc2ZhZmdzZAo=
+  access-token-validity-in-seconds: 86400

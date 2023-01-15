@@ -36,8 +36,17 @@ public class GymDto {
         this.current_count = current_count;
     }
 
-    public int increase_count(){
+    //GymDto save entity 생성자ㅣ
+    public GymDto(String name,String address,int count,ManagerDto managerDto){
+        this.name = name;
+        this.address = address;
+        this.count = count;
+        this.manager = managerDto;
+    }
 
+    public int increase_count(){
+        System.out.println("호출ㄹ");
+        System.out.println(this.current_count);
         this.current_count = this.current_count + 1;
         return current_count;
     }

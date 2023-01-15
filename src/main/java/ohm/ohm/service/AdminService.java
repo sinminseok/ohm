@@ -5,18 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.AdminDto;
-import ohm.ohm.dto.GymDto;
 import ohm.ohm.entity.Admin;
-import ohm.ohm.entity.Gym;
 import ohm.ohm.repository.AdminRepository;
 import ohm.ohm.repository.GymRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 
 @Service

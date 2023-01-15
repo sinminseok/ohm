@@ -22,3 +22,8 @@ Trainer - CRUD, Gym으로 Trainer 조회
 
 
 CRUD 메서드는 save,find,update,delete로 고정한다.
+
+Manager - 로그인기능은 Spring Security Jwt Rest api를 사용해 구현한다 ,매니저의 모든 요청은 JWT 토큰을 Header에 담아
+요청을 보내고 인증한다.
+
+ADMIN은 코무무(본인) 계정이므로 걍 DB에 박아주자 ㅋ

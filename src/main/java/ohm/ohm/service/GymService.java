@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.entity.Gym;
-import ohm.ohm.entity.Manager;
 import ohm.ohm.repository.GymRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -78,17 +75,14 @@ public class GymService {
 
     //현재 인원 추가 method
     @Transactional
-    public int increase_count(Long id) throws Exception {
-        GymDto gymdto = findById(id);
-        System.out.println(gymdto.getName());
-        return gymdto.increase_count();
+    public void increase_count(Long id) throws Exception {
+        gymRepository.increase_count(id);
     }
 
     //현재 인원 감소 method
     @Transactional
-    public int decrease_count(Long id) throws Exception {
-        GymDto gymdto = findById(id);
-        return gymdto.decrease_count();
+    public void decrease_count(Long id) throws Exception {
+        gymRepository.decrease_count(id);
     }
 
 

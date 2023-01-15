@@ -1,33 +1,95 @@
-//package ohm.ohm.config;
-//
-//
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration
+package ohm.ohm.config;
+
+
+import lombok.RequiredArgsConstructor;
+import ohm.ohm.jwt.JwtAccessDeniedHandler;
+import ohm.ohm.jwt.JwtAuthenticationEntry;
+import ohm.ohm.jwt.JwtSecurityConfig;
+import ohm.ohm.jwt.TokenProvider;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
+@Configuration
 //@RequiredArgsConstructor
-//@EnableWebSecurity
-//public class SecurityConfig {
-//
-//    private final UserDetailsService userDetailsService;
-//
-//    @Bean
-//    public BCryptPasswordEncoder encodePwe(){
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//
-////    @Bean
-////    protected SecurityFilterChain configure(HttpSecurity http) throws Exception{
-////        http.csrf().disable();
-////        http.logout()
-////                .logoutUrl("/logout");
-////        http.authorizeRequests();
-////    }
-//}
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize어노테이션 사용을 위해 선언
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final TokenProvider tokenProvider;
+
+    //에러 반환 클래스들 선언후 주입
+    private final JwtAuthenticationEntry jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    public SecurityConfig(
+            TokenProvider tokenProvider,
+            JwtAuthenticationEntry jwtAuthenticationEntryPoint,
+            JwtAccessDeniedHandler jwtAccessDeniedHandler
+    ) {
+        this.tokenProvider = tokenProvider;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+    }
+
+
+    // BCryptPasswordEncoder 라는 패스워드 인코더 사용
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    //h2-console 하위 모든 요청들과 파비콘 관련 요청은 Spring Security 로직을ㅇ수행하지 않도록
+    @Override
+    public void configure(WebSecurity web){
+        web.ignoring()
+                .antMatchers(
+                        "/h2/**"
+                        ,"/favicon.ico"
+                        ,"/error"
+                );
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf().disable()
+                .exceptionHandling()
+                //Exception을 핸들링할때 우리가 만들었던 클래스들을 추가해준다.
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
+
+                //세션을 사용하지 않음
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/gym/count/{gymId}","/api/gym/count_increase/{gymId}","/api/gym/count_decrease/{gymId}","/api/gym/count").permitAll()
+                .antMatchers("/api/manager/signup","/api/manager/login").permitAll() // 회원가입 경로는 인증없이 호출 가능
+                .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
+
+                .and()
+                .apply(new JwtSecurityConfig(tokenProvider));
+    }
+
+
+}
