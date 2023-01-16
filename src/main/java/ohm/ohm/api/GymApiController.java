@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -34,16 +35,26 @@ public class GymApiController {
         return ResponseEntity.ok(save);
     }
 
+    //모든헬스장 조회
+    @GetMapping("/gym/findall")
+    public ResponseEntity<List<GymDto>> findall() throws Exception{
+        List<GymDto> findall = gymService.findall();
+        return ResponseEntity.ok(findall);
+    }
+
+    //이름으로 헬스장 조회
+    @GetMapping("/gym/findByName/{gymName}")
+    public ResponseEntity<List<GymDto>> findByName(@PathVariable String gymName)  throws Exception{
+        List<GymDto> byName = gymService.findByName(gymName);
+        return ResponseEntity.ok(byName);
+    }
+
     //ID로 헬스장 조회(클라이언트에서 ID값을 가지고 있어야함)
     @GetMapping("/gym/find/{gymId}")
     public ResponseEntity<GymDto> findById(@PathVariable Long gymId) throws Exception{
          return ResponseEntity.ok(gymService.findById(gymId));
     }
 
-    @PostMapping("/gym/update/{gymId}")
-    public ResponseEntity<GymDto> updateGym(@PathVariable Long gymIdm,@RequestBody GymDto updateGymDto) throws Exception{
-
-    }
 
     //현재 헬스장 인원
     @GetMapping("/gym/count/{gymId}")

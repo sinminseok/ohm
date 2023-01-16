@@ -3,10 +3,12 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.TrainerDto;
+import ohm.ohm.entity.Authority;
 import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.Trainer;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.TrainerRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +24,30 @@ public class TrainerService {
     private final TrainerRepository trainerRepository;
     private final GymRepository gymRepository;
     private final AppConfig appConfig;
+    private final PasswordEncoder passwordEncoder;
 
 
-    //trainer 등록 및 소개 - manager가 등록
+    //Manger가 등록 - 가입코드 부여
+   @Transactional
+   public TrainerDto signup(TrainerDto trainerDto,Long gymId){
+       if(trainerRepository.findOneWithAuthoritiesByName(trainerDto.getName()).orElse(null) != null){
+           throw new RuntimeException("이미 가입되어 있는 트레이너입니다.");
+       }
+
+       Optional<Gym> gym = gymRepository.findById(gymId);
+
+       Authority authority = Authority.builder()
+               .authorityName("ROLE_TRAINER")
+               .build();
+
+       Trainer trainer = new Trainer(trainerDto.getName(),passwordEncoder.encode(trainerDto.getPassword()),trainerDto.getSex(),gym.get());
+       Trainer save = trainerRepository.save(trainer);
+       return appConfig.modelMapper().map(save,TrainerDto.class);
+   }
+
+
+
+
     @Transactional
     public Long save(TrainerDto trainerDto) {
         Trainer trainer = appConfig.modelMapper().map(trainerDto, Trainer.class);

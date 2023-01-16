@@ -30,4 +30,13 @@ public class PostDto {
     }
 
 
+    //Post 저장 생성자
+    public PostDto(String title,String content,GymDto gymDto){
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.gym = gymDto;
+    }
+
+
 }

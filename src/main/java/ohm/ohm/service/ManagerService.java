@@ -48,7 +48,7 @@ public class ManagerService implements UserDetailsService {
     @Transactional
     public ManagerDto signup(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
 
         Authority authority = Authority.builder()

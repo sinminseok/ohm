@@ -11,13 +11,14 @@ import javax.persistence.*;
 @Getter
 public class Trainer {
 
-
     @Id
     @GeneratedValue
     @Column(name = "post_id")
     private Long id;
 
     private String name;
+
+    private String password;
 
     private String profile;
 
@@ -27,6 +28,13 @@ public class Trainer {
     @ManyToOne
     @JoinColumn(name = "gym_id")
     private Gym gym;
+
+    public Trainer(String name,String password,Sex sex,Gym gym){
+        this.name = name;
+        this.password = password;
+        this.sex = sex;
+        this.gym  = gym;
+    }
 
     public void update(TrainerDto trainerDto){
         this.id = trainerDto.getId();

@@ -12,6 +12,8 @@ public class TrainerDto {
 
     private String name;
 
+    private String password;
+
     private String profile;
 
     private Sex sex;
