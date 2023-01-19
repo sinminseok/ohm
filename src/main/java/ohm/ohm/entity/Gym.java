@@ -25,18 +25,22 @@ public class Gym {
 
     private String img;
 
+    private int code;
+
     //헬스장 현재 인원
     private int current_count;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
-    private Manager manager;
+
+
+    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    private List<Manager> managers = new ArrayList<Manager>();
+
 
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Post> posts = new ArrayList<Post>();
 
-    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
-    private List<Trainer> trainers = new ArrayList<Trainer>();
+//    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
+//    private List<Trainer> trainers = new ArrayList<Trainer>();
 
 
 

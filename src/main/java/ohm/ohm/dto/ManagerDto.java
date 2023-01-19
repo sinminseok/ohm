@@ -26,7 +26,7 @@ public class ManagerDto {
 
     private AdminDto admin;
 
-    private List<GymDto> gyms = new ArrayList<GymDto>();
+    private GymDto gymDto;
 
     private Set<Authority> authorities;
 

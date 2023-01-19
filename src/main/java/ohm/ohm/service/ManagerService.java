@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.entity.Authority;
+import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.Manager;
 import ohm.ohm.jwt.TokenProvider;
 import ohm.ohm.repository.GymRepository;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +46,16 @@ public class ManagerService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Transactional
+    public List<Manager> findTrainer_byGymId(Long gymId){
+        Optional<Gym> byId = gymRepository.findById(gymId);
+        List<Manager> managers = byId.get().getManagers();
+        return managers;
+    }
+
     //메서드 이름은 추후 signup --> save로 변경
     @Transactional
-    public ManagerDto signup(ManagerDto managerDto) {
+    public ManagerDto manager_signup(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
@@ -62,22 +71,30 @@ public class ManagerService implements UserDetailsService {
     }
 
     @Transactional
-    public Optional<Manager> getManagerrWithAuthorities(String name) {
+    public ManagerDto trainer_signup(ManagerDto managerDto) {
+        if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
+            throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
+        }
+
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_TRAINER")
+                .build();
+
+        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()), managerDto.getAge(), managerDto.getEmail(), Collections.singleton(authority));
+        Manager save_manager = managerRepository.save(manager);
+        return appConfig.modelMapper().map(save_manager, ManagerDto.class);
+
+    }
+
+    @Transactional
+    public Optional<Manager> getManagerrWithAuthorities(String name){
         return managerRepository.findOneWithAuthoritiesByName(name);
     }
 
-    //현재 시큐리티에 담겨져있는 username을 가져온다.
+    //현재 시큐리티에 담겨져있는
     @Transactional
     public ManagerDto getMyManagerWithAuthorities() {
         return appConfig.modelMapper().map(SecurityUtils.getCurrentUsername().flatMap(managerRepository::findOneWithAuthoritiesByName).get(), ManagerDto.class);
-    }
-
-
-    //매니저(헬스장 관리자) - 추후 부여된 가입코드로 가입
-    @Transactional
-    public Long save(ManagerDto managerDto) {
-        Manager manager = appConfig.modelMapper().map(managerDto, Manager.class);
-        return managerRepository.save(manager).getId();
     }
 
 

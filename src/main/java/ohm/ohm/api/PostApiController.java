@@ -9,10 +9,12 @@ import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -28,7 +30,9 @@ public class PostApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
+    //manager or trainer가 등록
     @PostMapping("/post/save/{gymId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<String> save(@PathVariable Long gymId, @Valid @RequestBody PostDto para_postDto) throws Exception {
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
         GymDto byId = gymService.findById(gymId);
@@ -37,10 +41,23 @@ public class PostApiController {
         return ResponseEntity.ok("success");
     }
 
-//    @GetMapping("/post/findall/{gymId}")
-//    public ResponseEntity<> findall(@PathVariable Long gymId){
-//        postService.findall()
-//    }
+    //헬스장에 등록된 모든 Post 조회
+    @GetMapping("/posts/{gymId}")
+    public ResponseEntity<List<PostDto>> findall(@PathVariable Long gymId){
+        List<PostDto> findall = postService.findall(gymId);
+        return ResponseEntity.ok(findall);
+    }
+
+    //Post 조회 findByID
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostDto> findById(@PathVariable Long postId){
+        PostDto byId = postService.findById(postId);
+        return ResponseEntity.ok(byId);
+    }
+
+
+
+
 
 
 }

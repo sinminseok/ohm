@@ -28,9 +28,8 @@ public class GymApiController {
     @PostMapping("/gym/save")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save(@Valid @RequestBody GymDto gymDto){
-
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
-        GymDto saveGymDto = new GymDto(gymDto.getName(),gymDto.getAddress(),gymDto.getCount(),managerDto);
+        GymDto saveGymDto = new GymDto(gymDto.getName(),gymDto.getAddress(),gymDto.getCount(),gymDto.getCode());
         Long save = gymService.save(saveGymDto);
         return ResponseEntity.ok(save);
     }

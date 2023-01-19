@@ -52,7 +52,8 @@ public class GymServiceTest {
         GymDto gymDto = new GymDto("TEST",10,5);
         Long save = gymService.save(gymDto);
 
-        GymDto byId = gymService.findById(save);
+        GymDto byId = gymService.findById(2L);
+        System.out.println("byIdbyId ="+byId.getId());
 
     }
 

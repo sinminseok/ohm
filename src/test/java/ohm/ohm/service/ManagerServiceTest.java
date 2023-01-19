@@ -27,25 +27,30 @@ public class ManagerServiceTest {
     @Test
     public void save_test(){
         ManagerDto managerDto = new ManagerDto("admin","admin");
-        Long save = managerService.save(managerDto);
-        Assertions.assertThat(save).isNotNull();
+        ManagerDto managerDto1 = managerService.manager_signup(managerDto);
+        Assertions.assertThat(managerDto1).isNotNull();
     }
 
     @Test
     public void findById_test(){
         ManagerDto managerDto = new ManagerDto("name","email");
-        Long save = managerService.save(managerDto);
-        ManagerDto byID = managerService.findByID(save);
+        ManagerDto managerDto1 = managerService.manager_signup(managerDto);
+        ManagerDto byID = managerService.findByID(managerDto1.getId());
         Assertions.assertThat(byID.getName()).isEqualTo("name");
     }
 
     @Test
     public void update_test(){
         ManagerDto managerDto = new ManagerDto("name","email");
-        Long save = managerService.save(managerDto);
-        ManagerDto updateDto = new ManagerDto(save,"change_name","change_email");
+        ManagerDto managerDto1 = managerService.manager_signup(managerDto);
+        ManagerDto updateDto = new ManagerDto(managerDto1.getId(),"change_name","change_email");
         Optional<Manager> update = managerService.update(updateDto);
         Assertions.assertThat(update.get().getName()).isEqualTo("change_name");
+    }
+
+    @Test
+    public void testt(){
+        managerService.findTrainer_byGymId(2L);
     }
 
 

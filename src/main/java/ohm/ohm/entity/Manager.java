@@ -1,6 +1,7 @@
 package ohm.ohm.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,15 @@ import java.util.Set;
 public class Manager{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     @Column(name = "manager_id")
     private Long id;
 
-    //이름
+    //로그인에 사용할 변수
     private String name;
+
+    //실제이름
+    private String nickname;
 
     private Integer age;
 
@@ -45,8 +49,10 @@ public class Manager{
     private Admin admin;
 
     //cascade 랑 orphanRemoval을 함께 사용하면 부모 객체 삭제시 연관된 자식 객체도 삭제
-    @OneToMany(mappedBy = "manager",cascade = CascadeType.PERSIST,orphanRemoval = true)
-    private List<Gym> gyms = new ArrayList<Gym>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gym_id")
+    private Gym gym;
+
 
     public void update(Manager update){
         this.id = update.id;

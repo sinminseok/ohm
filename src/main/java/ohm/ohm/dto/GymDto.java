@@ -1,9 +1,7 @@
 package ohm.ohm.dto;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.entity.Gym;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +19,16 @@ public class GymDto {
 
     private String img;
 
+    private int code;
+
     private int current_count;
 
-    private ManagerDto manager;
+    @JsonIgnore
+    private ArrayList<ManagerDto> manager = new ArrayList<>();
+
 
     private List<PostDto> posts = new ArrayList<PostDto>();
 
-    private List<TrainerDto> trainers = new ArrayList<TrainerDto>();
 
     //테스트용 생성자
     public GymDto(String name,int count,int current_count){
@@ -37,16 +38,15 @@ public class GymDto {
     }
 
     //GymDto save entity 생성자ㅣ
-    public GymDto(String name,String address,int count,ManagerDto managerDto){
+    public GymDto(String name,String address,int count,int code){
         this.name = name;
         this.address = address;
         this.count = count;
-        this.manager = managerDto;
+        this.code = code;
+        //this.manager = managerDto.getGymDto().getManager();
     }
 
     public int increase_count(){
-        System.out.println("호출ㄹ");
-        System.out.println(this.current_count);
         this.current_count = this.current_count + 1;
         return current_count;
     }

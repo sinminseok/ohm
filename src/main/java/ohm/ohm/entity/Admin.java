@@ -19,6 +19,8 @@ public class Admin {
 
     private String name;
 
+    private String nickname;
+
 
     private String password;
 

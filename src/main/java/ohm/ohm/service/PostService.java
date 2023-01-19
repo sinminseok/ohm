@@ -34,8 +34,8 @@ public class PostService {
 
 
     //헬스장 id로 모든 post조회
-    public List<PostDto> findall(Long id) {
-        List<Post> by_gymId = postRepository.findBy_gymId(id);
+    public List<PostDto> findall(Long gymid) {
+        List<Post> by_gymId = postRepository.findBy_gymId(gymid);
         List<PostDto> postDtos = new ArrayList<PostDto>();
 
         for(Post element : by_gymId){

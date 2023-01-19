@@ -1,6 +1,7 @@
 package ohm.ohm.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ public class PostDto {
 
     private String img;
 
+    @JsonIgnore
     private GymDto gym;
 
     public PostDto(String title,String content){

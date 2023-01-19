@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
-//@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize어노테이션 사용을 위해 선언
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -84,7 +83,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/gym/count/{gymId}","/api/gym/count_increase/{gymId}","/api/gym/count_decrease/{gymId}","/api/gym/count").permitAll()
-                .antMatchers("/api/manager/signup","/api/manager/login").permitAll() // 회원가입 경로는 인증없이 호출 가능
+                .antMatchers("/api/manager/signup","/api/manager/login","/api/manager/trainer/signup").permitAll()
+                .antMatchers("/api/trainer/login","/api/trainer/signup/{gymId}","/api/trainer/{trainerId}","/api/trainer/gym/{gymId}").permitAll()
+                .antMatchers("/api/posts/{gymId}","/api/post/{postId}","/api/manager/trainer/signup").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
 
                 .and()
