@@ -4,6 +4,7 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
+import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.entity.Authority;
 import ohm.ohm.entity.Gym;
@@ -52,6 +53,11 @@ public class ManagerService implements UserDetailsService {
         List<Manager> managers = byId.get().getManagers();
         return managers;
     }
+
+//    @Transactional
+//    public GymDto refister_gym(GymDto gymDto){
+//
+//    }
 
     //메서드 이름은 추후 signup --> save로 변경
     @Transactional
@@ -107,10 +113,22 @@ public class ManagerService implements UserDetailsService {
 
     //매니저 정보수정
     public Optional<Manager> update(ManagerDto updateDto) {
+        //업데이트될 정보
         Manager map = appConfig.modelMapper().map(updateDto, Manager.class);
+
+        //기본 manager 조회
         Optional<Manager> byId = managerRepository.findById(updateDto.getId());
+
+      //update생성자로 변경감지
         byId.get().update(map);
         return byId;
+    }
+
+
+    @Transactional
+    public void register_gym(Long gymId,Long manager_id){
+        managerRepository.registerByGymId(manager_id,gymId);
+
     }
 
 

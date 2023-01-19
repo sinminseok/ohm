@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -31,6 +32,10 @@ public class GymApiController {
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
         GymDto saveGymDto = new GymDto(gymDto.getName(),gymDto.getAddress(),gymDto.getCount(),gymDto.getCode());
         Long save = gymService.save(saveGymDto);
+
+        managerService.register_gym(save, managerDto.getId());
+
+
         return ResponseEntity.ok(save);
     }
 

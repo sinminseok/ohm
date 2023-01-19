@@ -18,4 +18,9 @@ public interface ManagerRepository extends JpaRepository<Manager,Long> {
     Optional<Manager> findOneWithAuthoritiesByName(String name);
 
 
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update Manager m set m.gym_id = :gym_id where m.manager_id =:manager_id",nativeQuery = true)
+    void registerByGymId(@Param("manager_id")Long manager_id,@Param("gym_id")Long gym_id);
+
+
 }

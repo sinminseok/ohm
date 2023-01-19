@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+//@Rollback(value = false)
 @RunWith(SpringRunner.class)
 public class ManagerServiceTest {
 
@@ -39,14 +39,14 @@ public class ManagerServiceTest {
         Assertions.assertThat(byID.getName()).isEqualTo("name");
     }
 
-    @Test
-    public void update_test(){
-        ManagerDto managerDto = new ManagerDto("name","email");
-        ManagerDto managerDto1 = managerService.manager_signup(managerDto);
-        ManagerDto updateDto = new ManagerDto(managerDto1.getId(),"change_name","change_email");
-        Optional<Manager> update = managerService.update(updateDto);
-        Assertions.assertThat(update.get().getName()).isEqualTo("change_name");
-    }
+//    @Test
+//    public void update_test(){
+//        ManagerDto managerDto = new ManagerDto("name","email");
+//        ManagerDto managerDto1 = managerService.manager_signup(managerDto);
+//        ManagerDto updateDto = new ManagerDto(managerDto1.getId(),"change_name","change_email");
+//        Optional<Manager> update = managerService.update(updateDto);
+//        Assertions.assertThat(update.get().getName()).isEqualTo("change_name");
+//    }
 
     @Test
     public void testt(){

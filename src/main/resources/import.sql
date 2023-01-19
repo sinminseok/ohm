@@ -1,6 +1,6 @@
 
 --Gym 등록
-INSERT INTO GYM(GYM_ID, ADDRESS, COUNT, CURRENT_COUNT, IMG, NAME) VALUES (2,'오목로11길5', 30 , 0,'이미지경로','케렌시아');
+INSERT INTO GYM(GYM_ID, ADDRESS, COUNT, CURRENT_COUNT,CODE, IMG, NAME) VALUES (2,'오목로11길5', 30 , 0,1234,'이미지경로','케렌시아');
 
 --manager 등록
 --아이디 manager 비번 admin

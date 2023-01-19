@@ -29,8 +29,7 @@ public class Gym {
 
     //헬스장 현재 인원
     private int current_count;
-
-
+    
 
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Manager> managers = new ArrayList<Manager>();

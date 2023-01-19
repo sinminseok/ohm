@@ -30,6 +30,15 @@ public class ManagerDto {
 
     private Set<Authority> authorities;
 
+    public ManagerDto(Long id,String name,String email,String password,Integer age,GymDto gymDto,Set<Authority> authorities){
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.age=age;
+        this.gymDto = gymDto;
+        this.authorities = authorities;
+    }
+
     public ManagerDto(String name,String email){
         this.name = name;
         this.email = email;

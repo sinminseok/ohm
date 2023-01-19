@@ -61,6 +61,10 @@ public class Manager{
         this.email = update.email;
     }
 
+    public void register_gym(Gym gym){
+        this.gym = gym;
+    }
+
     public Manager(String name,String password,Integer age,String email,Set<Authority> authorities){
         this.name = name;
         this.password = password;
