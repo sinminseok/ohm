@@ -19,10 +19,9 @@ public class Admin {
 
     private String name;
 
-    private String nickname;
-
-
     private String password;
+
+    private String nickname;
 
     //email로 회원가입
     private String email;

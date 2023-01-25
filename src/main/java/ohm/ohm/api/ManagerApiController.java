@@ -49,19 +49,19 @@ public class ManagerApiController {
     }
 
     //manager 계정 생성
-    @PostMapping("/manager/signup")
+    @PostMapping("/manager")
     public ResponseEntity<ManagerDto> manager_signup(@Valid @RequestBody ManagerDto managerDto){
-        return ResponseEntity.ok(managerService.manager_signup(managerDto));
+        return ResponseEntity.ok(managerService.manager_save(managerDto));
     }
 
     //manager_trainer 계정생성
-    @PostMapping("/manager/trainer/signup")
+    @PostMapping("/trainer")
     public ResponseEntity<ManagerDto> trainer_signup(@Valid @RequestBody ManagerDto managerDto){
-        return ResponseEntity.ok(managerService.trainer_signup(managerDto));
+        return ResponseEntity.ok(managerService.trainer_save(managerDto));
     }
 
 
-    //READ
+    //현재 로그인된 Manager 정보조회
     @GetMapping("/manager")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<ManagerDto> getManagerInfo(){

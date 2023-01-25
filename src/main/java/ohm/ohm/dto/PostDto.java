@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
-public class PostDto {
+public class PostDto extends BaseDto{
 
     private Long id;
 
@@ -15,7 +17,7 @@ public class PostDto {
 
     private String content;
 
-    private String img;
+    private List<PostImgDto> imgs;
 
     @JsonIgnore
     private GymDto gym;

@@ -21,8 +21,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PostService {
 
-    private final PostRepository postRepository;
     private final GymRepository gymRepository;
+    private final PostRepository postRepository;
     private final AppConfig appConfig;
 
     //글 등록 - manager가 사용
@@ -55,7 +55,7 @@ public class PostService {
     public Optional<Post> update(PostDto updateDto) {
         Post update = appConfig.modelMapper().map(updateDto, Post.class);
         Optional<Post> byId = postRepository.findById(update.getId());
-        byId.get().update(updateDto);
+        byId.get().update(update);
         return byId;
     }
 

@@ -53,7 +53,6 @@ public class GymServiceTest {
         Long save = gymService.save(gymDto);
 
         GymDto byId = gymService.findById(2L);
-        System.out.println("byIdbyId ="+byId.getId());
 
     }
 

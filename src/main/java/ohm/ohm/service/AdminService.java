@@ -25,7 +25,7 @@ public class AdminService {
     //Admin 계정 생성 service
     //추후 Spring security로 로그인 로직 구현
     @Transactional
-    public Long join(AdminDto adminDto){
+    public Long save(AdminDto adminDto){
         Admin admin = appConfig.modelMapper().map(adminDto, Admin.class);
         Long id = adminRepository.save(admin).getId();
         return id;

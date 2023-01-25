@@ -25,7 +25,8 @@ public class PostApiController {
 
     private final ManagerService managerService;
 
-    private GymService gymService;
+
+    private final GymService gymService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -35,7 +36,9 @@ public class PostApiController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<String> save(@PathVariable Long gymId, @Valid @RequestBody PostDto para_postDto) throws Exception {
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
+
         GymDto byId = gymService.findById(gymId);
+
         PostDto postDto = new PostDto(para_postDto.getTitle(),para_postDto.getContent(),byId);
         Long save = postService.save(postDto);
         return ResponseEntity.ok("success");

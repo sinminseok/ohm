@@ -2,23 +2,32 @@ package ohm.ohm.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class GymDto {
+public class GymDto extends BaseTimeDto{
 
     private Long id;
-
+    @NotNull
+    @Size(min = 1,max = 50)
     private String name;
 
+    @NotNull
+    @Size(min = 1,max = 50)
     private String address;
 
+    //헬스장 총 인원
     private int count;
 
-    private String img;
+    private List<GymImgDto> img;
 
+    @NotNull
+    @Size(min = 1,max = 5)
     private int code;
 
     private int current_count;

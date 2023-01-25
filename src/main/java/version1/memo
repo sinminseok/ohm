@@ -1,13 +1,11 @@
 
 오헬몇 version 1 기능 명세서
 
-Admin(통합관리자-코무무) 기능 - Manager 생성,조회,삭제
+Admin(통합관리자-코무무) 기능 - 조회,삭제
 
-Manager(헬스장관리자) 기능 - 헬스장(Gym)(CRUD) , 게시물(Post)작성 , 트레이너(Trainer) 등록
+Manager(헬스장관리자) 기능 - 헬스장(Gym)(CRUD) -- Trainer는 생성불가 , 게시물(Post)작성 -- Trainer,Manager둘다 사용
 
-Gym(헬스장) 기능 - 헬스장 현재 인원 노출,시간대별 인구밀집도 자료 노출(그래프)
-
-Trainer(헬스장 소속 트레이너) 기능 - 자기소개
+Gym(헬스장) 기능 - 헬스장 현재 인원 노출 , 시간대별 인구밀집도 자료 노출(그래프)
 
 Post(헬스장 공지사항) 기능 - CRUD(Manager 가 제어)
 
@@ -15,11 +13,11 @@ Post(헬스장 공지사항) 기능 - CRUD(Manager 가 제어)
 Service 구현 기능
 
 AdminService - Admin 계정 생성
-ManagerService - CRUD
-GymService - 현재 헬스장 인원현황 데이터 뿌리기기능(주기능) , CRUD - manager와 연관관계
+ManagerService - CRUD, ROLE을 이용해 Trainer와 Manager을 역할 분리
+GymService - 현재 헬스장 인원현황 데이터 뿌리기기능(주기능) , CRUD
 PostService - CRUD , Gym으로 Post 조회
-Trainer - CRUD, Gym으로 Trainer 조회
 
+계정 Entity에서 name,password 로 로그인 정보를 확인한다.(id는 걍 PK)
 
 CRUD 메서드는 save,find,update,delete로 고정한다.
 

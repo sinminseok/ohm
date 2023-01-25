@@ -39,11 +39,6 @@ public class ManagerService implements UserDetailsService {
     private final ManagerRepository managerRepository;
     private final GymRepository gymRepository;
     private final AppConfig appConfig;
-
-
-    //JWT
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -54,14 +49,10 @@ public class ManagerService implements UserDetailsService {
         return managers;
     }
 
-//    @Transactional
-//    public GymDto refister_gym(GymDto gymDto){
-//
-//    }
 
-    //메서드 이름은 추후 signup --> save로 변경
+    //manager 회원가입
     @Transactional
-    public ManagerDto manager_signup(ManagerDto managerDto) {
+    public ManagerDto manager_save(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
@@ -70,14 +61,16 @@ public class ManagerService implements UserDetailsService {
                 .authorityName("ROLE_MANAGER")
                 .build();
 
-        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()), managerDto.getAge(), managerDto.getEmail(), Collections.singleton(authority));
+        //String name,String password,String nickname,String profile,String oneline_introduce,String introduce,Integer age,String email,Set<Authority> authorities
+        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()),managerDto.getNickname(),managerDto.getProfile(),managerDto.getOneline_introduce(),managerDto.getIntroduce() , managerDto.getAge(),managerDto.getEmail(), Collections.singleton(authority));
         Manager save_manager = managerRepository.save(manager);
         return appConfig.modelMapper().map(save_manager, ManagerDto.class);
 
     }
 
+    //trainer 회원가입
     @Transactional
-    public ManagerDto trainer_signup(ManagerDto managerDto) {
+    public ManagerDto trainer_save(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
@@ -86,18 +79,14 @@ public class ManagerService implements UserDetailsService {
                 .authorityName("ROLE_TRAINER")
                 .build();
 
-        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()), managerDto.getAge(), managerDto.getEmail(), Collections.singleton(authority));
+        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()),managerDto.getNickname(),managerDto.getProfile(),managerDto.getOneline_introduce(),managerDto.getIntroduce() , managerDto.getAge(),managerDto.getEmail(), Collections.singleton(authority));
         Manager save_manager = managerRepository.save(manager);
         return appConfig.modelMapper().map(save_manager, ManagerDto.class);
 
     }
 
-    @Transactional
-    public Optional<Manager> getManagerrWithAuthorities(String name){
-        return managerRepository.findOneWithAuthoritiesByName(name);
-    }
 
-    //현재 시큐리티에 담겨져있는
+    //현재 시큐리티에 담겨져있는 계정 권한 가져오는 메서드
     @Transactional
     public ManagerDto getMyManagerWithAuthorities() {
         return appConfig.modelMapper().map(SecurityUtils.getCurrentUsername().flatMap(managerRepository::findOneWithAuthoritiesByName).get(), ManagerDto.class);

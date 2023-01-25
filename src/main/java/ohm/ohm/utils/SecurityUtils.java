@@ -16,7 +16,6 @@ public class SecurityUtils {
 
     }
 
-
     public static Optional<String> getCurrentUsername(){
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

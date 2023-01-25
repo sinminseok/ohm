@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class ManagerDto {
+public class ManagerDto extends BaseTimeDto{
 
     private Long id;
 
@@ -22,7 +22,15 @@ public class ManagerDto {
 
     private String password;
 
-    private Integer age;
+    private String nickname;
+
+    private String profile;
+
+    private String oneline_introduce;
+
+    private String introduce;
+
+    private int age;
 
     private AdminDto admin;
 
@@ -30,6 +38,7 @@ public class ManagerDto {
 
     private Set<Authority> authorities;
 
+    //
     public ManagerDto(Long id,String name,String email,String password,Integer age,GymDto gymDto,Set<Authority> authorities){
         this.id = id;
         this.name = name;

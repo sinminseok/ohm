@@ -2,13 +2,13 @@ package ohm.ohm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import ohm.ohm.dto.PostDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
-public class Post {
+public class Post extends BaseEntity{
 
 
     @Id
@@ -21,19 +21,19 @@ public class Post {
     private String content;
 
     //추후 이미지 list로 변경
-    private String img;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    private List<PostImg> imgs;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
-    public void update(PostDto postDto){
-        this.id = postDto.getId();
-        this.title = postDto.getTitle();
-        this.content = postDto.getContent();
-        this.img = postDto.getImg();
-//        this.gym = postDto.gym;
+    public void update(Post post){
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.imgs = post.getImgs();
     }
 
 }
