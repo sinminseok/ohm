@@ -1,7 +1,10 @@
 package ohm.ohm.entity;
 
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Gym extends BaseTimeEntity{
 
     @Id
@@ -16,8 +20,10 @@ public class Gym extends BaseTimeEntity{
     @Column(name = "gym_id")
     private Long id;
 
+    //헬스장이름
     private String name;
 
+    //헬스장주소
     private String address;
 
     //헬스장 총인원
@@ -30,10 +36,12 @@ public class Gym extends BaseTimeEntity{
     //트레이너가 가입시 해당 code로 인증후 어느 헬스장인지 식별
     private int code;
 
+    //헬스장 소개 문구
+    private String introduce;
+
     //헬스장 현재 인원
     private int current_count;
 
-    //cascade 랑 orphanRemoval을 함께 사용하면 부모 객체 삭제시 연관된 자식 객체도 삭제
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Manager> managers = new ArrayList<Manager>();
 
@@ -43,5 +51,22 @@ public class Gym extends BaseTimeEntity{
 
 
 
+    @Builder
+    public Gym(String name,String address,int count,int code,String introduce){
+        this.name = name;
+        this.address = address;
+        this.introduce = introduce;
+        this.count = count;
+        this.code = code;
+    }
+
+    //Gym에서 파일 처리를 위한 메서드
+    public void addImg(GymImg gymImg){
+        this.imgs.add(gymImg);
+
+        if(gymImg.getGym() != this){
+            gymImg.setGym(this);
+        }
+    }
 
 }

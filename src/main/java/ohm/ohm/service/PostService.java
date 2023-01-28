@@ -21,11 +21,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PostService {
 
-    private final GymRepository gymRepository;
+
     private final PostRepository postRepository;
     private final AppConfig appConfig;
 
-    //글 등록 - manager가 사용
+    //글 등록 - manager,trainer가 사용
     @Transactional
     public Long save(PostDto postDto) {
         Post post = appConfig.modelMapper().map(postDto, Post.class);
@@ -37,14 +37,13 @@ public class PostService {
     public List<PostDto> findall(Long gymid) {
         List<Post> by_gymId = postRepository.findBy_gymId(gymid);
         List<PostDto> postDtos = new ArrayList<PostDto>();
-
         for(Post element : by_gymId){
             postDtos.add(appConfig.modelMapper().map(element,PostDto.class));
         }
         return postDtos;
     }
 
-    //post id로 조회 (R)
+    //post id로 조회
     public PostDto findById(Long id) {
         Optional<Post> byId = postRepository.findById(id);
         PostDto postDto = appConfig.modelMapper().map(byId.get(), PostDto.class);
@@ -58,6 +57,5 @@ public class PostService {
         byId.get().update(update);
         return byId;
     }
-
 
 }

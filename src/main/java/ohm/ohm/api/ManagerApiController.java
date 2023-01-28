@@ -26,7 +26,6 @@ import javax.validation.Valid;
 public class ManagerApiController {
 
     private final ManagerService managerService;
-
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 

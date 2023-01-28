@@ -3,14 +3,13 @@ package ohm.ohm.api;
 
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.GymImgDto;
 import ohm.ohm.dto.ManagerDto;
-import ohm.ohm.entity.Manager;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,19 +28,23 @@ public class GymApiController {
     //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
     @PostMapping("/gym")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Long> save(@Valid @RequestBody GymDto gymDto){
-        ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
-        GymDto saveGymDto = new GymDto(gymDto.getName(),gymDto.getAddress(),gymDto.getCount(),gymDto.getCode());
-        Long save = gymService.save(saveGymDto);
-        managerService.register_gym(save, managerDto.getId());
-        return ResponseEntity.ok(save);
-    }
+    public ResponseEntity<Long> save(
 
-//    @PostMapping("/gym/{gymId}/img")
-//    public ResponseEntity<Long> save_img(@Valid @RequestBody GymImgDto gymImgDto,@PathVariable Long gymId) throws Exception {
-//        gymService.findById(gymId)
-//        gymService.save_img()
-//    }
+            @RequestPart(value = "images",required = false) List<MultipartFile> files,
+
+            @Valid @RequestPart(value = "GymDto") GymDto gymDto
+
+    ) throws Exception {
+
+        ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
+
+        Long save = gymService.save(gymDto,files);
+
+        managerService.register_gym(save, managerDto.getId());
+
+        return ResponseEntity.ok(save);
+
+    }
 
     //모든헬스장 조회
     @GetMapping("/gym")
@@ -69,6 +72,7 @@ public class GymApiController {
     public ResponseEntity<Integer> current_count(@PathVariable Long gymId) throws Exception {
         GymDto gymDto = gymService.findById(gymId);
         return ResponseEntity.ok(gymDto.getCurrent_count());
+
     }
 
     //현재 헬스장 인원수 증가 api

@@ -4,16 +4,12 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
-import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.entity.Authority;
-import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.Manager;
-import ohm.ohm.jwt.TokenProvider;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.ManagerRepository;
 import ohm.ohm.utils.SecurityUtils;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,8 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,15 +36,7 @@ public class ManagerService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @Transactional
-    public List<Manager> findTrainer_byGymId(Long gymId){
-        Optional<Gym> byId = gymRepository.findById(gymId);
-        List<Manager> managers = byId.get().getManagers();
-        return managers;
-    }
-
-
-    //manager 회원가입
+    //Manager 회원가입
     @Transactional
     public ManagerDto manager_save(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
@@ -61,14 +47,26 @@ public class ManagerService implements UserDetailsService {
                 .authorityName("ROLE_MANAGER")
                 .build();
 
-        //String name,String password,String nickname,String profile,String oneline_introduce,String introduce,Integer age,String email,Set<Authority> authorities
-        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()),managerDto.getNickname(),managerDto.getProfile(),managerDto.getOneline_introduce(),managerDto.getIntroduce() , managerDto.getAge(),managerDto.getEmail(), Collections.singleton(authority));
+
+        Manager manager = Manager.builder()
+                .name(managerDto.getName())
+                .password(passwordEncoder.encode(managerDto.getPassword()))
+                .nickname(managerDto.getNickname())
+                .age(managerDto.getAge())
+                .email(managerDto.getEmail())
+                .profile(managerDto.getProfile())
+                .oneline_introduce(managerDto.getOneline_introduce())
+                .introduce(managerDto.getIntroduce())
+                .authorities(Collections.singleton(authority))
+                .build();
+
+
         Manager save_manager = managerRepository.save(manager);
         return appConfig.modelMapper().map(save_manager, ManagerDto.class);
 
     }
 
-    //trainer 회원가입
+    //Trainer 회원가입
     @Transactional
     public ManagerDto trainer_save(ManagerDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
@@ -114,6 +112,7 @@ public class ManagerService implements UserDetailsService {
     }
 
 
+    //Gym을 save할때 manager와 연관관계를 맺어주는 메서드
     @Transactional
     public void register_gym(Long gymId,Long manager_id){
         managerRepository.registerByGymId(manager_id,gymId);
@@ -127,6 +126,14 @@ public class ManagerService implements UserDetailsService {
         managerRepository.delete(byId.get());
     }
 
+   // ------------시큐리티에서 사용되는 메서드 --------------
+    private User createUser(String username, Manager manager) {
+        List<GrantedAuthority> grantedAuthorities = manager.getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
+                .collect(Collectors.toList());
+        return new User(manager.getName(), manager.getPassword(), grantedAuthorities);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -135,11 +142,4 @@ public class ManagerService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username + "DB에서 찾을수 없다."));
     }
 
-
-    private User createUser(String username, Manager manager) {
-        List<GrantedAuthority> grantedAuthorities = manager.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                .collect(Collectors.toList());
-        return new User(manager.getName(), manager.getPassword(), grantedAuthorities);
-    }
 }

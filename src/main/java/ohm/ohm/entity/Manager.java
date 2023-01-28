@@ -1,15 +1,21 @@
 package ohm.ohm.entity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
 
+// ROLE은 MANAGER,TRAINER 두개로 구분
+//MANAGER는 헬스장 총 책임자(사장)
+//TRAINER는 헬스장 소속 트레이너(직원)
 @Entity
 @Getter
 @NoArgsConstructor
 public class Manager extends BaseTimeEntity{
+
 
     @Id
     @GeneratedValue()
@@ -23,14 +29,17 @@ public class Manager extends BaseTimeEntity{
     //프로필사진
     private String profile;
 
+    //한줄소개
     private String oneline_introduce;
 
+    //자기소개
     private String introduce;
 
     //실제이름
     private String nickname;
 
     private int age;
+
 
     private String email;
 
@@ -59,19 +68,20 @@ public class Manager extends BaseTimeEntity{
         this.email = update.email;
     }
 
-
-    //Manager 회원가입시 필요한 생성자
-    public Manager(String name,String password,String nickname,String profile,String oneline_introduce,String introduce,Integer age,String email,Set<Authority> authorities){
+    @Builder
+    public Manager(String name, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
         this.name = name;
         this.password = password;
         this.nickname = nickname;
         this.profile = profile;
         this.oneline_introduce = oneline_introduce;
         this.introduce = introduce;
+//        this.getCreatedTime() = LocalDateTime.now();
         this.age = age;
         this.email = email;
         this.authorities = authorities;
     }
+
 
 
 }

@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final AdminRepository adminRepository;
-    private final GymRepository gymRepository;
     private final AppConfig appConfig;
 
     //Admin 계정 생성 service

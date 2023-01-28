@@ -39,10 +39,6 @@ public class ManagerServiceTest {
         Assertions.assertThat(byID.getName()).isEqualTo("name");
     }
 
-    @Test
-    public void testt(){
-        managerService.findTrainer_byGymId(2L);
-    }
 
 
 

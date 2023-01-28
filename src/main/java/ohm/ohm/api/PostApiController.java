@@ -10,11 +10,12 @@ import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api")
@@ -22,17 +23,13 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-
     private final ManagerService managerService;
-
-
     private final GymService gymService;
 
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
+    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //manager or trainer가 등록
-    @PostMapping("/post/save/{gymId}")
+    @PostMapping("/post/{gymId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<String> save(@PathVariable Long gymId, @Valid @RequestBody PostDto para_postDto) throws Exception {
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();

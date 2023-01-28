@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//코무무 계정
 @Entity
 @Getter
 public class Admin {
@@ -23,10 +24,8 @@ public class Admin {
 
     private String nickname;
 
-    //email로 회원가입
     private String email;
 
-    //manager 연관관계 매핑
     @JsonIgnore
     @OneToMany(mappedBy = "admin",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Manager> managers = new ArrayList<Manager>();

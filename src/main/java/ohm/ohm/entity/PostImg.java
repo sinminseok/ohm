@@ -18,5 +18,6 @@ public class PostImg {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    //사진 순서
     private String img;
 }

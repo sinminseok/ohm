@@ -82,10 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/gym/count/{gymId}","/api/gym/count_increase/{gymId}","/api/gym/count_decrease/{gymId}","/api/gym/count").permitAll()
-                .antMatchers("/api/manager/signup","/api/manager/login","/api/manager/trainer/signup").permitAll()
-                .antMatchers("/api/trainer/login","/api/trainer/signup/{gymId}","/api/trainer/{trainerId}","/api/trainer/gym/{gymId}").permitAll()
-                .antMatchers("/api/posts/{gymId}","/api/post/{postId}","/api/manager/trainer/signup").permitAll()
+                .antMatchers("/api/gym","/api/name/{gymName}","/api/gym/{gymId}","/api/gym/count/{gymId}","/api/gym/count-increase/{gymId}","/api/gym/count-decrease/{gymId}").permitAll()
+                .antMatchers("/api/manager","/api/manager/login","/api/trainer").permitAll()
+                .antMatchers("/api/post/{gymId}","/api/posts/{gymId}").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
 
                 .and()

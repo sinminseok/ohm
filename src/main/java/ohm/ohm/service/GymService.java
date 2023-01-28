@@ -10,8 +10,10 @@ import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.GymImg;
 import ohm.ohm.repository.GymImgRepository;
 import ohm.ohm.repository.GymRepository;
+import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,23 +29,42 @@ public class GymService {
     private final GymRepository gymRepository;
     private final GymImgRepository gymImgRepository;
     private final AppConfig appConfig;
+    private final FileHandlerUtils fileHandler;
 
-    //헬스장 생성 --manager가 사용
+    //헬스장 생성 -- ROLE이 ROLE_MANAGER인 Manager만 사용가능
     @Transactional
-    public Long save(GymDto gymDto){
-        Gym gym = appConfig.modelMapper().map(gymDto, Gym.class);
+    public Long save(GymDto gymDto, List<MultipartFile> files) throws Exception {
+
+        //img save
+        Gym gym = Gym.builder()
+                .address(gymDto.getAddress())
+                .code(gymDto.getCode())
+                .count(gymDto.getCount())
+                .name(gymDto.getName())
+                .introduce(gymDto.getIntroduce())
+                .build();
+
         Gym save = gymRepository.save(gym);
+
+
+        List<GymImg> gymImgList = fileHandler.parseFileInfo(save,files);
+
+
+        if(!gymImgList.isEmpty()){
+            for(GymImg gymImg : gymImgList){
+                //파일을 DB에 저장
+                gymImgRepository.save(gymImg);
+//                gym.addImg(gymImgRepository.save(gymImg));
+            }
+        }
+
         return save.getId();
-    }
 
-    @Transactional
-    public Long save_img(GymImgDto gymImgDto){
-        GymImg gymimg = appConfig.modelMapper().map(gymImgDto, GymImg.class);
-        return gymImgRepository.save(gymimg).getId();
     }
 
 
-    //모든 헬스장 조회 - admin이 사용
+
+    //모든 GYM 조회
     public List<GymDto> findall(){
         List<Gym> gyms = gymRepository.findAll();
         List<GymDto> gymDtos = new ArrayList<GymDto>();
@@ -53,7 +74,7 @@ public class GymService {
         return gymDtos;
     }
 
-    //이름으로 조회계 - 클라이언트가사용
+    //GYM 이름으로 조회 - 클라이언트가사용
     public List<GymDto> findByName(String name){
         List<Gym> gyms = gymRepository.findByNameContaining(name);
         List<GymDto> gymDtos =  new ArrayList<GymDto>();
@@ -66,6 +87,7 @@ public class GymService {
 
 
 
+    //GYM ID로 조회
     public GymDto findById(Long id) throws Exception {
         Optional<Gym> gym = gymRepository.findById(id);
         if(gym.isPresent()){
@@ -76,20 +98,20 @@ public class GymService {
     }
 
 
-    //Gym Id로 조회
+    //현재 GYM 인원수 조회
     public int current_count(Long id) throws Exception {
         GymDto gymdto = findById(id);
         return gymdto.getCurrent_count();
     }
 
 
-    //현재 인원 추가 method
+    //현재 GYM 인원수 증가(1증가)
     @Transactional
     public void increase_count(Long id) throws Exception {
         gymRepository.increase_count(id);
     }
 
-    //현재 인원 감소 method
+    //현재 GYM 인원수 감소(1감소)
     @Transactional
     public void decrease_count(Long id) throws Exception {
         gymRepository.decrease_count(id);

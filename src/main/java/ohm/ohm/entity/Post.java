@@ -16,14 +16,17 @@ public class Post extends BaseEntity{
     @Column(name = "post_id")
     private Long id;
 
+    //글 제목
     private String title;
 
+    //글 내용
     private String content;
 
-    //추후 이미지 list로 변경
+    //글 이미지
     @OneToMany(mappedBy = "post",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<PostImg> imgs;
 
+    //Gym과 연관관계
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gym_id")

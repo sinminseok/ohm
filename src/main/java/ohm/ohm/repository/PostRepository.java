@@ -14,4 +14,8 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findBy_gymId(@Param("id")Long id);
 
 
+
+
+
+
 }

@@ -26,8 +26,10 @@ public class GymDto extends BaseTimeDto{
 
     private List<GymImgDto> img;
 
-    @NotNull
-    @Size(min = 1,max = 5)
+    private String introduce;
+
+
+
     private int code;
 
     private int current_count;
@@ -35,9 +37,7 @@ public class GymDto extends BaseTimeDto{
     @JsonIgnore
     private ArrayList<ManagerDto> manager = new ArrayList<>();
 
-
     private List<PostDto> posts = new ArrayList<PostDto>();
-
 
     //테스트용 생성자
     public GymDto(String name,int count,int current_count){

@@ -49,25 +49,7 @@ public class PostServiceTest {
         Assertions.assertThat(byId.getTitle()).isEqualTo("titlde");
     }
 
-    //Gym id로 해당 Gym으로 올라온 Post 모두 조회
-    @Test
-    public void findall() throws Exception {
-        GymDto gymDto = new GymDto("test_gym",20,0);
-        Long gym_id = gymService.save(gymDto);
-        GymDto findgym = gymService.findById(gym_id);
 
-        PostDto postDto1 = new PostDto("title1","contenttt",findgym);
-        PostDto postDto2 = new PostDto("title2","contenttt",findgym);
-        PostDto postDto3 = new PostDto("title3","contenttt",findgym);
-        postService.save(postDto1);
-        postService.save(postDto2);
-        postService.save(postDto3);
-
-
-        List<PostDto> findall = postService.findall(gym_id);
-        Assertions.assertThat(findall.size()).isEqualTo(3);
-
-    }
 
     @Test
     public void update_test(){

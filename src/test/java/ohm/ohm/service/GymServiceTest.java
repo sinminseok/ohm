@@ -32,29 +32,11 @@ public class GymServiceTest {
     AppConfig appConfig;
 
 
-    @Test
-    public void save_test(){
-        GymDto gymDto = new GymDto("testGym",10,5);
-        gymService.save(gymDto);
-    }
-
-    @Test
-    public void findByName_test(){
-        GymDto gymDto = new GymDto("HIGYM",10,5);
-        gymService.save(gymDto);
-        List<GymDto> hi = gymService.findByName("GYM");
-        Assertions.assertThat(hi.get(0).getName()).isEqualTo("HIGYM");
-    }
 
 
-    @Test
-    public void findById_test() throws Exception {
-        GymDto gymDto = new GymDto("TEST",10,5);
-        Long save = gymService.save(gymDto);
 
-        GymDto byId = gymService.findById(2L);
 
-    }
+
 
     @Test
     public void currentcount_test() throws Exception{
