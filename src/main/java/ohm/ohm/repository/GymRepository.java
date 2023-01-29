@@ -14,6 +14,8 @@ public interface GymRepository extends JpaRepository<Gym,Long> {
 
     List<Gym> findByNameContaining(String name);
 
+    @Query("select g from Gym g left join fetch g.imgs")
+    List<Gym> findAllFetchJoin();
 
     @Modifying(clearAutomatically = true)
     @Query("update Gym g set g.current_count = g.current_count + 1 where g.id = :id")

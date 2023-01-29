@@ -6,5 +6,9 @@ public class PostImgDto {
 
     private PostDto postDto;
 
-    private String img;
+    //파일 원본명
+    private String origFileName;
+
+    //파일 저장 경로
+    private String filePath;
 }

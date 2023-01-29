@@ -4,6 +4,8 @@ package ohm.ohm.api;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.ManagerDto;
+import ohm.ohm.dto.responseDto.GymResponseDto;
+import ohm.ohm.entity.Gym;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,7 @@ public class GymApiController {
     @PostMapping("/gym")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save(
-
             @RequestPart(value = "images",required = false) List<MultipartFile> files,
-
             @Valid @RequestPart(value = "GymDto") GymDto gymDto
 
     ) throws Exception {
@@ -47,22 +47,22 @@ public class GymApiController {
     }
 
     //모든헬스장 조회
-    @GetMapping("/gym")
-    public ResponseEntity<List<GymDto>> findall() throws Exception{
-        List<GymDto> findall = gymService.findall();
+    @GetMapping("/gyms")
+    public ResponseEntity<List<GymResponseDto>> findall() throws Exception{
+        List<GymResponseDto> findall = gymService.findall();
         return ResponseEntity.ok(findall);
     }
 
     //이름으로 헬스장 조회
     @GetMapping("/gym/name/{gymName}")
-    public ResponseEntity<List<GymDto>> findByName(@PathVariable String gymName)  throws Exception{
-        List<GymDto> byName = gymService.findByName(gymName);
+    public ResponseEntity<List<GymResponseDto>> findByName(@PathVariable String gymName)  throws Exception{
+        List<GymResponseDto> byName = gymService.findByName(gymName);
         return ResponseEntity.ok(byName);
     }
 
     //ID로 헬스장 조회(클라이언트에서 ID값을 가지고 있어야함)
     @GetMapping("/gym/{gymId}")
-    public ResponseEntity<GymDto> findById(@PathVariable Long gymId) throws Exception{
+    public ResponseEntity<GymResponseDto> findById(@PathVariable Long gymId) throws Exception{
          return ResponseEntity.ok(gymService.findById(gymId));
     }
 
@@ -70,7 +70,7 @@ public class GymApiController {
     //현재 헬스장 인원
     @GetMapping("/gym/count/{gymId}")
     public ResponseEntity<Integer> current_count(@PathVariable Long gymId) throws Exception {
-        GymDto gymDto = gymService.findById(gymId);
+        GymDto gymDto = gymService.findById_count(gymId);
         return ResponseEntity.ok(gymDto.getCurrent_count());
 
     }
@@ -79,8 +79,7 @@ public class GymApiController {
     @PostMapping("/gym/count-increase/{gymId}")
     public ResponseEntity<Integer> increase_count(@PathVariable Long gymId) throws Exception{
         gymService.increase_count(gymId);
-        return ResponseEntity.ok(gymService.findById(gymId).getCurrent_count());
-
+        return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
     }
 
     //헬스장 인원 감소 api
@@ -88,7 +87,7 @@ public class GymApiController {
     public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception{
         gymService.decrease_count(gymId);
 
-        return ResponseEntity.ok(gymService.findById(gymId).getCurrent_count());
+        return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
     }
 
 

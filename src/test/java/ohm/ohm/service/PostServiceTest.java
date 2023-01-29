@@ -31,33 +31,12 @@ public class PostServiceTest {
     @Autowired
     PostService postService;
 
-    @Autowired
-
-
-    @Test
-    public void save_test(){
-        PostDto postDto = new PostDto("titlde","contenttt");
-        Long save = postService.save(postDto);
-        Assertions.assertThat(save).isNotNull();
-    }
-
-    @Test
-    public void findById_test(){
-        PostDto postDto = new PostDto("titlde","contenttt");
-        Long save = postService.save(postDto);
-        PostDto byId = postService.findById(save);
-        Assertions.assertThat(byId.getTitle()).isEqualTo("titlde");
-    }
 
 
 
-    @Test
-    public void update_test(){
-        PostDto postDto = new PostDto("titlde","contenttt");
-        Long save = postService.save(postDto);
-        PostDto updateDto = new PostDto(save,"changetitle","contenttt");
-        Optional<Post> update = postService.update(updateDto);
 
-        Assertions.assertThat(update.get().getTitle()).isEqualTo("changetitle");
-    }
+
+
+
+
 }

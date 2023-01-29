@@ -50,12 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //h2-console 하위 모든 요청들과 파비콘 관련 요청은 Spring Security 로직을ㅇ수행하지 않도록
     @Override
-    public void configure(WebSecurity web){
+    public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(
                         "/h2/**"
-                        ,"/favicon.ico"
-                        ,"/error"
+                        , "/favicon.ico"
+                        , "/error"
                 );
     }
 
@@ -82,9 +82,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/gym","/api/name/{gymName}","/api/gym/{gymId}","/api/gym/count/{gymId}","/api/gym/count-increase/{gymId}","/api/gym/count-decrease/{gymId}").permitAll()
-                .antMatchers("/api/manager","/api/manager/login","/api/trainer").permitAll()
-                .antMatchers("/api/post/{gymId}","/api/posts/{gymId}").permitAll()
+                .antMatchers("/api/gym", "/api/gyms", "/api/gym/name/{gymName}", "/api/gym/{gymId}", "/api/gym/count/{gymId}").permitAll()
+                .antMatchers("/api/gym/count-increase/{gymId}", "/api/gym/count-decrease/{gymId}").permitAll()
+                .antMatchers("/api/manager", "/api/manager/login", "/api/trainer").permitAll()
+                .antMatchers("/api/post/{gymId}", "/api/posts/{gymId}").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
 
                 .and()

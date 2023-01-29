@@ -1,14 +1,20 @@
 package ohm.ohm.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ohm.ohm.entity.Gym;
 
+
+@Getter
+@NoArgsConstructor
 public class GymImgDto {
 
     private Long id;
 
-    private int order;
 
+    @JsonManagedReference
     private Gym gym;
 
     private String origFileName;
@@ -16,8 +22,7 @@ public class GymImgDto {
     private String filePath;
 
     @Builder
-    public GymImgDto(int order,String origFileName,String filePath){
-        this.order = order;
+    public GymImgDto(String origFileName,String filePath){
         this.origFileName = origFileName;
         this.filePath = filePath;
     }

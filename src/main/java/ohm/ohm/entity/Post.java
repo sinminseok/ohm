@@ -1,14 +1,17 @@
 package ohm.ohm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
-public class Post extends BaseEntity{
+@NoArgsConstructor
+public class Post extends BaseEntity {
 
 
     @Id
@@ -23,7 +26,7 @@ public class Post extends BaseEntity{
     private String content;
 
     //글 이미지
-    @OneToMany(mappedBy = "post",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<PostImg> imgs;
 
     //Gym과 연관관계
@@ -32,7 +35,14 @@ public class Post extends BaseEntity{
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
-    public void update(Post post){
+    @Builder
+    public Post(String title, String content, Gym gym) {
+        this.title = title;
+        this.content = content;
+        this.gym = gym;
+    }
+
+    public void update(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();

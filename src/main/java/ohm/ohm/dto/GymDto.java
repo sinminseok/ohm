@@ -24,19 +24,33 @@ public class GymDto extends BaseTimeDto{
     //헬스장 총 인원
     private int count;
 
-    private List<GymImgDto> img;
+
+    @JsonIgnore
+    private List<GymImgDto> imgs;
 
     private String introduce;
 
-
+    private String oneline_introduce;
 
     private int code;
 
     private int current_count;
 
+    private String holiday;
+
+    //평일 운영시간
+    private String weekday_time;
+
+    //주말 운영시간
+    private String weekend_time;
+
+
+    private int trainer_count;
+
     @JsonIgnore
     private ArrayList<ManagerDto> manager = new ArrayList<>();
 
+    @JsonIgnore
     private List<PostDto> posts = new ArrayList<PostDto>();
 
     //테스트용 생성자

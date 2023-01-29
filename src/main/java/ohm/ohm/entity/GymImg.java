@@ -30,17 +30,10 @@ public class GymImg {
     private String filePath;
 
     @Builder
-    public GymImg(Gym gym,String origFileName,String filePath){
+    public GymImg(Gym gym, String origFileName, String filePath) {
         this.origFileName = origFileName;
         this.gym = gym;
         this.filePath = filePath;
-    }
-
-    public void setGym(Gym gym){
-        this.gym = gym;
-        if(!gym.getImgs().contains(this)){
-            gym.getImgs().add(this);
-        }
     }
 
 

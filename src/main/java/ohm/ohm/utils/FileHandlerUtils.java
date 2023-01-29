@@ -2,6 +2,8 @@ package ohm.ohm.utils;
 
 import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.GymImg;
+import ohm.ohm.entity.Post;
+import ohm.ohm.entity.PostImg;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -17,7 +19,7 @@ import java.util.List;
 public class FileHandlerUtils {
 
 
-    public List<GymImg> parseFileInfo(
+    public List<GymImg> gymimg_parseFileInfo(
             Gym gym,
             List<MultipartFile> multipartFiles
     ) throws Exception {
@@ -76,17 +78,98 @@ public class FileHandlerUtils {
             // 파일 DTO 생성
             GymImg gymImg = GymImg.builder()
                     .gym(gym)
-
                     .origFileName(multipartFile.getOriginalFilename())
                     .filePath(path + File.separator + new_file_name)
                     .build();
 
-            System.out.println("gymImggymImg=" + gymImg.getOrigFileName());
 
 
             // 생성 후 리스트에 추가
             fileList.add(gymImg);
-            System.out.println("fileList====" + fileList.size());
+
+            // 업로드 한 파일 데이터를 지정한 파일에 저장
+            file = new File(absolutePath + path + File.separator + new_file_name);
+            multipartFile.transferTo(file);
+
+            // 파일 권한 설정(쓰기, 읽기)
+            file.setWritable(true);
+            file.setReadable(true);
+        }
+        return fileList;
+    }
+
+
+
+
+
+
+
+    public List<PostImg> postimg_parseFileInfo(
+            Post post,
+            List<MultipartFile> multipartFiles
+    ) throws Exception {
+        // 반환할 파일 리스트
+        List<PostImg> fileList = new ArrayList<>();
+
+        if (multipartFiles.isEmpty()) {
+            return fileList;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter =
+                DateTimeFormatter.ofPattern("yyyyMMdd");
+        String current_date = now.format(dateTimeFormatter);
+
+
+        String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+
+        // 파일을 저장할 세부 경로 지정
+        String path = "images" + File.separator + current_date;
+
+
+        File file = new File(path);
+
+
+        // 디렉터리가 존재하지 않을 경우
+        if (!file.exists()) {
+            boolean wasSuccessful = file.mkdirs();
+
+            // 디렉터리 생성에 실패했을 경우
+            if (!wasSuccessful)
+                System.out.println("file: was not successful");
+        }
+
+        // 다중 파일 처리
+        for (MultipartFile multipartFile : multipartFiles) {
+
+            // 파일의 확장자 추출
+            String originalFileExtension;
+            String contentType = multipartFile.getContentType();
+
+            // 확장자명이 존재하지 않을 경우 처리 x
+            if (ObjectUtils.isEmpty(contentType)) {
+                break;
+            } else {  // 확장자가 jpeg, png인 파일들만 받아서 처리
+                if (contentType.contains("image/jpeg"))
+                    originalFileExtension = ".jpg";
+                else if (contentType.contains("image/png"))
+                    originalFileExtension = ".png";
+                else  // 다른 확장자일 경우 처리 x
+                    break;
+            }
+
+            // 파일명 중복 피하고자 나노초까지 얻어와 지정
+            String new_file_name = System.nanoTime() + originalFileExtension;
+
+            // 파일 DTO 생성
+            PostImg postImg = PostImg.builder()
+                    .post(post)
+                    .origFileName(multipartFile.getOriginalFilename())
+                    .filePath(path + File.separator + new_file_name)
+                    .build();
+
+
+            // 생성 후 리스트에 추가
+            fileList.add(postImg);
 
             // 업로드 한 파일 데이터를 지정한 파일에 저장
             file = new File(absolutePath + path + File.separator + new_file_name);
@@ -98,9 +181,6 @@ public class FileHandlerUtils {
 
 
         }
-
-        System.out.println("fildasfgst====" + fileList.size());
-
 
 
         return fileList;

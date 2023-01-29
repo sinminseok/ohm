@@ -5,12 +5,17 @@ import lombok.RequiredArgsConstructor;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.PostDto;
+import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.entity.Gym;
 import ohm.ohm.entity.Post;
+import ohm.ohm.entity.PostImg;
 import ohm.ohm.repository.GymRepository;
+import ohm.ohm.repository.PostImgRepository;
 import ohm.ohm.repository.PostRepository;
+import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,30 +28,51 @@ public class PostService {
 
 
     private final PostRepository postRepository;
+    private final GymRepository gymRepository;
+    private final PostImgRepository postImgRepository;
     private final AppConfig appConfig;
+    private final FileHandlerUtils fileHandler;
 
     //글 등록 - manager,trainer가 사용
     @Transactional
-    public Long save(PostDto postDto) {
-        Post post = appConfig.modelMapper().map(postDto, Post.class);
-        return postRepository.save(post).getId();
+    public Long save(Long gymId,PostDto postDto, List<MultipartFile> files) throws Exception {
+        Optional<Gym> gym = gymRepository.findById(gymId);
+
+
+        Post post = Post.builder()
+                .title(postDto.getTitle())
+                .content(postDto.getContent())
+                .gym(gym.get())
+                .build();
+
+        Post save = postRepository.save(post);
+
+        List<PostImg> postImgs = fileHandler.postimg_parseFileInfo(save, files);
+
+        if(!postImgs.isEmpty()){
+            for(PostImg postImg :postImgs){
+                postImgRepository.save(postImg);
+            }
+        }
+
+        return save.getId();
     }
 
 
     //헬스장 id로 모든 post조회
-    public List<PostDto> findall(Long gymid) {
+    public List<PostResponseDto> findall(Long gymid) {
         List<Post> by_gymId = postRepository.findBy_gymId(gymid);
-        List<PostDto> postDtos = new ArrayList<PostDto>();
+        List<PostResponseDto> postDtos = new ArrayList<PostResponseDto>();
         for(Post element : by_gymId){
-            postDtos.add(appConfig.modelMapper().map(element,PostDto.class));
+            postDtos.add(appConfig.modelMapper().map(element,PostResponseDto.class));
         }
         return postDtos;
     }
 
     //post id로 조회
-    public PostDto findById(Long id) {
+    public PostResponseDto findById(Long id) {
         Optional<Post> byId = postRepository.findById(id);
-        PostDto postDto = appConfig.modelMapper().map(byId.get(), PostDto.class);
+        PostResponseDto postDto = appConfig.modelMapper().map(byId.get(), PostResponseDto.class);
         return postDto;
     }
 
