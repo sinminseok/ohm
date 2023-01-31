@@ -30,23 +30,19 @@ public class PostApiController {
 
 
 
-    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
     //manager or trainer가 등록
     @PostMapping("/post/{gymId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
-    public ResponseEntity<String> save(
+    public ResponseEntity<Long> save(
             @PathVariable Long gymId,
             @Valid @RequestPart(value = "PostDto") PostDto para_postDto,
             @RequestPart(value = "images",required = false) List<MultipartFile> files
             ) throws Exception {
 
-        ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
         Long save = postService.save(gymId,para_postDto,files);
 
 
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(save);
     }
 
     //헬스장에 등록된 모든 Post 조회

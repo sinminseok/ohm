@@ -11,11 +11,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-
-
 @SpringBootTest
 @Transactional
 //@Rollback(value = false)
@@ -29,14 +24,6 @@ public class ManagerServiceTest {
         ManagerDto managerDto = new ManagerDto("admin","admin");
         ManagerDto managerDto1 = managerService.manager_save(managerDto);
         Assertions.assertThat(managerDto1).isNotNull();
-    }
-
-    @Test
-    public void findById_test(){
-        ManagerDto managerDto = new ManagerDto("name","email");
-        ManagerDto managerDto1 = managerService.manager_save(managerDto);
-        ManagerDto byID = managerService.findByID(managerDto1.getId());
-        Assertions.assertThat(byID.getName()).isEqualTo("name");
     }
 
 

@@ -76,7 +76,6 @@ public class Manager extends BaseTimeEntity{
         this.profile = profile;
         this.oneline_introduce = oneline_introduce;
         this.introduce = introduce;
-//        this.getCreatedTime() = LocalDateTime.now();
         this.age = age;
         this.email = email;
         this.authorities = authorities;

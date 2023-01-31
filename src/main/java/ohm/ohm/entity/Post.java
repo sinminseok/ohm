@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -36,7 +38,8 @@ public class Post extends BaseEntity {
     private Gym gym;
 
     @Builder
-    public Post(String title, String content, Gym gym) {
+    public Post(String title, String content, Gym gym, LocalDateTime createdTime) {
+        //this.getCreatedBy() = String.valueOf(LocalDate.now());
         this.title = title;
         this.content = content;
         this.gym = gym;

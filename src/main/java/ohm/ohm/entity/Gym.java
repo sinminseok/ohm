@@ -50,6 +50,9 @@ public class Gym extends BaseTimeEntity{
     //평일 운영시간
     private String weekday_time;
 
+    //헬스장 면적수
+    private String area;
+
     //주말 운영시간
     private String weekend_time;
 

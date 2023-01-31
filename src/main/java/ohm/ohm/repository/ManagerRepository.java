@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface ManagerRepository extends JpaRepository<Manager,Long> {
@@ -17,6 +19,11 @@ public interface ManagerRepository extends JpaRepository<Manager,Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update Manager m set m.gym_id = :gym_id where m.manager_id =:manager_id",nativeQuery = true)
     void registerByGymId(@Param("manager_id")Long manager_id,@Param("gym_id")Long gym_id);
+
+
+
+    @Query(value = "select * from Manager where Manager.gym_id = :gym_id",nativeQuery = true)
+    List<Optional<Manager>> findall_byGymId(@Param("gym_id")Long gym_id);
 
 
 }

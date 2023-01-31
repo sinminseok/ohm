@@ -13,12 +13,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
     @CreatedDate
     private LocalDateTime createdTime;
 
     @LastModifiedBy
-    private String lastModifiedTime;
+    private LocalDateTime lastModifiedTime;
 }

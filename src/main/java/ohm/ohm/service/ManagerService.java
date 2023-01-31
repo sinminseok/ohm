@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.ManagerDto;
+import ohm.ohm.dto.responseDto.TrainerResponseDto;
 import ohm.ohm.entity.Authority;
 import ohm.ohm.entity.Manager;
 import ohm.ohm.repository.GymRepository;
@@ -19,6 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -92,9 +95,20 @@ public class ManagerService implements UserDetailsService {
 
 
     //Id로 매니저 조회
-    public ManagerDto findByID(Long id) {
+    public TrainerResponseDto findByID(Long id) {
         Optional<Manager> byId = managerRepository.findById(id);
-        return appConfig.modelMapper().map(byId.get(), ManagerDto.class);
+        return appConfig.modelMapper().map(byId.get(), TrainerResponseDto.class);
+    }
+
+    public List<TrainerResponseDto> trainer_findall(Long gymId){
+        List<Optional<Manager>> managers = managerRepository.findall_byGymId(gymId);
+        List<TrainerResponseDto> trainerResponseDtos = new ArrayList<TrainerResponseDto>();
+
+        for(Optional<Manager> manager : managers){
+            trainerResponseDtos.add(appConfig.modelMapper().map(manager.get(),TrainerResponseDto.class));
+        }
+
+        return trainerResponseDtos;
     }
 
 

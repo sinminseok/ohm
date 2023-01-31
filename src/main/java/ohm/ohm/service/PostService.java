@@ -40,6 +40,7 @@ public class PostService {
 
 
         Post post = Post.builder()
+
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .gym(gym.get())

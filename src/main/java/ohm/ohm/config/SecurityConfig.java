@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/gym", "/api/gyms", "/api/gym/name/{gymName}", "/api/gym/{gymId}", "/api/gym/count/{gymId}").permitAll()
                 .antMatchers("/api/gym/count-increase/{gymId}", "/api/gym/count-decrease/{gymId}").permitAll()
-                .antMatchers("/api/manager", "/api/manager/login", "/api/trainer").permitAll()
+                .antMatchers("/api/manager", "/api/manager/login", "/api/trainer","/api/manager/findall/{gymId}","/api/manager/{managerId}").permitAll()
                 .antMatchers("/api/post/{gymId}", "/api/posts/{gymId}").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
 

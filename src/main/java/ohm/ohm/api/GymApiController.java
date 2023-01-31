@@ -1,21 +1,16 @@
 package ohm.ohm.api;
-
-
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
-import ohm.ohm.entity.Gym;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -86,7 +81,6 @@ public class GymApiController {
     @PostMapping("/gym/count-decrease/{gymId}")
     public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception{
         gymService.decrease_count(gymId);
-
         return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
     }
 
