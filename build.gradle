@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+//https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation 'commons-io:commons-io:2.6'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.16.0'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'

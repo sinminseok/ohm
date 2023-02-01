@@ -1,10 +1,13 @@
 package ohm.ohm.api;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.GymDto;
 import ohm.ohm.dto.ManagerDto;
 import ohm.ohm.dto.PostDto;
+import ohm.ohm.dto.TokenDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
@@ -21,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Api(tags = {"POST API"})
 @RequiredArgsConstructor
 public class PostApiController {
 
@@ -31,6 +35,7 @@ public class PostApiController {
 
 
     //manager or trainer가 등록
+    @ApiOperation(value = "Post 저장", response = Long.class)
     @PostMapping("/post/{gymId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<Long> save(
@@ -45,7 +50,8 @@ public class PostApiController {
         return ResponseEntity.ok(save);
     }
 
-    //헬스장에 등록된 모든 Post 조회
+    //헬스장에 등록된 모든 Post 조회]
+    @ApiOperation(value = "모든 Post 조회", response = PostResponseDto.class, responseContainer = "List")
     @GetMapping("/posts/{gymId}")
     public ResponseEntity<List<PostResponseDto>> findall(@PathVariable Long gymId){
         List<PostResponseDto> findall = postService.findall(gymId);
@@ -53,6 +59,7 @@ public class PostApiController {
     }
 
     //Post 조회 findByID
+    @ApiOperation(value = "Post 조회", response = PostResponseDto.class)
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostResponseDto> findById(@PathVariable Long postId){
         PostResponseDto byId = postService.findById(postId);
