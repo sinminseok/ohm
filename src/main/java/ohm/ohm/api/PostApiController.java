@@ -30,8 +30,8 @@ public class PostApiController {
 
     private final PostService postService;
     private final ManagerService managerService;
-    private final GymService gymService;
 
+    private final GymService gymService;
 
 
     //manager or trainer가 등록
@@ -54,6 +54,7 @@ public class PostApiController {
     @ApiOperation(value = "모든 Post 조회", response = PostResponseDto.class, responseContainer = "List")
     @GetMapping("/posts/{gymId}")
     public ResponseEntity<List<PostResponseDto>> findall(@PathVariable Long gymId){
+        System.out.println();
         List<PostResponseDto> findall = postService.findall(gymId);
         return ResponseEntity.ok(findall);
     }

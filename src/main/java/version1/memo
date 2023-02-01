@@ -9,13 +9,14 @@ Gym(헬스장) 기능 - 헬스장 현재 인원 노출 , 시간대별 인구밀�
 
 Post(헬스장 공지사항) 기능 - CRUD(Manager 가 제어)
 
-
 Service 구현 기능
 
-AdminService - Admin 계정 생성
+AdminService -
 ManagerService - CRUD, ROLE을 이용해 Trainer와 Manager을 역할 분리
 GymService - 현재 헬스장 인원현황 데이터 뿌리기기능(주기능) , CRUD
 PostService - CRUD , Gym으로 Post 조회
+
+
 
 계정 Entity에서 name,password 로 로그인 정보를 확인한다.(id는 걍 PK)
 
@@ -25,3 +26,7 @@ Manager - 로그인기능은 Spring Security Jwt Rest api를 사용해 구현한
 요청을 보내고 인증한다.
 
 ADMIN은 코무무(본인) 계정이므로 걍 DB에 박아주자 ㅋ
+
+
+----------
+GYM

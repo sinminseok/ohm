@@ -57,6 +57,8 @@ public class ManagerApiController {
         return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
     }
 
+
+
     @ApiOperation(value = "manager 회원가입", response = ManagerDto.class)
     @PostMapping("/manager")
     public ResponseEntity<ManagerDto> manager_signup(@Valid @RequestBody ManagerDto managerDto) {
@@ -78,6 +80,7 @@ public class ManagerApiController {
     public ResponseEntity<ManagerDto> getManagerInfo() {
         return ResponseEntity.ok(managerService.getMyManagerWithAuthorities());
     }
+
 
 
     @ApiOperation(value = "Id로 Manager(ROLE이 Trainer)조회", response = ManagerDto.class)
