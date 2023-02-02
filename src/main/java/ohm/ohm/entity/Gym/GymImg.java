@@ -1,10 +1,10 @@
-package ohm.ohm.entity;
+package ohm.ohm.entity.Gym;
 
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.entity.Gym.Gym;
 
 import javax.persistence.*;
 

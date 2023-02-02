@@ -3,7 +3,7 @@ package ohm.ohm.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.entity.Manager;
+import ohm.ohm.dto.ManagerDto.ManagerDto;
 
 import java.util.ArrayList;
 import java.util.List;

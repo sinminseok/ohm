@@ -1,10 +1,10 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.GymDto;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.entity.Gym;
+import ohm.ohm.entity.Gym.Gym;
 
 
 @Getter
@@ -12,7 +12,6 @@ import ohm.ohm.entity.Gym;
 public class GymImgDto {
 
     private Long id;
-
 
     @JsonManagedReference
     private Gym gym;

@@ -1,7 +1,12 @@
-package ohm.ohm.entity;
+package ohm.ohm.entity.Manager;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.entity.Admin;
+import ohm.ohm.entity.Gym.Gym;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -14,7 +19,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Manager extends BaseTimeEntity{
+public class Manager{
 
 
     @Id
@@ -23,6 +28,12 @@ public class Manager extends BaseTimeEntity{
     private Long id;
 
     private String name;
+
+    @CreatedDate
+    private LocalDateTime createdTime;
+
+    @LastModifiedBy
+    private LocalDateTime lastModifiedTime;
 
     private String password;
 
@@ -71,6 +82,7 @@ public class Manager extends BaseTimeEntity{
     @Builder
     public Manager(String name, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
         this.name = name;
+        this.createdTime = LocalDateTime.now();
         this.password = password;
         this.nickname = nickname;
         this.profile = profile;

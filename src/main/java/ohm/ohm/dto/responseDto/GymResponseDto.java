@@ -1,11 +1,8 @@
 package ohm.ohm.dto.responseDto;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.dto.GymImgDto;
 
 import java.util.List;
 

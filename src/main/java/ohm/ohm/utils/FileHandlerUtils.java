@@ -1,11 +1,11 @@
 package ohm.ohm.utils;
 
-import ohm.ohm.entity.Gym;
-import ohm.ohm.entity.GymImg;
-import ohm.ohm.entity.Post;
-import ohm.ohm.entity.PostImg;
+import ohm.ohm.entity.Gym.Gym;
+import ohm.ohm.entity.Gym.GymImg;
+import ohm.ohm.entity.Post.Post;
+import ohm.ohm.entity.Post.PostImg;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +17,8 @@ import java.util.List;
 
 @Component
 public class FileHandlerUtils {
-
+//    @Value("${spring.servlet.multipart.location}")
+//    String filePath;
 
     public List<GymImg> gymimg_parseFileInfo(
             Gym gym,
@@ -39,7 +40,7 @@ public class FileHandlerUtils {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
         // 파일을 저장할 세부 경로 지정
-        String path = "images" + File.separator + current_date;
+        String path =  "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
 
 
         File file = new File(path);
@@ -102,9 +103,6 @@ public class FileHandlerUtils {
 
 
 
-
-
-
     public List<PostImg> postimg_parseFileInfo(
             Post post,
             List<MultipartFile> multipartFiles
@@ -124,7 +122,7 @@ public class FileHandlerUtils {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
         // 파일을 저장할 세부 경로 지정
-        String path = "images" + File.separator + current_date;
+        String path =  "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
 
 
         File file = new File(path);

@@ -1,4 +1,4 @@
-package ohm.ohm.entity;
+package ohm.ohm.entity.Manager;
 
 
 import lombok.Builder;

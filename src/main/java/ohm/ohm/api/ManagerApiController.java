@@ -4,11 +4,11 @@ package ohm.ohm.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import ohm.ohm.dto.LoginDto;
-import ohm.ohm.dto.ManagerDto;
-import ohm.ohm.dto.TokenDto;
+import ohm.ohm.dto.ManagerDto.LoginDto;
+import ohm.ohm.dto.ManagerDto.ManagerDto;
+import ohm.ohm.dto.ManagerDto.TokenDto;
+import ohm.ohm.dto.requestDto.ManagerRequestDto;
 import ohm.ohm.dto.responseDto.TrainerResponseDto;
-import ohm.ohm.entity.Manager;
 import ohm.ohm.jwt.JwtFilter;
 import ohm.ohm.jwt.TokenProvider;
 import ohm.ohm.service.GymService;
@@ -58,17 +58,16 @@ public class ManagerApiController {
     }
 
 
-
     @ApiOperation(value = "manager 회원가입", response = ManagerDto.class)
     @PostMapping("/manager")
-    public ResponseEntity<ManagerDto> manager_signup(@Valid @RequestBody ManagerDto managerDto) {
+    public ResponseEntity<ManagerDto> manager_signup(@Valid @RequestBody ManagerRequestDto managerDto) {
         return ResponseEntity.ok(managerService.manager_save(managerDto));
     }
 
     //manager_trainer 계정생성
     @ApiOperation(value = "trainer 회원가입", response = ManagerDto.class)
     @PostMapping("/trainer")
-    public ResponseEntity<ManagerDto> trainer_signup(@Valid @RequestBody ManagerDto managerDto) {
+    public ResponseEntity<ManagerDto> trainer_signup(@Valid @RequestBody ManagerRequestDto managerDto) {
         return ResponseEntity.ok(managerService.trainer_save(managerDto));
     }
 
@@ -83,6 +82,22 @@ public class ManagerApiController {
 
 
 
+
+    @ApiOperation(value = "Manager ID로 정보조회", response = ManagerDto.class)
+    @GetMapping("/manager/info/{managerId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    public ResponseEntity<ManagerDto> getManagerInfoById(
+            @PathVariable Long managerId
+
+    ){
+        ManagerDto managerInfo = managerService.getManagerInfo(managerId);
+        return ResponseEntity.ok(managerInfo);
+    }
+
+
+
+
+
     @ApiOperation(value = "Id로 Manager(ROLE이 Trainer)조회", response = ManagerDto.class)
     @GetMapping("/manager/{managerId}")
     public ResponseEntity<TrainerResponseDto> trainer_find(
@@ -91,6 +106,10 @@ public class ManagerApiController {
         TrainerResponseDto byID = managerService.findByID(managerId);
         return ResponseEntity.ok(byID);
     }
+
+
+
+
 
     @ApiOperation(value = "GymId로 해당 Gym에 소속된 manager모두조회", response = ManagerDto.class)
     @GetMapping("/manager/findall/{gymId}")

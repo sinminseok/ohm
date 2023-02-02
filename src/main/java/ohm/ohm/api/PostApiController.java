@@ -4,10 +4,7 @@ package ohm.ohm.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.ManagerDto;
-import ohm.ohm.dto.PostDto;
-import ohm.ohm.dto.TokenDto;
+import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
@@ -17,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 

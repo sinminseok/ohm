@@ -1,8 +1,9 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.GymDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import ohm.ohm.dto.ManagerDto.ManagerDto;
+import ohm.ohm.dto.PostDto.PostDto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class GymDto extends BaseTimeDto{
+public class GymDto {
 
     private Long id;
     @NotNull
@@ -36,19 +37,17 @@ public class GymDto extends BaseTimeDto{
 
     private int current_count;
 
-    private String holiday;
-
-    //평일 운영시간
-    private String weekday_time;
-
-    //주말 운영시간
-    private String weekend_time;
-
 
     private int trainer_count;
 
     @JsonIgnore
     private ArrayList<ManagerDto> manager = new ArrayList<>();
+
+    @JsonIgnore
+    private GymTimeDto gymTime;
+
+    @JsonIgnore
+    private GymPriceDto gymPrice;
 
     @JsonIgnore
     private List<PostDto> posts = new ArrayList<PostDto>();

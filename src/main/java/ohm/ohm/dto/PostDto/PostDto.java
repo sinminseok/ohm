@@ -1,15 +1,16 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.PostDto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.dto.GymDto.GymDto;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PostDto extends BaseDto{
+public class PostDto {
 
     private Long id;
 

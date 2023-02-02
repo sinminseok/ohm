@@ -1,4 +1,4 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.ManagerDto;
 
 
 import lombok.*;

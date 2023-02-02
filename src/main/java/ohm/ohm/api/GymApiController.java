@@ -2,10 +2,9 @@ package ohm.ohm.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import netscape.javascript.JSObject;
-import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.ManagerDto;
-import ohm.ohm.dto.TokenDto;
+import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.dto.ManagerDto.ManagerDto;
+import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
@@ -33,13 +32,14 @@ public class GymApiController {
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save(
             @RequestPart(value = "images",required = false) List<MultipartFile> files,
-            @Valid @RequestPart(value = "GymDto") GymDto gymDto
+            @Valid @RequestPart(value = "GymRequestDto") GymRequestDto gymRequestDto
 
     ) throws Exception {
 
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
+        System.out.println("gymRequestDto == "+gymRequestDto.getCLOSEDDAYS());
 
-        Long save = gymService.save(gymDto,files);
+        Long save = gymService.save(gymRequestDto,files);
 
         managerService.register_gym(save, managerDto.getId());
 

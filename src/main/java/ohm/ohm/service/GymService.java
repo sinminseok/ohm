@@ -4,14 +4,16 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
-import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.GymImgDto;
+import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymImgResponseDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
-import ohm.ohm.entity.Gym;
-import ohm.ohm.entity.GymImg;
+import ohm.ohm.entity.Gym.Gym;
+import ohm.ohm.entity.Gym.GymImg;
+import ohm.ohm.entity.Gym.GymTime;
 import ohm.ohm.repository.GymImgRepository;
 import ohm.ohm.repository.GymRepository;
+import ohm.ohm.repository.GymTimeRepository;
 import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +33,14 @@ public class GymService {
     private final GymImgRepository gymImgRepository;
     private final AppConfig appConfig;
     private final FileHandlerUtils fileHandler;
+    private final GymTimeRepository gymTimeRepository;
     //헬스장 생성 -- ROLE이 ROLE_MANAGER인 Manager만 사용가능
 
 
     @Transactional
-    public Long save(GymDto gymDto, List<MultipartFile> files) throws Exception {
+    public Long save(GymRequestDto gymDto, List<MultipartFile> files) throws Exception {
+
+
 
         //img save
         Gym gym = Gym.builder()
@@ -43,15 +48,26 @@ public class GymService {
                 .code(gymDto.getCode())
                 .count(gymDto.getCount())
                 .name(gymDto.getName())
+                .area(gymDto.getArea())
                 .oneline_introduce(gymDto.getOneline_introduce())
-                .holiday(gymDto.getHoliday())
                 .trainer_count(gymDto.getTrainer_count())
-                .weekday_time(gymDto.getWeekday_time())
-                .weekend_time(gymDto.getWeekend_time())
                 .introduce(gymDto.getIntroduce())
                 .build();
 
         Gym save = gymRepository.save(gym);
+
+        System.out.println("FGDSGDFS == "+gymDto.getCLOSEDDAYS());
+
+        GymTime gymTime = GymTime.builder()
+                .gym(save)
+                .CLOSEDDAYS(gymDto.getCLOSEDDAYS())
+                .SUNDAY(gymDto.getSUNDAY())
+                .SATURDAY(gymDto.getSATURDAY())
+                .WEEKDAY(gymDto.getWEEKDAY())
+                .HOLIDAY(gymDto.getHOLIDAY())
+                .build();
+
+        gymTimeRepository.save(gymTime);
 
         List<GymImg> gymImgList = fileHandler.gymimg_parseFileInfo(save, files);
 

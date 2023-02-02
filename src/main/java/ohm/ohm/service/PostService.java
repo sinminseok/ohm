@@ -3,12 +3,11 @@ package ohm.ohm.service;
 
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.config.AppConfig;
-import ohm.ohm.dto.GymDto;
-import ohm.ohm.dto.PostDto;
+import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
-import ohm.ohm.entity.Gym;
-import ohm.ohm.entity.Post;
-import ohm.ohm.entity.PostImg;
+import ohm.ohm.entity.Gym.Gym;
+import ohm.ohm.entity.Post.Post;
+import ohm.ohm.entity.Post.PostImg;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.PostImgRepository;
 import ohm.ohm.repository.PostRepository;

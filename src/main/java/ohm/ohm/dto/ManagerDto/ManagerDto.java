@@ -1,18 +1,18 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.ManagerDto;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.entity.Authority;
-import ohm.ohm.entity.Gym;
+import ohm.ohm.dto.AdminDto;
+import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.entity.Manager.Authority;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class ManagerDto extends BaseTimeDto{
+public class ManagerDto  {
 
     private Long id;
 
@@ -20,7 +20,6 @@ public class ManagerDto extends BaseTimeDto{
 
     private String email;
 
-    private String password;
 
     private String nickname;
 
@@ -38,11 +37,24 @@ public class ManagerDto extends BaseTimeDto{
 
     private Set<Authority> authorities;
 
+    @Builder
+    public ManagerDto(String profile,String oneline_introduce,String introduce,String nickname,Long id,String name,String email,Integer age,GymDto gymDto,Set<Authority> authorities){
+        this.id = id;
+        this.name = name;
+        this.nickname = nickname;
+        this.profile = profile;
+        this.oneline_introduce = oneline_introduce;
+        this.introduce = introduce;
+        this.email = email;
+        this.age = age;
+        this.gymDto = gymDto;
+        this.authorities = authorities;
+    }
+
     //
     public ManagerDto(Long id,String name,String email,String password,Integer age,GymDto gymDto,Set<Authority> authorities){
         this.id = id;
         this.name = name;
-        this.password = password;
         this.age=age;
         this.gymDto = gymDto;
         this.authorities = authorities;

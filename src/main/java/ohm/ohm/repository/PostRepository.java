@@ -1,6 +1,6 @@
 package ohm.ohm.repository;
 
-import ohm.ohm.entity.Post;
+import ohm.ohm.entity.Post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

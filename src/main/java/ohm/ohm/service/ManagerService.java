@@ -4,10 +4,12 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
-import ohm.ohm.dto.ManagerDto;
+import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.dto.ManagerDto.ManagerDto;
+import ohm.ohm.dto.requestDto.ManagerRequestDto;
 import ohm.ohm.dto.responseDto.TrainerResponseDto;
-import ohm.ohm.entity.Authority;
-import ohm.ohm.entity.Manager;
+import ohm.ohm.entity.Manager.Authority;
+import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.ManagerRepository;
 import ohm.ohm.utils.SecurityUtils;
@@ -41,7 +43,7 @@ public class ManagerService implements UserDetailsService {
 
     //Manager 회원가입
     @Transactional
-    public ManagerDto manager_save(ManagerDto managerDto) {
+    public ManagerDto manager_save(ManagerRequestDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
@@ -71,7 +73,7 @@ public class ManagerService implements UserDetailsService {
 
     //Trainer 회원가입
     @Transactional
-    public ManagerDto trainer_save(ManagerDto managerDto) {
+    public ManagerDto trainer_save(ManagerRequestDto managerDto) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
         }
@@ -91,6 +93,41 @@ public class ManagerService implements UserDetailsService {
     @Transactional
     public ManagerDto getMyManagerWithAuthorities() {
         return appConfig.modelMapper().map(SecurityUtils.getCurrentUsername().flatMap(managerRepository::findOneWithAuthoritiesByName).get(), ManagerDto.class);
+    }
+    
+    @Transactional
+    public ManagerDto getManagerInfo(Long id){
+
+//        Manager findmanager = managerRepository.findManagerFetchJoinGym(id);
+        Optional<Manager> findmanager = managerRepository.findOneWithGymById(id);
+        System.out.println("findmanagerfindmanager =" +findmanager.get().getGym().getName());
+        ManagerDto managerDto = ManagerDto.builder()
+                .name(findmanager.get().getName())
+                .age(findmanager.get().getAge())
+                .gymDto(appConfig.modelMapper().map(findmanager.get().getGym(), GymDto.class))
+                .id(findmanager.get().getId())
+//                .authorities(findmanager.getAuthorities())
+                .email(findmanager.get().getEmail())
+                .nickname(findmanager.get().getNickname())
+                .introduce(findmanager.get().getIntroduce())
+                .oneline_introduce(findmanager.get().getOneline_introduce())
+                .profile(findmanager.get().getProfile())
+                .build();
+//        System.out.println("findmanagerfindmanager =" +findmanager.getGym().getName());
+//        ManagerDto managerDto = ManagerDto.builder()
+//                .name(findmanager.getName())
+//                .age(findmanager.getAge())
+//                .gymDto(appConfig.modelMapper().map(findmanager.getGym(), GymDto.class))
+//                .id(findmanager.getId())
+////                .authorities(findmanager.getAuthorities())
+//                .email(findmanager.getEmail())
+//                .nickname(findmanager.getNickname())
+//                .introduce(findmanager.getIntroduce())
+//                .oneline_introduce(findmanager.getOneline_introduce())
+//                .profile(findmanager.getProfile())
+//                .build();
+
+        return managerDto;
     }
 
 

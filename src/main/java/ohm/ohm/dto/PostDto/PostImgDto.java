@@ -1,4 +1,6 @@
-package ohm.ohm.dto;
+package ohm.ohm.dto.PostDto;
+
+import ohm.ohm.dto.PostDto.PostDto;
 
 public class PostImgDto {
 

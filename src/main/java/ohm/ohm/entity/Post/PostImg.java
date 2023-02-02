@@ -1,8 +1,9 @@
-package ohm.ohm.entity;
+package ohm.ohm.entity.Post;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.entity.Post.Post;
 
 import javax.persistence.*;
 

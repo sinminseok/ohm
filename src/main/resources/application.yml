@@ -19,6 +19,7 @@ spring:
 
   servlet:
     multipart:
+#      location: /Users/sinminseok12/Desktop/ohmimage
       max-file-size: 10MB
       max-request-size: 10MB
 
