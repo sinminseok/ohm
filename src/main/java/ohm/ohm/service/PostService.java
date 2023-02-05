@@ -34,10 +34,8 @@ public class PostService {
 
     //글 등록 - manager,trainer가 사용
     @Transactional
-    public Long save(Long gymId,PostDto postDto, List<MultipartFile> files) throws Exception {
+    public Long save_content(Long gymId,PostDto postDto) throws Exception {
         Optional<Gym> gym = gymRepository.findById(gymId);
-
-
         Post post = Post.builder()
 
                 .title(postDto.getTitle())
@@ -46,17 +44,29 @@ public class PostService {
                 .build();
 
         Post save = postRepository.save(post);
+        return save.getId();
+    }
 
-        List<PostImg> postImgs = fileHandler.postimg_parseFileInfo(save, files);
+
+    @Transactional
+    public Long save_img(Long postId, List<MultipartFile> files) throws Exception {
+        Optional<Post> post = postRepository.findById(postId);
+
+        System.out.println("files == "+files.size());
+        List<PostImg> postImgs = fileHandler.postimg_parseFileInfo(post.get(), files);
+        System.out.println("postImgs == "+files.get(0).getOriginalFilename());
 
         if(!postImgs.isEmpty()){
             for(PostImg postImg :postImgs){
-                postImgRepository.save(postImg);
+                PostImg save = postImgRepository.save(postImg);
+                System.out.println("TITERJV = "+save.getId());
             }
         }
 
-        return save.getId();
+        return post.get().getId();
+
     }
+
 
 
     //헬스장 id로 모든 post조회

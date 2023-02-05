@@ -26,21 +26,32 @@ public class PostApiController {
 
     private final PostService postService;
     private final ManagerService managerService;
-
     private final GymService gymService;
 
 
     //manager or trainer가 등록
     @ApiOperation(value = "Post 저장", response = Long.class)
-    @PostMapping("/post/{gymId}")
+    @PostMapping(value = "/post/{gymId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
-    public ResponseEntity<Long> save(
+    public ResponseEntity<Long> save_dto(
             @PathVariable Long gymId,
-            @Valid @RequestPart(value = "PostDto") PostDto para_postDto,
-            @RequestPart(value = "images",required = false) List<MultipartFile> files
-            ) throws Exception {
+            @Valid @RequestBody PostDto para_postDto
+    ) throws Exception {
+        Long save = postService.save_content(gymId,para_postDto);
+        return ResponseEntity.ok(save);
+    }
 
-        Long save = postService.save(gymId,para_postDto,files);
+    //manager or trainer가 등록
+    @ApiOperation(value = "Post image 저장", response = Long.class)
+    @PostMapping(value = "/post/img/{postId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    public ResponseEntity<Long> save_imgs(
+            @PathVariable Long postId,
+            @RequestPart(value = "images",required = false) List<MultipartFile> files
+    ) throws Exception {
+
+
+        Long save = postService.save_img(postId,files);
 
 
         return ResponseEntity.ok(save);

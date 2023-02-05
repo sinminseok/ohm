@@ -100,7 +100,8 @@ public class ManagerService implements UserDetailsService {
 
 //        Manager findmanager = managerRepository.findManagerFetchJoinGym(id);
         Optional<Manager> findmanager = managerRepository.findOneWithGymById(id);
-        System.out.println("findmanagerfindmanager =" +findmanager.get().getGym().getName());
+
+        System.out.println("SDFGDFSG");
         ManagerDto managerDto = ManagerDto.builder()
                 .name(findmanager.get().getName())
                 .age(findmanager.get().getAge())
@@ -113,19 +114,8 @@ public class ManagerService implements UserDetailsService {
                 .oneline_introduce(findmanager.get().getOneline_introduce())
                 .profile(findmanager.get().getProfile())
                 .build();
-//        System.out.println("findmanagerfindmanager =" +findmanager.getGym().getName());
-//        ManagerDto managerDto = ManagerDto.builder()
-//                .name(findmanager.getName())
-//                .age(findmanager.getAge())
-//                .gymDto(appConfig.modelMapper().map(findmanager.getGym(), GymDto.class))
-//                .id(findmanager.getId())
-////                .authorities(findmanager.getAuthorities())
-//                .email(findmanager.getEmail())
-//                .nickname(findmanager.getNickname())
-//                .introduce(findmanager.getIntroduce())
-//                .oneline_introduce(findmanager.getOneline_introduce())
-//                .profile(findmanager.getProfile())
-//                .build();
+
+        System.out.println("ggggggg");
 
         return managerDto;
     }

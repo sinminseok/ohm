@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.dto.PostDto.PostDto;
+import ohm.ohm.entity.Post.Post;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -46,11 +48,13 @@ public class GymDto {
     @JsonIgnore
     private GymTimeDto gymTime;
 
+
     @JsonIgnore
     private GymPriceDto gymPrice;
 
+
     @JsonIgnore
-    private List<PostDto> posts = new ArrayList<PostDto>();
+    private List<Post> posts = new ArrayList<Post>();
 
     //테스트용 생성자
     public GymDto(String name,int count,int current_count){

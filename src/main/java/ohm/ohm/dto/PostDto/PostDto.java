@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohm.ohm.dto.GymDto.GymDto;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -13,6 +14,7 @@ import java.util.List;
 public class PostDto {
 
     private Long id;
+
 
     private String title;
 

@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class PostResponseDto {
 
+    private Long id;
+
     private String title;
 
     private String content;
@@ -19,8 +21,9 @@ public class PostResponseDto {
 
 
     @Builder
-    public PostResponseDto(String title,String content,List<PostImgResponseDto> imgs){
+    public PostResponseDto(Long id,String title,String content,List<PostImgResponseDto> imgs){
         this.title = title;
+        this.id = id;
         this.content = content;
         this.imgs = imgs;
     }

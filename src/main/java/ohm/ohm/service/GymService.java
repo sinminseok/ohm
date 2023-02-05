@@ -56,7 +56,6 @@ public class GymService {
 
         Gym save = gymRepository.save(gym);
 
-        System.out.println("FGDSGDFS == "+gymDto.getCLOSEDDAYS());
 
         GymTime gymTime = GymTime.builder()
                 .gym(save)
@@ -113,23 +112,47 @@ public class GymService {
     public List<GymResponseDto> findByName(String name) {
         List<Gym> gyms = gymRepository.findByNameContaining(name);
         List<GymResponseDto> gymDtos = new ArrayList<GymResponseDto>();
-        for (Gym element : gyms) {
-            gymDtos.add(appConfig.modelMapper().map(element, GymResponseDto.class));
-        }
 
+        for (Gym gym : gyms) {
+            List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
+            for(GymImg gymImg :gym.getImgs()){
+                gymImgDtos.add(appConfig.modelMapper().map(gymImg,GymImgResponseDto.class));
+            }
+
+            GymResponseDto gymResponseDto = GymResponseDto.builder()
+                    .address(gym.getAddress())
+                    .name(gym.getName())
+                    .introduce(gym.getIntroduce())
+                    .oneline_introduce(gym.getOneline_introduce())
+                    .imgs(gymImgDtos)
+                    .count(gym.getCount()).build();
+            gymDtos.add(gymResponseDto);
+        }
         return gymDtos;
     }
 
 
     //GYM ID로 조회
     public GymResponseDto findById(Long id) throws Exception {
-        Optional<Gym> gym = gymRepository.findById(id);
-        if (gym.isPresent()) {
-            return appConfig.modelMapper().map(gym.get(), GymResponseDto.class);
-        } else {
-            throw new Exception();
+        Gym gym = gymRepository.findGymFetchJoin(id);
+        List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
+        for(GymImg gymImg :gym.getImgs()){
+            gymImgDtos.add(appConfig.modelMapper().map(gymImg,GymImgResponseDto.class));
         }
+
+        GymResponseDto gymResponseDto = GymResponseDto.builder()
+                .address(gym.getAddress())
+                .name(gym.getName())
+                .introduce(gym.getIntroduce())
+                .oneline_introduce(gym.getOneline_introduce())
+                .imgs(gymImgDtos)
+                .count(gym.getCount()).build();
+
+        return gymResponseDto;
+
     }
+
+
 
     public GymDto findById_count(Long id) throws Exception {
         Optional<Gym> byId = gymRepository.findById(id);
