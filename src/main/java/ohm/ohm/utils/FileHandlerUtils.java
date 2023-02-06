@@ -17,8 +17,8 @@ import java.util.List;
 
 @Component
 public class FileHandlerUtils {
-//    @Value("${spring.servlet.multipart.location}")
-//    String filePath;
+
+
 
     public List<GymImg> gymimg_parseFileInfo(
             Gym gym,
@@ -40,8 +40,7 @@ public class FileHandlerUtils {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
         // 파일을 저장할 세부 경로 지정
-        String path =  "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
-
+        String path = "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
 
         File file = new File(path);
 
@@ -58,25 +57,21 @@ public class FileHandlerUtils {
         // 다중 파일 처리
         for (MultipartFile multipartFile : multipartFiles) {
 
+
             // 파일의 확장자 추출
             String originalFileExtension;
             String contentType = multipartFile.getContentType();
 
             // 확장자명이 존재하지 않을 경우 처리 x
-            if (ObjectUtils.isEmpty(contentType)) {
-                break;
-            } else {  // 확장자가 jpeg, png인 파일들만 받아서 처리
-                if (contentType.contains("image/jpeg"))
-                    originalFileExtension = ".jpg";
-                else if (contentType.contains("image/png"))
-                    originalFileExtension = ".png";
-                else  // 다른 확장자일 경우 처리 x
-                    break;
-            }
 
+
+            String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+            ; // 파일 확장자
             // 파일명 중복 피하고자 나노초까지 얻어와 지정
-            String new_file_name = System.nanoTime() + originalFileExtension;
+            System.out.println(ext);
+            String new_file_name = System.nanoTime() + ext;
 
+            System.out.println(new_file_name);
             // 파일 DTO 생성
             GymImg gymImg = GymImg.builder()
                     .gym(gym)
@@ -84,6 +79,7 @@ public class FileHandlerUtils {
                     .filePath(path + File.separator + new_file_name)
                     .build();
 
+            System.out.println(gymImg.getFilePath());
 
 
             // 생성 후 리스트에 추가
@@ -96,11 +92,15 @@ public class FileHandlerUtils {
             // 파일 권한 설정(쓰기, 읽기)
             file.setWritable(true);
             file.setReadable(true);
+
+
         }
+
+        System.out.println(fileList);
+
+
         return fileList;
     }
-
-
 
 
     public List<PostImg> postimg_parseFileInfo(
@@ -109,9 +109,6 @@ public class FileHandlerUtils {
     ) throws Exception {
         // 반환할 파일 리스트
         List<PostImg> fileList = new ArrayList<>();
-        System.out.println("DOING +"+multipartFiles);
-        System.out.println("DOING +"+multipartFiles.isEmpty());
-        System.out.println("DOING +"+multipartFiles.size());
 
 
         if (multipartFiles.isEmpty()) {
@@ -126,8 +123,7 @@ public class FileHandlerUtils {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
         // 파일을 저장할 세부 경로 지정
-        String path =  "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
-
+        String path = "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
 
         File file = new File(path);
 
@@ -143,7 +139,7 @@ public class FileHandlerUtils {
 
         // 다중 파일 처리
         for (MultipartFile multipartFile : multipartFiles) {
-            System.out.println("111111");
+
 
             // 파일의 확장자 추출
             String originalFileExtension;
@@ -151,13 +147,13 @@ public class FileHandlerUtils {
 
             // 확장자명이 존재하지 않을 경우 처리 x
 
-            System.out.println("333333");
-            String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));; // 파일 확장자
+
+            String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+            ; // 파일 확장자
             // 파일명 중복 피하고자 나노초까지 얻어와 지정
             System.out.println(ext);
             String new_file_name = System.nanoTime() + ext;
 
-            System.out.println("444444");
             System.out.println(new_file_name);
             // 파일 DTO 생성
             PostImg postImg = PostImg.builder()
@@ -165,7 +161,7 @@ public class FileHandlerUtils {
                     .origFileName(multipartFile.getOriginalFilename())
                     .filePath(path + File.separator + new_file_name)
                     .build();
-            System.out.println("5555555");
+
             System.out.println(postImg.getFilePath());
 
 

@@ -31,4 +31,7 @@ public interface GymRepository extends JpaRepository<Gym,Long> {
     @Query("update Gym g set g.current_count = g.current_count - 1 where g.id = :id")
     int decrease_count(@Param("id")Long id);
 
+    @Query("select g from Gym g where g.code = :code")
+    Gym find_code(@Param("code")int code);
+
 }

@@ -82,6 +82,8 @@ public class ManagerService implements UserDetailsService {
                 .authorityName("ROLE_TRAINER")
                 .build();
 
+
+
         Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()),managerDto.getNickname(),managerDto.getProfile(),managerDto.getOneline_introduce(),managerDto.getIntroduce() , managerDto.getAge(),managerDto.getEmail(), Collections.singleton(authority));
         Manager save_manager = managerRepository.save(manager);
         return appConfig.modelMapper().map(save_manager, ManagerDto.class);
@@ -101,7 +103,6 @@ public class ManagerService implements UserDetailsService {
 //        Manager findmanager = managerRepository.findManagerFetchJoinGym(id);
         Optional<Manager> findmanager = managerRepository.findOneWithGymById(id);
 
-        System.out.println("SDFGDFSG");
         ManagerDto managerDto = ManagerDto.builder()
                 .name(findmanager.get().getName())
                 .age(findmanager.get().getAge())
@@ -115,7 +116,6 @@ public class ManagerService implements UserDetailsService {
                 .profile(findmanager.get().getProfile())
                 .build();
 
-        System.out.println("ggggggg");
 
         return managerDto;
     }

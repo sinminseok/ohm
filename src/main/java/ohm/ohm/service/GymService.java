@@ -38,9 +38,7 @@ public class GymService {
 
 
     @Transactional
-    public Long save(GymRequestDto gymDto, List<MultipartFile> files) throws Exception {
-
-
+    public Long save(GymRequestDto gymDto) throws Exception {
 
         //img save
         Gym gym = Gym.builder()
@@ -56,7 +54,10 @@ public class GymService {
 
         Gym save = gymRepository.save(gym);
 
-
+        System.out.println("gymTimeee");
+        System.out.println(gymDto.getCLOSEDDAYS());
+        System.out.println(gymDto.getSATURDAY());
+        System.out.println(gymDto.getWEEKDAY());
         GymTime gymTime = GymTime.builder()
                 .gym(save)
                 .CLOSEDDAYS(gymDto.getCLOSEDDAYS())
@@ -68,7 +69,19 @@ public class GymService {
 
         gymTimeRepository.save(gymTime);
 
-        List<GymImg> gymImgList = fileHandler.gymimg_parseFileInfo(save, files);
+
+
+        return save.getId();
+
+    }
+
+    @Transactional
+    public Long save_img(Long gymId, List<MultipartFile> files) throws Exception {
+
+        Optional<Gym> gym = gymRepository.findById(gymId);
+
+
+        List<GymImg> gymImgList = fileHandler.gymimg_parseFileInfo(gym.get(), files);
 
 
         if (!gymImgList.isEmpty()) {
@@ -78,7 +91,7 @@ public class GymService {
             }
         }
 
-        return save.getId();
+        return gym.get().getId();
 
     }
 
@@ -102,6 +115,7 @@ public class GymService {
                     .oneline_introduce(gym.getOneline_introduce())
                     .imgs(gymImgDtos)
                     .count(gym.getCount()).build();
+
             gymDtos.add(gymResponseDto);
         }
         return gymDtos;
@@ -181,6 +195,12 @@ public class GymService {
     @Transactional
     public void decrease_count(Long id) throws Exception {
         gymRepository.decrease_count(id);
+    }
+
+
+    public Long check_code(int code) throws Exception{
+        Gym gym = gymRepository.find_code(code);
+        return gym.getId();
     }
 
 

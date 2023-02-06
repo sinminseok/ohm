@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 import java.util.List;
-
 
 
 @RestController
@@ -37,7 +37,7 @@ public class PostApiController {
             @PathVariable Long gymId,
             @Valid @RequestBody PostDto para_postDto
     ) throws Exception {
-        Long save = postService.save_content(gymId,para_postDto);
+        Long save = postService.save_content(gymId, para_postDto);
         return ResponseEntity.ok(save);
     }
 
@@ -47,20 +47,17 @@ public class PostApiController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<Long> save_imgs(
             @PathVariable Long postId,
-            @RequestPart(value = "images",required = false) List<MultipartFile> files
+            @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) throws Exception {
 
-
-        Long save = postService.save_img(postId,files);
-
-
+        Long save = postService.save_img(postId, files);
         return ResponseEntity.ok(save);
     }
 
     //헬스장에 등록된 모든 Post 조회]
     @ApiOperation(value = "모든 Post 조회", response = PostResponseDto.class, responseContainer = "List")
     @GetMapping("/posts/{gymId}")
-    public ResponseEntity<List<PostResponseDto>> findall(@PathVariable Long gymId){
+    public ResponseEntity<List<PostResponseDto>> findall(@PathVariable Long gymId) {
         System.out.println();
         List<PostResponseDto> findall = postService.findall(gymId);
         return ResponseEntity.ok(findall);
@@ -69,14 +66,10 @@ public class PostApiController {
     //Post 조회 findByID
     @ApiOperation(value = "Post 조회", response = PostResponseDto.class)
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostResponseDto> findById(@PathVariable Long postId){
+    public ResponseEntity<PostResponseDto> findById(@PathVariable Long postId) {
         PostResponseDto byId = postService.findById(postId);
         return ResponseEntity.ok(byId);
     }
-
-
-
-
 
 
 }

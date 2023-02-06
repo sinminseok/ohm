@@ -31,20 +31,30 @@ public class GymApiController {
     @PostMapping("/gym")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save(
-            @RequestPart(value = "images",required = false) List<MultipartFile> files,
-            @Valid @RequestPart(value = "GymRequestDto") GymRequestDto gymRequestDto
+            @Valid @RequestBody GymRequestDto gymRequestDto
 
     ) throws Exception {
 
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
-        System.out.println("gymRequestDto == "+gymRequestDto.getCLOSEDDAYS());
 
-        Long save = gymService.save(gymRequestDto,files);
+        Long save = gymService.save(gymRequestDto);
 
         managerService.register_gym(save, managerDto.getId());
 
         return ResponseEntity.ok(save);
 
+    }
+
+    //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
+    @ApiOperation(value = "Gym 등록(Manager만 사용)", response = Long.class)
+    @PostMapping("/gym/image/{gymId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    public ResponseEntity<Long> save_img(
+            @PathVariable Long gymId,
+            @RequestPart(value = "images",required = false) List<MultipartFile> files
+    ) throws Exception {
+        Long aLong = gymService.save_img(gymId, files);
+        return ResponseEntity.ok(aLong);
     }
 
     //모든헬스장 조회
@@ -95,6 +105,14 @@ public class GymApiController {
     public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception{
         gymService.decrease_count(gymId);
         return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
+    }
+
+    //헬스장 인원 감소 api
+    @ApiOperation(value = "code로 GymId조회", response = Integer.class)
+    @GetMapping("/gym/code/{code}")
+    public ResponseEntity<Long> check_code(@PathVariable int code) throws Exception{
+        Long aLong = gymService.check_code(code);
+        return ResponseEntity.ok(aLong);
     }
 
 
