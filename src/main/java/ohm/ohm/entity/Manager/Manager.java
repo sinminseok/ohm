@@ -80,8 +80,9 @@ public class Manager{
     }
 
     @Builder
-    public Manager(String name, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
+    public Manager(Gym gym,String name, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
         this.name = name;
+        this.gym = gym;
         this.createdTime = LocalDateTime.now();
         this.password = password;
         this.nickname = nickname;

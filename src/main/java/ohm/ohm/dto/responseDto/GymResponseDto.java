@@ -10,11 +10,15 @@ import java.util.List;
 @NoArgsConstructor
 public class GymResponseDto {
 
+    private Long id;
+
     private String name;
 
     private String address;
 
     private int count;
+
+    private int current_count;
 
     private List<GymImgResponseDto> imgs;
 
@@ -23,8 +27,10 @@ public class GymResponseDto {
     private String oneline_introduce;
 
     @Builder
-    public GymResponseDto(String name,String address,int count,List<GymImgResponseDto> imgs,String introduce,String oneline_introduce){
+    public GymResponseDto(Long id,int current_count,String name,String address,int count,List<GymImgResponseDto> imgs,String introduce,String oneline_introduce){
         this.name = name;
+        this.id = id;
+        this.current_count = current_count;
         this.address = address;
         this.count = count;
         this.imgs = imgs;

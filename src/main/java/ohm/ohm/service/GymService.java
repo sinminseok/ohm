@@ -110,6 +110,7 @@ public class GymService {
 
             GymResponseDto gymResponseDto = GymResponseDto.builder()
                     .address(gym.getAddress())
+                    .id(gym.getId())
                     .name(gym.getName())
                     .introduce(gym.getIntroduce())
                     .oneline_introduce(gym.getOneline_introduce())
@@ -136,6 +137,7 @@ public class GymService {
             GymResponseDto gymResponseDto = GymResponseDto.builder()
                     .address(gym.getAddress())
                     .name(gym.getName())
+                    .id(gym.getId())
                     .introduce(gym.getIntroduce())
                     .oneline_introduce(gym.getOneline_introduce())
                     .imgs(gymImgDtos)
@@ -156,6 +158,7 @@ public class GymService {
 
         GymResponseDto gymResponseDto = GymResponseDto.builder()
                 .address(gym.getAddress())
+                .id(gym.getId())
                 .name(gym.getName())
                 .introduce(gym.getIntroduce())
                 .oneline_introduce(gym.getOneline_introduce())

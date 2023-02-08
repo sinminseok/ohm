@@ -8,6 +8,7 @@ import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.dto.requestDto.ManagerRequestDto;
 import ohm.ohm.dto.responseDto.TrainerResponseDto;
+import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Manager.Authority;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.repository.GymRepository;
@@ -73,18 +74,30 @@ public class ManagerService implements UserDetailsService {
 
     //Trainer 회원가입
     @Transactional
-    public ManagerDto trainer_save(ManagerRequestDto managerDto) {
+    public ManagerDto trainer_save(ManagerRequestDto managerDto, Long gymId) {
         if (managerRepository.findOneWithAuthoritiesByName(managerDto.getName()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 매니저입니다.");
+            throw new RuntimeException("이미 가입되어 있는 트레이너 입니다.");
         }
+        Optional<Gym> gym_optional = gymRepository.findById(gymId);
 
         Authority authority = Authority.builder()
                 .authorityName("ROLE_TRAINER")
                 .build();
 
+        Manager manager = Manager.builder()
+                .name(managerDto.getName())
+                .gym(gym_optional.get())
+                .password(passwordEncoder.encode(managerDto.getPassword()))
+                .nickname(managerDto.getNickname())
+                .age(managerDto.getAge())
+                .email(managerDto.getEmail())
+                .profile(managerDto.getProfile())
+                .oneline_introduce(managerDto.getOneline_introduce())
+                .introduce(managerDto.getIntroduce())
+                .authorities(Collections.singleton(authority))
+                .build();
 
 
-        Manager manager = new Manager(managerDto.getName(), passwordEncoder.encode(managerDto.getPassword()),managerDto.getNickname(),managerDto.getProfile(),managerDto.getOneline_introduce(),managerDto.getIntroduce() , managerDto.getAge(),managerDto.getEmail(), Collections.singleton(authority));
         Manager save_manager = managerRepository.save(manager);
         return appConfig.modelMapper().map(save_manager, ManagerDto.class);
 
@@ -96,9 +109,9 @@ public class ManagerService implements UserDetailsService {
     public ManagerDto getMyManagerWithAuthorities() {
         return appConfig.modelMapper().map(SecurityUtils.getCurrentUsername().flatMap(managerRepository::findOneWithAuthoritiesByName).get(), ManagerDto.class);
     }
-    
+
     @Transactional
-    public ManagerDto getManagerInfo(Long id){
+    public ManagerDto getManagerInfo(Long id) {
 
 //        Manager findmanager = managerRepository.findManagerFetchJoinGym(id);
         Optional<Manager> findmanager = managerRepository.findOneWithGymById(id);
@@ -127,12 +140,12 @@ public class ManagerService implements UserDetailsService {
         return appConfig.modelMapper().map(byId.get(), TrainerResponseDto.class);
     }
 
-    public List<TrainerResponseDto> trainer_findall(Long gymId){
+    public List<TrainerResponseDto> trainer_findall(Long gymId) {
         List<Optional<Manager>> managers = managerRepository.findall_byGymId(gymId);
         List<TrainerResponseDto> trainerResponseDtos = new ArrayList<TrainerResponseDto>();
 
-        for(Optional<Manager> manager : managers){
-            trainerResponseDtos.add(appConfig.modelMapper().map(manager.get(),TrainerResponseDto.class));
+        for (Optional<Manager> manager : managers) {
+            trainerResponseDtos.add(appConfig.modelMapper().map(manager.get(), TrainerResponseDto.class));
         }
 
         return trainerResponseDtos;
@@ -147,7 +160,7 @@ public class ManagerService implements UserDetailsService {
         //기본 manager 조회
         Optional<Manager> byId = managerRepository.findById(updateDto.getId());
 
-      //update생성자로 변경감지
+        //update생성자로 변경감지
         byId.get().update(map);
         return byId;
     }
@@ -155,8 +168,8 @@ public class ManagerService implements UserDetailsService {
 
     //Gym을 save할때 manager와 연관관계를 맺어주는 메서드
     @Transactional
-    public void register_gym(Long gymId,Long manager_id){
-        managerRepository.registerByGymId(manager_id,gymId);
+    public void register_gym(Long gymId, Long manager_id) {
+        managerRepository.registerByGymId(manager_id, gymId);
 
     }
 
@@ -167,7 +180,7 @@ public class ManagerService implements UserDetailsService {
         managerRepository.delete(byId.get());
     }
 
-   // ------------시큐리티에서 사용되는 메서드 --------------
+    // ------------시큐리티에서 사용되는 메서드 --------------
     private User createUser(String username, Manager manager) {
         List<GrantedAuthority> grantedAuthorities = manager.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))

@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class ManagerDto  {
+public class ManagerDto {
 
     private Long id;
 
@@ -38,7 +38,7 @@ public class ManagerDto  {
     private Set<Authority> authorities;
 
     @Builder
-    public ManagerDto(String profile,String oneline_introduce,String introduce,String nickname,Long id,String name,String email,Integer age,GymDto gymDto,Set<Authority> authorities){
+    public ManagerDto(String profile, String oneline_introduce, String introduce, String nickname, Long id, String name, String email, Integer age, GymDto gymDto, Set<Authority> authorities) {
         this.id = id;
         this.name = name;
         this.nickname = nickname;
@@ -52,20 +52,20 @@ public class ManagerDto  {
     }
 
     //
-    public ManagerDto(Long id,String name,String email,String password,Integer age,GymDto gymDto,Set<Authority> authorities){
+    public ManagerDto(Long id, String name, String email, String password, Integer age, GymDto gymDto, Set<Authority> authorities) {
         this.id = id;
         this.name = name;
-        this.age=age;
+        this.age = age;
         this.gymDto = gymDto;
         this.authorities = authorities;
     }
 
-    public ManagerDto(String name,String email){
+    public ManagerDto(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
-    public ManagerDto(Long id,String name,String email){
+    public ManagerDto(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;

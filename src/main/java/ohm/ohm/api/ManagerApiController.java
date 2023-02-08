@@ -38,7 +38,6 @@ public class ManagerApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
-
     @ApiOperation(value = "manager 로그인", response = TokenDto.class)
     @PostMapping("/manager/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
@@ -66,9 +65,11 @@ public class ManagerApiController {
 
     //manager_trainer 계정생성
     @ApiOperation(value = "trainer 회원가입", response = ManagerDto.class)
-    @PostMapping("/trainer")
-    public ResponseEntity<ManagerDto> trainer_signup(@Valid @RequestBody ManagerRequestDto managerDto) {
-        return ResponseEntity.ok(managerService.trainer_save(managerDto));
+    @PostMapping("/trainer/{gymId}")
+    public ResponseEntity<ManagerDto> trainer_signup(
+            @PathVariable Long gymId,
+            @Valid @RequestBody ManagerRequestDto managerDto) {
+        return ResponseEntity.ok(managerService.trainer_save(managerDto,gymId));
     }
 
 
@@ -81,34 +82,26 @@ public class ManagerApiController {
     }
 
 
-
-
     @ApiOperation(value = "Manager ID로 정보조회", response = ManagerDto.class)
     @GetMapping("/manager/info/{managerId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
     public ResponseEntity<ManagerDto> getManagerInfoById(
             @PathVariable Long managerId
 
-    ){
+    ) {
         ManagerDto managerInfo = managerService.getManagerInfo(managerId);
         return ResponseEntity.ok(managerInfo);
     }
-
-
-
 
 
     @ApiOperation(value = "Id로 Manager(ROLE이 Trainer)조회", response = ManagerDto.class)
     @GetMapping("/manager/{managerId}")
     public ResponseEntity<TrainerResponseDto> trainer_find(
             @PathVariable Long managerId
-    ){
+    ) {
         TrainerResponseDto byID = managerService.findByID(managerId);
         return ResponseEntity.ok(byID);
     }
-
-
-
 
 
     @ApiOperation(value = "GymId로 해당 Gym에 소속된 manager모두조회", response = ManagerDto.class)

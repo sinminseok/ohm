@@ -26,7 +26,6 @@ public interface GymRepository extends JpaRepository<Gym,Long> {
     int increase_count(@Param("id")Long id);
 
 
-
     @Modifying(clearAutomatically = true)
     @Query("update Gym g set g.current_count = g.current_count - 1 where g.id = :id")
     int decrease_count(@Param("id")Long id);

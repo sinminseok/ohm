@@ -107,7 +107,7 @@ public class GymApiController {
         return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
     }
 
-    //헬스장 인원 감소 api
+
     @ApiOperation(value = "code로 GymId조회", response = Integer.class)
     @GetMapping("/gym/code/{code}")
     public ResponseEntity<Long> check_code(@PathVariable int code) throws Exception{
