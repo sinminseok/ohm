@@ -5,13 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.dto.GymDto.GymPriceDto;
+import ohm.ohm.dto.GymDto.GymTimeDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymImgResponseDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Gym.GymImg;
+import ohm.ohm.entity.Gym.GymPrice;
 import ohm.ohm.entity.Gym.GymTime;
 import ohm.ohm.repository.GymImgRepository;
+import ohm.ohm.repository.GymPriceRepository;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.GymTimeRepository;
 import ohm.ohm.utils.FileHandlerUtils;
@@ -34,6 +38,7 @@ public class GymService {
     private final AppConfig appConfig;
     private final FileHandlerUtils fileHandler;
     private final GymTimeRepository gymTimeRepository;
+    private final GymPriceRepository gymPriceRepository;
     //헬스장 생성 -- ROLE이 ROLE_MANAGER인 Manager만 사용가능
 
 
@@ -53,24 +58,6 @@ public class GymService {
                 .build();
 
         Gym save = gymRepository.save(gym);
-
-        System.out.println("gymTimeee");
-        System.out.println(gymDto.getCLOSEDDAYS());
-        System.out.println(gymDto.getSATURDAY());
-        System.out.println(gymDto.getWEEKDAY());
-        GymTime gymTime = GymTime.builder()
-                .gym(save)
-                .CLOSEDDAYS(gymDto.getCLOSEDDAYS())
-                .SUNDAY(gymDto.getSUNDAY())
-                .SATURDAY(gymDto.getSATURDAY())
-                .WEEKDAY(gymDto.getWEEKDAY())
-                .HOLIDAY(gymDto.getHOLIDAY())
-                .build();
-
-        gymTimeRepository.save(gymTime);
-
-
-
         return save.getId();
 
     }
@@ -171,6 +158,7 @@ public class GymService {
 
 
 
+    //Gym Id로 count를 증가시킬 gym 리턴
     public GymDto findById_count(Long id) throws Exception {
         Optional<Gym> byId = gymRepository.findById(id);
         if (byId.isPresent()) {
@@ -198,6 +186,41 @@ public class GymService {
     @Transactional
     public void decrease_count(Long id) throws Exception {
         gymRepository.decrease_count(id);
+    }
+
+    @Transactional
+    public Long register_price(Long gymId, GymPriceDto gymPriceDto){
+
+        Optional<Gym> byId = gymRepository.findById(gymId);
+
+        GymPrice gymPrice_builder = GymPrice.builder()
+                .price(gymPriceDto.getPrice())
+                .during(gymPriceDto.getDuring())
+                .gym(byId.get())
+                .build();
+
+        GymPrice save = gymPriceRepository.save(gymPrice_builder);
+        return save.getId();
+    }
+
+    @Transactional
+    public Long register_time(Long gymId, GymTimeDto gymTimeDto){
+
+        Optional<Gym> byId = gymRepository.findById(gymId);
+
+        GymTime gymTime = GymTime.builder()
+                .gym(byId.get())
+                .HOLIDAY(gymTimeDto.getHoliday())
+                .WEEKDAY(gymTimeDto.getWeekday())
+                .SATURDAY(gymTimeDto.getSaturday())
+                .SUNDAY(gymTimeDto.getSunday())
+                .CLOSEDDAYS(gymTimeDto.getCloseddays())
+                .build();
+
+        GymTime save = gymTimeRepository.save(gymTime);
+
+
+        return save.getId();
     }
 
 
