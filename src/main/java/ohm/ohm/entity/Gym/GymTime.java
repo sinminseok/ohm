@@ -20,29 +20,29 @@ public class GymTime {
     private Long id;
 
     //휴관일
-    private String CLOSEDDAYS;
+    private String closeddays;
 
-    private String SUNDAY;
+    private String sunday;
 
-    private String SATURDAY;
+    private String saturday;
 
     //평일
-    private String WEEKDAY;
+    private String weekday;
 
     //공휴일
-    private String HOLIDAY;
+    private String holiday;
 
     @OneToOne(mappedBy = "gymTime")
     private Gym gym;
 
     @Builder
     public GymTime(Gym gym,String CLOSEDDAYS,String SUNDAY,String SATURDAY,String WEEKDAY,String HOLIDAY){
-        this.CLOSEDDAYS =CLOSEDDAYS;
-        this.SUNDAY = SUNDAY;
+        this.closeddays =CLOSEDDAYS;
+        this.sunday = SUNDAY;
         this.gym = gym;
-        this.SATURDAY = SATURDAY;
-        this.WEEKDAY = WEEKDAY;
-        this.HOLIDAY = HOLIDAY;
+        this.saturday = SATURDAY;
+        this.weekday = WEEKDAY;
+        this.holiday = HOLIDAY;
     }
 
 

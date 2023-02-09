@@ -15,20 +15,18 @@ public class GymTimeDto {
 
     private Long id;
 
-
-
     //휴관일
-    private String CLOSEDDAYS;
+    private String closeddays;
 
-    private String SUNDAY;
+    private String sunday;
 
-    private String SATURDAY;
+    private String saturday;
 
     //평일
-    private String WEEKDAY;
+    private String weekday;
 
     //공휴일
-    private String HOLIDAY;
+    private String holiday;
 
     @JsonIgnore
     private Gym gym;

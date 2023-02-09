@@ -11,6 +11,8 @@ Post(헬스장 공지사항) 기능 - CRUD(Manager 가 제어)
 
 Service 구현 기능
 
+
+
 AdminService -
 ManagerService - CRUD, ROLE을 이용해 Trainer와 Manager을 역할 분리
 GymService - 현재 헬스장 인원현황 데이터 뿌리기기능(주기능) , CRUD
@@ -30,4 +32,10 @@ ADMIN은 코무무(본인) 계정이므로 걍 DB에 박아주자 ㅋ
 
 ----------
 
-헬스장 가격등록,시간등록 api는 따로 제작
+manager 회원가입시 코드 인증기능 추가
+
+통계 쿼리 구상 및 API 제작
+
+manager와 연관된 헬스장이 이미 있을경우 예외처리
+
+gymTime 테이블 저장시 gym에 ID mapping 작업

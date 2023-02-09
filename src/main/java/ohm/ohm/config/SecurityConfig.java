@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 .and()
+
                 .authorizeRequests()
                 .antMatchers(
                         "/swagger-resources/**",

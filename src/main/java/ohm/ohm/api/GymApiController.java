@@ -3,9 +3,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.dto.GymDto.GymPriceDto;
+import ohm.ohm.dto.GymDto.GymTimeDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
+import ohm.ohm.entity.Gym.GymPrice;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
@@ -112,6 +115,26 @@ public class GymApiController {
     @GetMapping("/gym/code/{code}")
     public ResponseEntity<Long> check_code(@PathVariable int code) throws Exception{
         Long aLong = gymService.check_code(code);
+        return ResponseEntity.ok(aLong);
+    }
+
+    @ApiOperation(value = "gym price등록", response = Integer.class)
+    @PostMapping("/gym/price/{gymId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    public ResponseEntity<Long> register_price(
+            @RequestBody GymPriceDto gymPriceDto,
+            @PathVariable Long gymId) throws Exception{
+        Long aLong = gymService.register_price(gymId, gymPriceDto);
+        return ResponseEntity.ok(aLong);
+    }
+
+    @ApiOperation(value = "gym Time등록", response = Integer.class)
+    @PostMapping("/gym/time/{gymId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    public ResponseEntity<Long> register_time(
+            @RequestBody GymTimeDto gymTimeDto,
+            @PathVariable Long gymId) throws Exception{
+        Long aLong = gymService.register_time(gymId, gymTimeDto);
         return ResponseEntity.ok(aLong);
     }
 
