@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.entity.Post.Post;
 
@@ -76,11 +77,27 @@ public class Gym{
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<GymPrice> prices;
 
+    public void register_time(GymTime gymTime){
+        this.gymTime = gymTime;
 
+    }
+
+    public void update(GymDto gymDto){
+        this.name = gymDto.getName();
+        this.id = gymDto.getId();
+        this.area = gymDto.getArea();
+        this.oneline_introduce = gymDto.getOneline_introduce();
+        this.trainer_count = gymDto.getTrainer_count();
+        this.address = gymDto.getAddress();
+        this.introduce = gymDto.getIntroduce();
+        this.count = gymDto.getCount();
+        this.code = gymDto.getCode();
+    }
 
     @Builder
-    public Gym(GymTime gymTime,String area,String name,String address,int count,int code,String introduce,String oneline_introduce,String holiday,String weekday_time,String weekend_time,int trainer_count){
+    public Gym(Long id,GymTime gymTime,String area,String name,String address,int count,int code,String introduce,String oneline_introduce,String holiday,String weekday_time,String weekend_time,int trainer_count){
         this.name = name;
+        this.id = id;
         this.area = area;
         this.gymTime = gymTime;
         this.oneline_introduce = oneline_introduce;

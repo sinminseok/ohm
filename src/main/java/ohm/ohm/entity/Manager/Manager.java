@@ -2,6 +2,7 @@ package ohm.ohm.entity.Manager;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.entity.Admin;
 import ohm.ohm.entity.Gym.Gym;
 import org.springframework.data.annotation.CreatedDate;
@@ -71,12 +72,20 @@ public class Manager{
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
+    public void register_profile(String profile){
+        this.profile = profile;
+    }
 
-    public void update(Manager update){
-        this.id = update.id;
-        this.name = update.name;
-        this.age = update.age;
-        this.email = update.email;
+
+    public void update(ManagerDto managerDto){
+        this.name = managerDto.getName();
+        this.lastModifiedTime = LocalDateTime.now();
+        this.nickname = managerDto.getNickname();
+        this.profile = managerDto.getProfile();
+        this.oneline_introduce = managerDto.getOneline_introduce();
+        this.introduce = managerDto.getIntroduce();
+        this.age = managerDto.getAge();
+        this.email = managerDto.getEmail();
     }
 
     @Builder

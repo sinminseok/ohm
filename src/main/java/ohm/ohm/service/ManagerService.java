@@ -13,6 +13,7 @@ import ohm.ohm.entity.Manager.Authority;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.ManagerRepository;
+import ohm.ohm.utils.FileHandlerUtils;
 import ohm.ohm.utils.SecurityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +42,15 @@ public class ManagerService implements UserDetailsService {
     private final GymRepository gymRepository;
     private final AppConfig appConfig;
     private final PasswordEncoder passwordEncoder;
+    private final FileHandlerUtils fileHandler;
 
+
+    @Transactional
+    public void profile_save(Long managerId, MultipartFile file) throws Exception {
+        Optional<Manager> byId = managerRepository.findById(managerId);
+        String fileURL = fileHandler.profileimg_parseFileInfo(file);
+        byId.get().register_profile(fileURL);
+    }
 
     //Manager 회원가입
     @Transactional
@@ -154,14 +164,13 @@ public class ManagerService implements UserDetailsService {
 
     //매니저 정보수정
     public Optional<Manager> update(ManagerDto updateDto) {
-        //업데이트될 정보
-        Manager map = appConfig.modelMapper().map(updateDto, Manager.class);
+
 
         //기본 manager 조회
         Optional<Manager> byId = managerRepository.findById(updateDto.getId());
 
         //update생성자로 변경감지
-        byId.get().update(map);
+        byId.get().update(updateDto);
         return byId;
     }
 
@@ -175,7 +184,7 @@ public class ManagerService implements UserDetailsService {
 
 
     //매니저 삭제
-    public void remove(Long id) {
+    public void delete(Long id) {
         Optional<Manager> byId = managerRepository.findById(id);
         managerRepository.delete(byId.get());
     }

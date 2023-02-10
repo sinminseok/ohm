@@ -1,12 +1,11 @@
 package ohm.ohm.api;
-
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.ManagerDto.LoginDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.dto.ManagerDto.TokenDto;
+import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.requestDto.ManagerRequestDto;
 import ohm.ohm.dto.responseDto.TrainerResponseDto;
 import ohm.ohm.jwt.JwtFilter;
@@ -22,6 +21,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,11 +34,10 @@ public class ManagerApiController {
 
     private final ManagerService managerService;
     private final TokenProvider tokenProvider;
-    private final GymService gymService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
-    @ApiOperation(value = "manager 로그인", response = TokenDto.class)
+    @ApiOperation(value = "manager,trainer 로그인", response = TokenDto.class)
     @PostMapping("/manager/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
 
@@ -63,7 +62,20 @@ public class ManagerApiController {
         return ResponseEntity.ok(managerService.manager_save(managerDto));
     }
 
-    //manager_trainer 계정생성
+    //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
+    @ApiOperation(value = "Manager profile 등록", response = Long.class)
+    @PostMapping("/manager/image/{managerId}")
+    public ResponseEntity<String> save_img(
+            @PathVariable Long managerId,
+            @RequestPart(value = "images",required = false) MultipartFile file
+    ) throws Exception {
+        managerService.profile_save(managerId,file);
+        return ResponseEntity.ok("image upload!");
+    }
+
+
+
+
     @ApiOperation(value = "trainer 회원가입", response = ManagerDto.class)
     @PostMapping("/trainer/{gymId}")
     public ResponseEntity<ManagerDto> trainer_signup(
@@ -111,6 +123,27 @@ public class ManagerApiController {
     ) {
         List<TrainerResponseDto> trainerResponseDtos = managerService.trainer_findall(gymId);
         return ResponseEntity.ok(trainerResponseDtos);
+    }
+
+
+
+    @ApiOperation(value = "Manager 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PatchMapping("/manager")
+    public ResponseEntity<String> update(
+            @RequestBody ManagerDto managerDto
+    ) {
+        managerService.update(managerDto);
+        return ResponseEntity.ok("Update!");
+    }
+
+
+    @ApiOperation(value = "Manager 삭제", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @DeleteMapping("/manager/{managerId}")
+    public ResponseEntity<String> remove(@PathVariable Long managerId) {
+        managerService.delete(managerId);
+        return ResponseEntity.ok("Remove!");
     }
 
 

@@ -6,9 +6,9 @@ import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.dto.GymDto.GymPriceDto;
 import ohm.ohm.dto.GymDto.GymTimeDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
+import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
-import ohm.ohm.entity.Gym.GymPrice;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,6 @@ public class GymApiController {
 
 
 
-    //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
     @ApiOperation(value = "Gym 등록(Manager만 사용)", response = Long.class)
     @PostMapping("/gym")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
@@ -49,7 +48,7 @@ public class GymApiController {
     }
 
     //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
-    @ApiOperation(value = "Gym 등록(Manager만 사용)", response = Long.class)
+    @ApiOperation(value = "GymImg 등록(Manager만 사용)", response = Long.class)
     @PostMapping("/gym/image/{gymId}")
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save_img(
@@ -65,7 +64,6 @@ public class GymApiController {
     @GetMapping("/gyms")
     public ResponseEntity<List<GymResponseDto>> findall() throws Exception{
         List<GymResponseDto> findall = gymService.findall();
-
         return ResponseEntity.ok(findall);
     }
 
@@ -77,7 +75,7 @@ public class GymApiController {
         return ResponseEntity.ok(byName);
     }
 
-    //ID로 헬스장 조회(클라이언트에서 ID값을 가지고 있어야함)
+    //ID로 헬스장 조회
     @ApiOperation(value = "ID로 헬스장 조회", response = GymResponseDto.class)
     @GetMapping("/gym/{gymId}")
     public ResponseEntity<GymResponseDto> findById(@PathVariable Long gymId) throws Exception{
@@ -137,6 +135,18 @@ public class GymApiController {
         Long aLong = gymService.register_time(gymId, gymTimeDto);
         return ResponseEntity.ok(aLong);
     }
+
+    //Post 수정
+    @ApiOperation(value = "Gym 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PatchMapping("/gym")
+    public ResponseEntity<String> update(
+            @RequestBody GymDto gymDto
+    ) {
+        gymService.update_gym(gymDto);
+        return ResponseEntity.ok("Update!");
+    }
+
 
 
 }

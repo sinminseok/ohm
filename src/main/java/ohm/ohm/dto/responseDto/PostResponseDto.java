@@ -19,7 +19,6 @@ public class PostResponseDto {
 
     private List<PostImgResponseDto> imgs;
 
-
     @Builder
     public PostResponseDto(Long id,String title,String content,List<PostImgResponseDto> imgs){
         this.title = title;
