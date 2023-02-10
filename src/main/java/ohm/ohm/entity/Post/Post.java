@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.entity.Gym.Gym;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -60,12 +61,11 @@ public class Post {
         this.gym = gym;
     }
 
-    public void update(Post post) {
+    public void update(PostDto post) {
         this.id = post.getId();
         this.lastModifiedTime = LocalDateTime.now();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.imgs = post.getImgs();
     }
 
 }

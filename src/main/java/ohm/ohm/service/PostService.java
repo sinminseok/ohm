@@ -52,14 +52,12 @@ public class PostService {
     public Long save_img(Long postId, List<MultipartFile> files) throws Exception {
         Optional<Post> post = postRepository.findById(postId);
 
-        System.out.println("files == "+files.size());
         List<PostImg> postImgs = fileHandler.postimg_parseFileInfo(post.get(), files);
-        System.out.println("postImgs == "+files.get(0).getOriginalFilename());
 
         if(!postImgs.isEmpty()){
             for(PostImg postImg :postImgs){
                 PostImg save = postImgRepository.save(postImg);
-                System.out.println("TITERJV = "+save.getId());
+
             }
         }
 
@@ -87,11 +85,19 @@ public class PostService {
     }
 
     //변경감지 게시물 수정 (클라이언트에서 수정된 사항은 해당 객체에 업데이트해서 넣고 아닌 값은 원래 객체 값을 대입해서 넣어주자)
-    public Optional<Post> update(PostDto updateDto) {
-        Post update = appConfig.modelMapper().map(updateDto, Post.class);
-        Optional<Post> byId = postRepository.findById(update.getId());
-        byId.get().update(update);
+    @Transactional
+    public Optional<Post> update_post(PostDto postDto) {
+        Optional<Post> byId = postRepository.findById(postDto.getId());
+        byId.get().update(postDto);
         return byId;
     }
+
+    @Transactional
+    public void delete(Long postId){
+        Optional<Post> byId = postRepository.findById(postId);
+        postRepository.delete(byId.get());
+    }
+
+
 
 }

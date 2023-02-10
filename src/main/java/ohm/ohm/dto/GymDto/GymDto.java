@@ -27,6 +27,8 @@ public class GymDto {
     //헬스장 총 인원
     private int count;
 
+    private String area;
+
 
     @JsonIgnore
     private List<GymImgDto> imgs;

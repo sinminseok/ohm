@@ -217,7 +217,12 @@ public class GymService {
                 .CLOSEDDAYS(gymTimeDto.getCloseddays())
                 .build();
 
+
+
         GymTime save = gymTimeRepository.save(gymTime);
+
+        //변경감지
+        byId.get().register_time(save);
 
 
         return save.getId();
@@ -227,6 +232,13 @@ public class GymService {
     public Long check_code(int code) throws Exception{
         Gym gym = gymRepository.find_code(code);
         return gym.getId();
+    }
+
+    @Transactional
+    public Optional<Gym> update_gym(GymDto gymDto){
+        Optional<Gym> byId = gymRepository.findById(gymDto.getId());
+        byId.get().update(gymDto);
+        return byId;
     }
 
 

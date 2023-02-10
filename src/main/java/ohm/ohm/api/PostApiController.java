@@ -71,5 +71,25 @@ public class PostApiController {
         return ResponseEntity.ok(byId);
     }
 
+    //Post 수정
+    @ApiOperation(value = "Post 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PatchMapping("/post")
+    public ResponseEntity<String> update(
+            @RequestBody PostDto postDto
+            ) {
+        postService.update_post(postDto);
+        return ResponseEntity.ok("Remove!");
+    }
+
+    //Post 삭제
+    @ApiOperation(value = "Post 삭제", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<String> remove(@PathVariable Long postId) {
+        postService.delete(postId);
+        return ResponseEntity.ok("Remove!");
+    }
+
 
 }
