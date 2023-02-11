@@ -1,6 +1,4 @@
 package ohm.ohm.service;
-
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
@@ -22,7 +20,6 @@ import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -237,7 +234,7 @@ public class GymService {
     @Transactional
     public Optional<Gym> update_gym(GymDto gymDto){
         Optional<Gym> byId = gymRepository.findById(gymDto.getId());
-        byId.get().update(gymDto);
+        byId.get().update(appConfig.modelMapper().map(gymDto,Gym.class));
         return byId;
     }
 

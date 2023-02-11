@@ -88,7 +88,7 @@ public class PostService {
     @Transactional
     public Optional<Post> update_post(PostDto postDto) {
         Optional<Post> byId = postRepository.findById(postDto.getId());
-        byId.get().update(postDto);
+        byId.get().update(appConfig.modelMapper().map(postDto,Post.class));
         return byId;
     }
 

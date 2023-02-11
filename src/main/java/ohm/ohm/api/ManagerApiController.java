@@ -37,6 +37,21 @@ public class ManagerApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
+
+
+    @ApiOperation(value = "manager code 인증", response = String.class)
+    @PostMapping("/manager/code/{code}")
+    public ResponseEntity<String> check_code(
+            @PathVariable String code) {
+
+        boolean bool = managerService.check_code(code);
+        if(bool == true){
+            return ResponseEntity.ok("true");
+        }else{
+            return ResponseEntity.ok("false");
+        }
+    }
+
     @ApiOperation(value = "manager,trainer 로그인", response = TokenDto.class)
     @PostMapping("/manager/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
@@ -62,7 +77,7 @@ public class ManagerApiController {
         return ResponseEntity.ok(managerService.manager_save(managerDto));
     }
 
-    //로그인한 manager가 Gym정보를 입력하고 저장하는 메서드
+
     @ApiOperation(value = "Manager profile 등록", response = Long.class)
     @PostMapping("/manager/image/{managerId}")
     public ResponseEntity<String> save_img(

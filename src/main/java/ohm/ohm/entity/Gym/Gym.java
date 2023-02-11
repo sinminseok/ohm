@@ -82,16 +82,16 @@ public class Gym{
 
     }
 
-    public void update(GymDto gymDto){
-        this.name = gymDto.getName();
-        this.id = gymDto.getId();
-        this.area = gymDto.getArea();
-        this.oneline_introduce = gymDto.getOneline_introduce();
-        this.trainer_count = gymDto.getTrainer_count();
-        this.address = gymDto.getAddress();
-        this.introduce = gymDto.getIntroduce();
-        this.count = gymDto.getCount();
-        this.code = gymDto.getCode();
+    public void update(Gym gym){
+        this.name = gym.getName();
+        this.id = gym.getId();
+        this.area = gym.getArea();
+        this.oneline_introduce = gym.getOneline_introduce();
+        this.trainer_count = gym.getTrainer_count();
+        this.address = gym.getAddress();
+        this.introduce = gym.getIntroduce();
+        this.count = gym.getCount();
+        this.code = gym.getCode();
     }
 
     @Builder

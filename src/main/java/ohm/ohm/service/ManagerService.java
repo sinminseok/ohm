@@ -8,9 +8,11 @@ import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
 import ohm.ohm.dto.requestDto.ManagerRequestDto;
 import ohm.ohm.dto.responseDto.TrainerResponseDto;
+import ohm.ohm.entity.Code;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Manager.Authority;
 import ohm.ohm.entity.Manager.Manager;
+import ohm.ohm.repository.CodeRepository;
 import ohm.ohm.repository.GymRepository;
 import ohm.ohm.repository.ManagerRepository;
 import ohm.ohm.utils.FileHandlerUtils;
@@ -41,9 +43,21 @@ public class ManagerService implements UserDetailsService {
     private final ManagerRepository managerRepository;
     private final GymRepository gymRepository;
     private final AppConfig appConfig;
+    private final CodeRepository codeRepository;
     private final PasswordEncoder passwordEncoder;
     private final FileHandlerUtils fileHandler;
 
+
+    public boolean check_code(String code){
+        Optional<Code> code1 = codeRepository.findCode(code);
+        if(code1.get() == null){
+
+            return false;
+        }else{
+            return true;
+
+        }
+    }
 
     @Transactional
     public void profile_save(Long managerId, MultipartFile file) throws Exception {
@@ -170,7 +184,7 @@ public class ManagerService implements UserDetailsService {
         Optional<Manager> byId = managerRepository.findById(updateDto.getId());
 
         //update생성자로 변경감지
-        byId.get().update(updateDto);
+        byId.get().update(appConfig.modelMapper().map(updateDto,Manager.class));
         return byId;
     }
 

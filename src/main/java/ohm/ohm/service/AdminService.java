@@ -21,8 +21,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final AppConfig appConfig;
 
-    //Admin 계정 생성 service
-    //추후 Spring security로 로그인 로직 구현
+
     @Transactional
     public Long save(AdminDto adminDto){
         Admin admin = appConfig.modelMapper().map(adminDto, Admin.class);
