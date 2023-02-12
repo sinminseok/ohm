@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.entity.Input.Input;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.entity.Post.Post;
 
@@ -76,6 +77,10 @@ public class Gym{
 
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<GymPrice> prices;
+
+    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    private List<Input> inputs;
+
 
     public void register_time(GymTime gymTime){
         this.gymTime = gymTime;

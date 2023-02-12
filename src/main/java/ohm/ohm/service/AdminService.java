@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.AdminDto;
 import ohm.ohm.entity.Admin;
-import ohm.ohm.repository.AdminRepository;
-import ohm.ohm.repository.GymRepository;
+import ohm.ohm.repository.manager.AdminRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

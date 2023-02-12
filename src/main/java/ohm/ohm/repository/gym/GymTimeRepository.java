@@ -1,4 +1,4 @@
-package ohm.ohm.repository;
+package ohm.ohm.repository.gym;
 
 import ohm.ohm.entity.Gym.GymTime;
 import ohm.ohm.entity.Manager.Manager;

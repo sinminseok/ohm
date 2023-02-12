@@ -1,6 +1,7 @@
-package ohm.ohm.repository;
+package ohm.ohm.repository.gym;
 
 import ohm.ohm.entity.Gym.Gym;
+import ohm.ohm.repository.gym.GymRepositoryCustom;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,15 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface GymRepository extends JpaRepository<Gym,Long> {
+public interface GymRepository extends JpaRepository<Gym,Long>, GymRepositoryCustom {
 
     @EntityGraph(attributePaths = "imgs")
     List<Gym> findByNameContaining(String name);
 
-    @Query("select g from Gym g left join fetch g.imgs")
-    List<Gym> findAllFetchJoin();
+//    @Query("select g from Gym g left join fetch g.imgs")
+//    List<Gym> findAllFetchJoin();
 
     @Query("select g from Gym g left join fetch g.imgs where g.id = :id")
     Gym findGymFetchJoin(@Param("id")Long id);

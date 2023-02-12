@@ -1,4 +1,4 @@
-package ohm.ohm.repository;
+package ohm.ohm.repository.post;
 
 import ohm.ohm.entity.Post.PostImg;
 import org.springframework.data.jpa.repository.JpaRepository;

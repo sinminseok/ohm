@@ -12,10 +12,10 @@ import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Gym.GymImg;
 import ohm.ohm.entity.Gym.GymPrice;
 import ohm.ohm.entity.Gym.GymTime;
-import ohm.ohm.repository.GymImgRepository;
-import ohm.ohm.repository.GymPriceRepository;
-import ohm.ohm.repository.GymRepository;
-import ohm.ohm.repository.GymTimeRepository;
+import ohm.ohm.repository.gym.GymImgRepository;
+import ohm.ohm.repository.gym.GymPriceRepository;
+import ohm.ohm.repository.gym.GymRepository;
+import ohm.ohm.repository.gym.GymTimeRepository;
 import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +36,11 @@ public class GymService {
     private final FileHandlerUtils fileHandler;
     private final GymTimeRepository gymTimeRepository;
     private final GymPriceRepository gymPriceRepository;
+    private final InputService inputService;
+
+
+
     //헬스장 생성 -- ROLE이 ROLE_MANAGER인 Manager만 사용가능
-
-
     @Transactional
     public Long save(GymRequestDto gymDto) throws Exception {
 
@@ -82,7 +84,7 @@ public class GymService {
 
     //모든 GYM 조회 App에서 List형식으로 조회
     public List<GymResponseDto> findall() {
-        List<Gym> gyms = gymRepository.findAllFetchJoin();
+        List<Gym> gyms = gymRepository.findAllGymList();
 
         List<GymResponseDto> gymDtos = new ArrayList<GymResponseDto>();
 
@@ -176,13 +178,15 @@ public class GymService {
     //현재 GYM 인원수 증가(1증가)
     @Transactional
     public void increase_count(Long id) throws Exception {
-        gymRepository.increase_count(id);
+        int count = gymRepository.increase_count(id);
+
     }
 
     //현재 GYM 인원수 감소(1감소)
     @Transactional
     public void decrease_count(Long id) throws Exception {
-        gymRepository.decrease_count(id);
+        int count = gymRepository.decrease_count(id);
+        inputService.insert_data(count,id);
     }
 
     @Transactional

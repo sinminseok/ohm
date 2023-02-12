@@ -3,7 +3,7 @@ package ohm.ohm.service;
 import ohm.ohm.config.AppConfig;
 import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.entity.Gym.Gym;
-import ohm.ohm.repository.GymRepository;
+import ohm.ohm.repository.gym.GymRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package ohm.ohm.repository;
+package ohm.ohm.repository.manager;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Manager.Manager;
 import org.springframework.data.jpa.repository.EntityGraph;

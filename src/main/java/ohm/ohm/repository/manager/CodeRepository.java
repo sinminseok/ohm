@@ -1,4 +1,4 @@
-package ohm.ohm.repository;
+package ohm.ohm.repository.manager;
 import ohm.ohm.entity.Code;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

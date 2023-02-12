@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/v2/api-docs",
                         "/webjars/**").permitAll()
-                .antMatchers("/api/gym", "/api/gyms", "/api/gym/name/{gymName}", "/api/gym/{gymId}", "/api/gym/count/{gymId}","/api/gym/code/{code}").permitAll()
+                .antMatchers("/api/gym/avg/{gymId}","/api/gym", "/api/gyms", "/api/gym/name/{gymName}", "/api/gym/{gymId}", "/api/gym/count/{gymId}","/api/gym/code/{code}").permitAll()
                 .antMatchers("/api/gym/count-increase/{gymId}", "/api/gym/count-decrease/{gymId}").permitAll()
                 .antMatchers( "/api/manager/code/{code}","/api/manager/image/{managerId}","/api/manager", "/api/manager/login", "/api/trainer/{gymId}", "/api/manager/findall/{gymId}", "/api/manager/{managerId}").permitAll()
                 .antMatchers("/api/post/{gymId}", "/api/posts/{gymId}").permitAll()
