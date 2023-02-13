@@ -77,15 +77,15 @@ public class Manager{
     }
 
 
-    public void update(ManagerDto managerDto){
-        this.name = managerDto.getName();
+    public void update(Manager manager){
+        this.name = manager.getName();
         this.lastModifiedTime = LocalDateTime.now();
-        this.nickname = managerDto.getNickname();
-        this.profile = managerDto.getProfile();
-        this.oneline_introduce = managerDto.getOneline_introduce();
-        this.introduce = managerDto.getIntroduce();
-        this.age = managerDto.getAge();
-        this.email = managerDto.getEmail();
+        this.nickname = manager.getNickname();
+        this.profile = manager.getProfile();
+        this.oneline_introduce = manager.getOneline_introduce();
+        this.introduce = manager.getIntroduce();
+        this.age = manager.getAge();
+        this.email = manager.getEmail();
     }
 
     @Builder

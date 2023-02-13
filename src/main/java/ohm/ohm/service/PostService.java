@@ -8,9 +8,9 @@ import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Post.Post;
 import ohm.ohm.entity.Post.PostImg;
-import ohm.ohm.repository.GymRepository;
-import ohm.ohm.repository.PostImgRepository;
-import ohm.ohm.repository.PostRepository;
+import ohm.ohm.repository.gym.GymRepository;
+import ohm.ohm.repository.post.PostImgRepository;
+import ohm.ohm.repository.post.PostRepository;
 import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +88,7 @@ public class PostService {
     @Transactional
     public Optional<Post> update_post(PostDto postDto) {
         Optional<Post> byId = postRepository.findById(postDto.getId());
-        byId.get().update(postDto);
+        byId.get().update(appConfig.modelMapper().map(postDto,Post.class));
         return byId;
     }
 

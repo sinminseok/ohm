@@ -61,7 +61,7 @@ public class Post {
         this.gym = gym;
     }
 
-    public void update(PostDto post) {
+    public void update(Post post) {
         this.id = post.getId();
         this.lastModifiedTime = LocalDateTime.now();
         this.title = post.getTitle();

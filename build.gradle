@@ -1,7 +1,15 @@
+buildscript { // 이놈
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'ohm'
@@ -12,14 +20,23 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
 
 repositories {
 	mavenCentral()
 }
 
+
 dependencies {
-//https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+// QueryDSL
+// querydsl 이놈
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation 'commons-io:commons-io:2.6'
@@ -45,6 +62,28 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 }
 
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//이놈
+def querydslDir =  "$buildDir/generated/querydsl"
+
+
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+

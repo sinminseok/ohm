@@ -26,10 +26,14 @@ public class FileHandlerUtils {
         // 반환할 파일 리스트
         List<GymImg> fileList = new ArrayList<>();
 
+
+        System.out.println(multipartFiles.size());
+        System.out.println("1111");
+        System.out.println("1111");
         if (multipartFiles.isEmpty()) {
             return fileList;
         }
-
+        System.out.println("22222");
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter =
                 DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -42,7 +46,7 @@ public class FileHandlerUtils {
         String path = "Users/sinminseok12/Desktop/ohmimage/images" + File.separator + current_date;
 
         File file = new File(path);
-
+        System.out.println("33333");
 
         // 디렉터리가 존재하지 않을 경우
         if (!file.exists()) {
@@ -52,24 +56,24 @@ public class FileHandlerUtils {
             if (!wasSuccessful)
                 System.out.println("file: was not successful");
         }
-
+        System.out.println("44444");
         // 다중 파일 처리
         for (MultipartFile multipartFile : multipartFiles) {
 
-
+            System.out.println("5555");
             // 파일의 확장자 추출
             String originalFileExtension;
             String contentType = multipartFile.getContentType();
 
             // 확장자명이 존재하지 않을 경우 처리 x
-
+            System.out.println("6666");
 
             String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
             ; // 파일 확장자
             // 파일명 중복 피하고자 나노초까지 얻어와 지정
             System.out.println(ext);
             String new_file_name = System.nanoTime() + ext;
-
+            System.out.println("7777");
             System.out.println(new_file_name);
             // 파일 DTO 생성
             GymImg gymImg = GymImg.builder()

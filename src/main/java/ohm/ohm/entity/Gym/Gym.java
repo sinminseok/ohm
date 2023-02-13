@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import ohm.ohm.dto.GymDto.GymDto;
+import ohm.ohm.entity.Input.Input;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.entity.Post.Post;
 
@@ -77,21 +78,25 @@ public class Gym{
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<GymPrice> prices;
 
+    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    private List<Input> inputs;
+
+
     public void register_time(GymTime gymTime){
         this.gymTime = gymTime;
 
     }
 
-    public void update(GymDto gymDto){
-        this.name = gymDto.getName();
-        this.id = gymDto.getId();
-        this.area = gymDto.getArea();
-        this.oneline_introduce = gymDto.getOneline_introduce();
-        this.trainer_count = gymDto.getTrainer_count();
-        this.address = gymDto.getAddress();
-        this.introduce = gymDto.getIntroduce();
-        this.count = gymDto.getCount();
-        this.code = gymDto.getCode();
+    public void update(Gym gym){
+        this.name = gym.getName();
+        this.id = gym.getId();
+        this.area = gym.getArea();
+        this.oneline_introduce = gym.getOneline_introduce();
+        this.trainer_count = gym.getTrainer_count();
+        this.address = gym.getAddress();
+        this.introduce = gym.getIntroduce();
+        this.count = gym.getCount();
+        this.code = gym.getCode();
     }
 
     @Builder

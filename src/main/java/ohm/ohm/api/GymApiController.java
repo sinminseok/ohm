@@ -10,6 +10,7 @@ import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.service.GymService;
+import ohm.ohm.service.InputService;
 import ohm.ohm.service.ManagerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,7 @@ import java.util.List;
 public class GymApiController {
 
     private final GymService gymService;
+    private final InputService inputService;
     private final ManagerService managerService;
 
 
@@ -55,6 +57,7 @@ public class GymApiController {
             @PathVariable Long gymId,
             @RequestPart(value = "images",required = false) List<MultipartFile> files
     ) throws Exception {
+
         Long aLong = gymService.save_img(gymId, files);
         return ResponseEntity.ok(aLong);
     }
@@ -66,6 +69,16 @@ public class GymApiController {
         List<GymResponseDto> findall = gymService.findall();
         return ResponseEntity.ok(findall);
     }
+
+    @GetMapping("/gym/avg/{gymId}")
+    public ResponseEntity<List<String>> search_avg(
+            @PathVariable Long gymId
+
+    ) throws Exception{
+        List<String> value = inputService.get_value(gymId);
+        return ResponseEntity.ok(value);
+    }
+
 
     //이름으로 헬스장 조회
     @ApiOperation(value = "이름으로 헬스장 조회", response = GymResponseDto.class , responseContainer = "List")
@@ -97,7 +110,9 @@ public class GymApiController {
     @PostMapping("/gym/count-increase/{gymId}")
     public ResponseEntity<Integer> increase_count(@PathVariable Long gymId) throws Exception{
         gymService.increase_count(gymId);
-        return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
+        int current_count = gymService.findById_count(gymId).getCurrent_count();
+        inputService.insert_data(current_count,gymId);
+        return ResponseEntity.ok(current_count);
     }
 
     //헬스장 인원 감소 api
