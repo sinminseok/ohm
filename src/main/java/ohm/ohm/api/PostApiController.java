@@ -9,6 +9,7 @@ import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,6 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-    private final ManagerService managerService;
-    private final GymService gymService;
 
 
     //manager or trainer가 등록
@@ -49,18 +48,15 @@ public class PostApiController {
             @PathVariable Long postId,
             @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) throws Exception {
-
         Long save = postService.save_img(postId, files);
         return ResponseEntity.ok(save);
     }
 
-    //헬스장에 등록된 모든 Post 조회]
+    // 헬스장에 등록된 모든 Post 조회
     @ApiOperation(value = "모든 Post 조회", response = PostResponseDto.class, responseContainer = "List")
     @GetMapping("/posts/{gymId}")
-    public ResponseEntity<List<PostResponseDto>> findall(@PathVariable Long gymId) {
-        System.out.println();
-        List<PostResponseDto> findall = postService.findall(gymId);
-        return ResponseEntity.ok(findall);
+    public ResponseEntity<Slice<PostResponseDto>> findall(@PathVariable Long gymId) {
+        return ResponseEntity.ok(postService.findall(gymId));
     }
 
     //Post 조회 findByID

@@ -1,6 +1,7 @@
 package ohm.ohm.dto.responseDto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class PostResponseDto {
 
     private Long id;
@@ -18,12 +21,4 @@ public class PostResponseDto {
     private String content;
 
     private List<PostImgResponseDto> imgs;
-
-    @Builder
-    public PostResponseDto(Long id,String title,String content,List<PostImgResponseDto> imgs){
-        this.title = title;
-        this.id = id;
-        this.content = content;
-        this.imgs = imgs;
-    }
 }

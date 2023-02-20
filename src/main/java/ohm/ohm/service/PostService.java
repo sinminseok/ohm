@@ -12,6 +12,9 @@ import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.post.PostImgRepository;
 import ohm.ohm.repository.post.PostRepository;
 import ohm.ohm.utils.FileHandlerUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +27,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
-
 
     private final PostRepository postRepository;
     private final GymRepository gymRepository;
@@ -68,12 +70,16 @@ public class PostService {
 
 
     //헬스장 id로 모든 post조회
-    public List<PostResponseDto> findall(Long gymid) {
-        List<Post> by_gymId = postRepository.findBy_gymId(gymid);
-        List<PostResponseDto> postDtos = new ArrayList<PostResponseDto>();
-        for(Post element : by_gymId){
-            postDtos.add(appConfig.modelMapper().map(element,PostResponseDto.class));
-        }
+    public Slice<PostResponseDto> findall(Long gymid) {
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "createdTime"));
+        Slice<Post> by_gymId = postRepository.findBy_gymId(gymid, pageRequest);
+
+        Slice<PostResponseDto> postDtos = by_gymId.map(
+                p -> PostResponseDto.builder()
+                        .content(p.getContent())
+                        .id(p.getId())
+                        .title(p.getTitle()).build());
+
         return postDtos;
     }
 

@@ -36,7 +36,6 @@ public class GymApiController {
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<Long> save(
             @Valid @RequestBody GymRequestDto gymRequestDto
-
     ) throws Exception {
 
         ManagerDto managerDto = managerService.getMyManagerWithAuthorities();
