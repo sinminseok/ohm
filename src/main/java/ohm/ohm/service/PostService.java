@@ -70,8 +70,8 @@ public class PostService {
 
 
     //헬스장 id로 모든 post조회
-    public Slice<PostResponseDto> findall(Long gymid) {
-        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "createdTime"));
+    public Slice<PostResponseDto> findall(Long gymid, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "createdTime"));
         Slice<Post> by_gymId = postRepository.findBy_gymId(gymid, pageRequest);
 
         Slice<PostResponseDto> postDtos = by_gymId.map(

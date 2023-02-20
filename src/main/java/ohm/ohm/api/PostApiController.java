@@ -10,6 +10,7 @@ import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +56,8 @@ public class PostApiController {
     // 헬스장에 등록된 모든 Post 조회
     @ApiOperation(value = "모든 Post 조회", response = PostResponseDto.class, responseContainer = "List")
     @GetMapping("/posts/{gymId}")
-    public ResponseEntity<Slice<PostResponseDto>> findall(@PathVariable Long gymId) {
-        return ResponseEntity.ok(postService.findall(gymId));
+    public ResponseEntity<Slice<PostResponseDto>> findall(@PathVariable Long gymId, @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+        return ResponseEntity.ok(postService.findall(gymId, page));
     }
 
     //Post 조회 findByID
