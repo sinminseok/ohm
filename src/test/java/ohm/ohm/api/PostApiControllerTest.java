@@ -44,7 +44,7 @@ class PostApiControllerTest {
         }
 
 
-        Slice<PostResponseDto> postResponseDtos = postService.findall(gym1.getId());
+        Slice<PostResponseDto> postResponseDtos = postService.findall(gym1.getId(), 0);
 
         System.out.println(postResponseDtos.getContent().get(0).getTitle());
 
