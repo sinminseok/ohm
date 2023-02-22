@@ -12,6 +12,7 @@ import ohm.ohm.entity.Code;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Manager.Authority;
 import ohm.ohm.entity.Manager.Manager;
+import ohm.ohm.entity.Post.PostImg;
 import ohm.ohm.repository.manager.CodeRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.manager.ManagerRepository;
@@ -51,11 +52,9 @@ public class ManagerService implements UserDetailsService {
     public boolean check_code(String code){
         Optional<Code> code1 = codeRepository.findCode(code);
         if(code1.get() == null){
-
             return false;
         }else{
             return true;
-
         }
     }
 
@@ -63,7 +62,24 @@ public class ManagerService implements UserDetailsService {
     public void profile_save(Long managerId, MultipartFile file) throws Exception {
         Optional<Manager> byId = managerRepository.findById(managerId);
         String fileURL = fileHandler.profileimg_parseFileInfo(file);
-        byId.get().register_profile(fileURL);
+        byId.get().register_profile(fileURL,file.getOriginalFilename());
+    }
+
+    @Transactional
+    public void profile_edit(Long managerId, MultipartFile file) throws Exception {
+        Optional<Manager> byId = managerRepository.findById(managerId);
+        String profileUrl = byId.get().getProfileUrl();
+
+        if(profileUrl == null){
+
+        }else{
+            fileHandler.delete_file(profileUrl);
+        }
+
+
+        System.out.println("222");
+        String fileURL = fileHandler.profileimg_parseFileInfo(file);
+        byId.get().register_profile(fileURL,file.getOriginalFilename());
     }
 
     //Manager 회원가입
@@ -150,7 +166,7 @@ public class ManagerService implements UserDetailsService {
                 .nickname(findmanager.get().getNickname())
                 .introduce(findmanager.get().getIntroduce())
                 .oneline_introduce(findmanager.get().getOneline_introduce())
-                .profile(findmanager.get().getProfile())
+                .profile(findmanager.get().getProfileUrl())
                 .build();
 
 
@@ -177,14 +193,17 @@ public class ManagerService implements UserDetailsService {
 
 
     //매니저 정보수정
+    @Transactional
     public Optional<Manager> update(ManagerDto updateDto) {
 
 
         //기본 manager 조회
         Optional<Manager> byId = managerRepository.findById(updateDto.getId());
 
+        System.out.println(byId.get().getId());
+        System.out.println("ddd");
         //update생성자로 변경감지
-        byId.get().update(appConfig.modelMapper().map(updateDto,Manager.class));
+        byId.get().update(updateDto);
         return byId;
     }
 

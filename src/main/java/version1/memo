@@ -18,7 +18,7 @@ ManagerService - CRUD, ROLE을 이용해 Trainer와 Manager을 역할 분리
 GymService - 현재 헬스장 인원현황 데이터 뿌리기기능(주기능) , CRUD
 PostService - CRUD , Gym으로 Post 조회
 
-
+ ㅅ
 
 계정 Entity에서 name,password 로 로그인 정보를 확인한다.(id는 걍 PK)
 
@@ -29,10 +29,22 @@ Manager - 로그인기능은 Spring Security Jwt Rest api를 사용해 구현한
 
 ADMIN은 코무무(본인) 계정이므로 걍 DB에 박아주자 ㅋ
 
-
+support_agent
 ----------
 
-통계 쿼리 구상 및 API 제작
+매니저가 현재인원 0으로 초기화하는 API
 
-게시물 시간,날짜순 으로 페이징 처리
+
+
+로그아웃,회원탈퇴 API 작업
+
+마음의 편지 기능
+
+요일별로
+
+평소보다 회원들이 없습니다"
+
+code중복 방지
+
+답변수정기능
 

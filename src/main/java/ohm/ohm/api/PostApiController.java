@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.PostDto.PostDto;
+import ohm.ohm.dto.requestDto.ImageIdRequestDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
 import ohm.ohm.service.GymService;
 import ohm.ohm.service.ManagerService;
@@ -77,8 +78,24 @@ public class PostApiController {
     @PatchMapping("/post")
     public ResponseEntity<String> update(
             @RequestBody PostDto postDto
-            ) {
+    ) {
         postService.update_post(postDto);
+        return ResponseEntity.ok("Update!");
+    }
+
+
+
+    //Post img 수정
+    @ApiOperation(value = "PostIMGㄷ 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PatchMapping("/post/img/{postId}")
+    public ResponseEntity<String> update_img(
+            @RequestParam List<Long> imgIds,
+            @PathVariable Long postId,
+            @RequestPart(value = "images", required = false) List<MultipartFile> files
+    ) throws Exception {
+        postService.delete_imgs(imgIds);
+        postService.save_img(postId,files);
         return ResponseEntity.ok("Remove!");
     }
 

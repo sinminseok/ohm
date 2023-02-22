@@ -37,8 +37,6 @@ public class ManagerApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
-
-
     @ApiOperation(value = "manager code 인증", response = String.class)
     @PostMapping("/manager/code/{code}")
     public ResponseEntity<String> check_code(
@@ -51,6 +49,8 @@ public class ManagerApiController {
             return ResponseEntity.ok("false");
         }
     }
+
+
 
     @ApiOperation(value = "manager,trainer 로그인", response = TokenDto.class)
     @PostMapping("/manager/login")
@@ -85,6 +85,16 @@ public class ManagerApiController {
             @RequestPart(value = "images",required = false) MultipartFile file
     ) throws Exception {
         managerService.profile_save(managerId,file);
+        return ResponseEntity.ok("image upload!");
+    }
+
+    @ApiOperation(value = "Manager profile 수정", response = Long.class)
+    @PatchMapping("/manager/image/{managerId}")
+    public ResponseEntity<String> profile_update(
+            @PathVariable Long managerId,
+            @RequestPart(value = "images",required = false) MultipartFile file
+    ) throws Exception {
+        managerService.profile_edit(managerId,file);
         return ResponseEntity.ok("image upload!");
     }
 

@@ -24,6 +24,7 @@ spring:
       max-request-size: 200MB
 
   jpa:
+
     hibernate:
       ddl-auto: create
     properties:

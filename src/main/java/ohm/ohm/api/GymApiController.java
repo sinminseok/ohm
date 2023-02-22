@@ -100,8 +100,8 @@ public class GymApiController {
     @ApiOperation(value = "현재 Gym에 있는 인원조회", response = Integer.class)
     @GetMapping("/gym/count/{gymId}")
     public ResponseEntity<Integer> current_count(@PathVariable Long gymId) throws Exception {
-        GymDto gymDto = gymService.findById_count(gymId);
-        return ResponseEntity.ok(gymDto.getCurrent_count());
+        int current_count = gymService.findById_count(gymId);
+        return ResponseEntity.ok(current_count);
 
     }
 
@@ -110,7 +110,7 @@ public class GymApiController {
     @PostMapping("/gym/count-increase/{gymId}")
     public ResponseEntity<Integer> increase_count(@PathVariable Long gymId) throws Exception{
         gymService.increase_count(gymId);
-        int current_count = gymService.findById_count(gymId).getCurrent_count();
+        int current_count = gymService.findById_count(gymId);
         inputService.insert_data(current_count,gymId);
         return ResponseEntity.ok(current_count);
     }
@@ -120,7 +120,7 @@ public class GymApiController {
     @PostMapping("/gym/count-decrease/{gymId}")
     public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception{
         gymService.decrease_count(gymId);
-        return ResponseEntity.ok(gymService.findById_count(gymId).getCurrent_count());
+        return ResponseEntity.ok(gymService.findById_count(gymId));
     }
 
 
@@ -128,18 +128,29 @@ public class GymApiController {
     @GetMapping("/gym/code/{code}")
     public ResponseEntity<Long> check_code(@PathVariable int code) throws Exception{
         Long aLong = gymService.check_code(code);
-        return ResponseEntity.ok(aLong);
+        return
+
+                ResponseEntity.ok(aLong);
     }
 
-    @ApiOperation(value = "gym price등록", response = Integer.class)
-    @PostMapping("/gym/price/{gymId}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Long> register_price(
-            @RequestBody GymPriceDto gymPriceDto,
-            @PathVariable Long gymId) throws Exception{
-        Long aLong = gymService.register_price(gymId, gymPriceDto);
-        return ResponseEntity.ok(aLong);
+    @ApiOperation(value = "gymId로 GymTime 조회", response = GymTimeDto.class)
+    @GetMapping("/gym/time/{gymId}")
+    public ResponseEntity<GymTimeDto> get_gymTime(@PathVariable Long gymId) throws Exception{
+        GymTimeDto time = gymService.get_time(gymId);
+        return ResponseEntity.ok(time);
     }
+
+
+
+    @ApiOperation(value = "gymId로 GymPrice 조회", response = Integer.class)
+    @GetMapping("/gym/price/{gymId}")
+    public ResponseEntity<List<GymPriceDto>> get_gymPrice(@PathVariable Long gymId) throws Exception{
+        List<GymPriceDto> prices = gymService.get_prices(gymId);
+        return ResponseEntity.ok(prices);
+    }
+
+
+
 
     @ApiOperation(value = "gym Time등록", response = Integer.class)
     @PostMapping("/gym/time/{gymId}")
@@ -149,6 +160,16 @@ public class GymApiController {
             @PathVariable Long gymId) throws Exception{
         Long aLong = gymService.register_time(gymId, gymTimeDto);
         return ResponseEntity.ok(aLong);
+    }
+
+    @ApiOperation(value = "gym Time수정", response = Integer.class)
+    @PatchMapping("/gym/time/{gymId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    public ResponseEntity<String> update_time(
+            @RequestBody GymTimeDto gymTimeDto,
+            @PathVariable Long gymId) throws Exception{
+        gymService.update_time(gymId,gymTimeDto);
+        return ResponseEntity.ok("UPDATE!");
     }
 
     //Post 수정
@@ -161,6 +182,45 @@ public class GymApiController {
         gymService.update_gym(gymDto);
         return ResponseEntity.ok("Update!");
     }
+
+    //Post img 수정
+    @ApiOperation(value = "GymImg 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PostMapping("/gym/image/update/{gymId}")
+    public ResponseEntity<String> update_img(
+            @RequestParam List<Long> imgIds,
+            @PathVariable Long gymId,
+            @RequestPart(value = "images", required = false) List<MultipartFile> files
+    ) throws Exception {
+        gymService.delete_img(imgIds);
+        gymService.save_img(gymId,files);
+        return ResponseEntity.ok("UPDATE!");
+    }
+
+    @ApiOperation(value = "gym price등록", response = Integer.class)
+    @PostMapping("/gym/price/{gymId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    public ResponseEntity<Long> register_price(
+            @RequestBody GymPriceDto gymPriceDto,
+            @PathVariable Long gymId) throws Exception{
+        Long aLong = gymService.register_price(gymId, gymPriceDto);
+        return ResponseEntity.ok(aLong);
+    }
+
+    //Post Price 수정
+    @ApiOperation(value = "GymPrice 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PatchMapping("/gym/price/{gymId}")
+    public ResponseEntity<String> update_price(
+            @RequestParam List<Long> priceIds,
+            @PathVariable Long gymId
+
+    ) throws Exception {
+        gymService.delete_price(priceIds);
+
+        return ResponseEntity.ok("DELETE!");
+    }
+
 
 
 

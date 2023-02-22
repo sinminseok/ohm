@@ -21,8 +21,8 @@ public class InputDto {
 
     private int count;
 
-    @JsonIgnore
-    private GymDto gym;
+//    @JsonIgnore
+//    private GymDto gym;
 
 
 

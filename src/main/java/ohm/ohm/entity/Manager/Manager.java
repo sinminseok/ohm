@@ -39,7 +39,11 @@ public class Manager{
     private String password;
 
     //프로필사진
-    private String profile;
+    private String profileUrl;
+
+
+    //프사이름
+    private String profileOrignName;
 
     //한줄소개
     private String oneline_introduce;
@@ -72,16 +76,18 @@ public class Manager{
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
-    public void register_profile(String profile){
-        this.profile = profile;
+    public void register_profile(String profile,String profileOrignName){
+        this.profileUrl = profile;
+        this.profileOrignName = profileOrignName;
     }
 
 
-    public void update(Manager manager){
+    public void update(ManagerDto manager){
+
         this.name = manager.getName();
         this.lastModifiedTime = LocalDateTime.now();
         this.nickname = manager.getNickname();
-        this.profile = manager.getProfile();
+       // this.profileUrl = manager.profileUrl;
         this.oneline_introduce = manager.getOneline_introduce();
         this.introduce = manager.getIntroduce();
         this.age = manager.getAge();
@@ -89,13 +95,14 @@ public class Manager{
     }
 
     @Builder
-    public Manager(Gym gym,String name, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
+    public Manager(Gym gym,String name,String profileOrignName, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
         this.name = name;
         this.gym = gym;
+        this.profileOrignName = profileOrignName;
         this.createdTime = LocalDateTime.now();
         this.password = password;
         this.nickname = nickname;
-        this.profile = profile;
+        this.profileUrl = profile;
         this.oneline_introduce = oneline_introduce;
         this.introduce = introduce;
         this.age = age;

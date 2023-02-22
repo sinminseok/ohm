@@ -20,7 +20,6 @@ public class ManagerDto {
 
     private String email;
 
-
     private String nickname;
 
     private String profile;

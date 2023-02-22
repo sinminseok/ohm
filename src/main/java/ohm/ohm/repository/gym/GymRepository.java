@@ -33,4 +33,10 @@ public interface GymRepository extends JpaRepository<Gym,Long>, GymRepositoryCus
     @Query("select g from Gym g where g.code = :code")
     Gym find_code(@Param("code")int code);
 
+
+    @Query("select g from Gym g left join fetch g.gymTime where g.id = :id")
+    Gym findTimeByGymId(@Param("id")Long id);
+
+//    @Query("select g from Gym g left join fetch g.questions where g.id = :id")
+//    Gym findAnswerBy(@Param("id") Long id);
 }

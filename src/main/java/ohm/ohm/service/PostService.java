@@ -32,6 +32,16 @@ public class PostService {
     private final AppConfig appConfig;
     private final FileHandlerUtils fileHandler;
 
+    @Transactional
+    public void delete_imgs(List<Long> ids) throws Exception {
+
+        for(Long id : ids){
+            PostImg postImg = postImgRepository.findById(id).get();
+            fileHandler.delete_file(postImg.getFilePath());
+            postImgRepository.delete(postImg);
+        }
+    }
+
     //글 등록 - manager,trainer가 사용
     @Transactional
     public Long save_content(Long gymId,PostDto postDto) throws Exception {

@@ -11,6 +11,7 @@ import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.entity.Input.Input;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.entity.Post.Post;
+import ohm.ohm.entity.Question.Question;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -80,6 +81,9 @@ public class Gym{
 
     @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List<Input> inputs;
+
+    @OneToMany(mappedBy = "gym",cascade = CascadeType.PERSIST,orphanRemoval = true)
+    private List<Question> questions;
 
 
     public void register_time(GymTime gymTime){
