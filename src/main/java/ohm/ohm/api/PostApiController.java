@@ -26,14 +26,12 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-    private final ManagerService managerService;
-    private final GymService gymService;
 
 
     //manager or trainer가 등록
     @ApiOperation(value = "Post 저장", response = Long.class)
     @PostMapping(value = "/post/{gymId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_CEO','ROLE_TRAINER')")
     public ResponseEntity<Long> save_dto(
             @PathVariable Long gymId,
             @Valid @RequestBody PostDto para_postDto
@@ -45,7 +43,7 @@ public class PostApiController {
     //manager or trainer가 등록
     @ApiOperation(value = "Post image 저장", response = Long.class)
     @PostMapping(value = "/post/img/{postId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_CEO','ROLE_TRAINER')")
     public ResponseEntity<Long> save_imgs(
             @PathVariable Long postId,
             @RequestPart(value = "images", required = false) List<MultipartFile> files
@@ -74,7 +72,7 @@ public class PostApiController {
 
     //Post 수정
     @ApiOperation(value = "Post 수정", response = String.class)
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @PatchMapping("/post")
     public ResponseEntity<String> update(
             @RequestBody PostDto postDto
@@ -86,8 +84,8 @@ public class PostApiController {
 
 
     //Post img 수정
-    @ApiOperation(value = "PostIMGㄷ 수정", response = String.class)
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @ApiOperation(value = "PostIMG 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @PatchMapping("/post/img/{postId}")
     public ResponseEntity<String> update_img(
             @RequestParam List<Long> imgIds,
@@ -101,7 +99,7 @@ public class PostApiController {
 
     //Post 삭제
     @ApiOperation(value = "Post 삭제", response = String.class)
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<String> remove(@PathVariable Long postId) {
         postService.delete(postId);

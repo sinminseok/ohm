@@ -26,7 +26,7 @@ public class AnswerApiController {
 
     @ApiOperation(value = "Answer 등록", response = Long.class)
     @PostMapping("/answer/{questionId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<Long> save(
             @Valid @RequestBody AnswerDto answerDto,
             @PathVariable Long questionId
@@ -38,7 +38,7 @@ public class AnswerApiController {
 
     @ApiOperation(value = "Answer 수정", response = String.class)
     @PatchMapping("/answer/{answerId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<String> update(
             @Valid @RequestBody AnswerDto answerDto,
             @PathVariable Long answerId
@@ -51,7 +51,7 @@ public class AnswerApiController {
 
     @ApiOperation(value = "Answer 삭제", response = Long.class)
     @DeleteMapping("/answer/{answerId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<String> delete(
             @PathVariable Long answerId
 

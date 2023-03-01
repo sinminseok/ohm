@@ -90,8 +90,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**").permitAll()
                 .antMatchers("/api/gym/time/{gymId}","/api/gym/price/{gymId}","/api/gym/avg/{gymId}","/api/gym", "/api/gyms", "/api/gym/name/{gymName}", "/api/gym/{gymId}", "/api/gym/count/{gymId}","/api/gym/code/{code}").permitAll()
                 .antMatchers("/api/gym/count-increase/{gymId}", "/api/gym/count-decrease/{gymId}").permitAll()
-                .antMatchers( "/api/manager/code/{code}","/api/manager/image/{managerId}","/api/manager", "/api/manager/login", "/api/trainer/{gymId}", "/api/manager/findall/{gymId}", "/api/manager/{managerId}").permitAll()
+                .antMatchers( "/api/manager/code/{code}","/api/ceo/code/{code}","/api/manager/image/{managerId}","/api/manager","/api/ceo", "/api/manager/login", "/api/trainer/{gymId}", "/api/manager/findall/{gymId}", "/api/manager/{managerId}").permitAll()
                 .antMatchers("/api/post/{gymId}", "/api/posts/{gymId}").permitAll()
+                .antMatchers("/api/admin/findall/{gymId}","/api/admin/{managerId}","/api/admin/login", "/api/admin/image/{managerId}","/api/admin").permitAll()
+                .antMatchers("/api/ceo/code/{code}", "/api/ceo").permitAll()
                 .antMatchers("/api/question/{gymId}","/api/question/{questionId}","/api/question/all/{gymId}").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
 

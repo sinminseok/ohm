@@ -10,8 +10,6 @@ public class QuestionDto {
 
     private Long id;
 
-    private String title;
-
     private String content;
 
     private AnswerDto answer;

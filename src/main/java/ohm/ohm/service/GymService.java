@@ -8,6 +8,7 @@ import ohm.ohm.dto.GymDto.GymPriceDto;
 import ohm.ohm.dto.GymDto.GymTimeDto;
 import ohm.ohm.dto.QuestionDto.QuestionDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
+import ohm.ohm.dto.responseDto.CountResponseDto;
 import ohm.ohm.dto.responseDto.GymImgResponseDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.entity.Gym.Gym;
@@ -19,6 +20,7 @@ import ohm.ohm.repository.gym.GymImgRepository;
 import ohm.ohm.repository.gym.GymPriceRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.gym.GymTimeRepository;
+import ohm.ohm.repository.input.InputRepository;
 import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,7 @@ public class GymService {
 
     private final GymRepository gymRepository;
     private final GymImgRepository gymImgRepository;
+    private final InputRepository inputRepository;
     private final AppConfig appConfig;
     private final FileHandlerUtils fileHandler;
     private final GymTimeRepository gymTimeRepository;
@@ -65,6 +68,8 @@ public class GymService {
     //헬스장 생성 -- ROLE이 ROLE_MANAGER인 Manager만 사용가능
     @Transactional
     public Long save(GymRequestDto gymDto) throws Exception {
+
+       // gymRepository.checkCode(gymDto.getCode());
 
         //img save
         Gym gym = Gym.builder()
@@ -116,6 +121,7 @@ public class GymService {
 
         List<GymResponseDto> gymDtos = new ArrayList<GymResponseDto>();
 
+        System.out.println(gyms.size());
         for (Gym gym : gyms) {
             List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
             for(GymImg gymImg :gym.getImgs()){
@@ -133,6 +139,7 @@ public class GymService {
 
             gymDtos.add(gymResponseDto);
         }
+        System.out.println(gymDtos.size());
         return gymDtos;
     }
 
@@ -188,7 +195,6 @@ public class GymService {
 
 
 
-    //Gym Id로 count를 증가시킬 gym 리턴
     public int findById_count(Long id) throws Exception {
         Optional<Gym> byId = gymRepository.findById(id);
         if (byId.isPresent()) {
@@ -197,6 +203,36 @@ public class GymService {
             throw new Exception();
         }
     }
+
+
+
+
+//    public CountResponseDto find_countresponse(Long gymId) throws Exception {
+//        Optional<Gym> byId = gymRepository.findById(gymId);
+//        String avgCount;
+//        //현재인원
+//        int current_count = byId.get().getCurrent_count();
+//
+//        //평균
+//        Double dateavg = inputRepository.dateavg(inputService.dayofweek(), gymId);
+//        System.out.println(dateavg);
+//        System.out.println(current_count);
+//        System.out.println("current_countcurrent_count");
+//        if((double) current_count <= dateavg){
+//            avgCount = "현재 헬스장은 원활합니다.";
+//        }else{
+//            avgCount = "현재 헬스장은 혼잡합니다";
+//        }
+//        CountResponseDto countResponseDto = CountResponseDto.builder()
+//                .count(current_count)
+//                .avgCount(avgCount)
+//                .build();
+//        if (byId.isPresent()) {
+//            return countResponseDto;
+//        } else {
+//            throw new Exception();
+//        }
+//    }
 
 
     //현재 GYM 인원수 조회
@@ -217,7 +253,7 @@ public class GymService {
     @Transactional
     public void decrease_count(Long id) throws Exception {
         int count = gymRepository.decrease_count(id);
-        inputService.insert_data(count,id);
+
     }
 
     @Transactional
@@ -279,6 +315,15 @@ public class GymService {
     public Long check_code(int code) throws Exception{
         Gym gym = gymRepository.find_code(code);
         return gym.getId();
+    }
+
+    public boolean duplication_code(int code) throws Exception{
+        Gym gym = gymRepository.checkCode(code);
+        if(gym == null){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Transactional

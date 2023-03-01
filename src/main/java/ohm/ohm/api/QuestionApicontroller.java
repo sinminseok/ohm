@@ -63,9 +63,9 @@ public class QuestionApicontroller {
     }
 
 
-    @ApiOperation(value = "Question t삭제", response = String.class)
+    @ApiOperation(value = "Question 삭제", response = String.class)
     @DeleteMapping("/question/{questionId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<String> delete(
             @PathVariable Long questionId
 

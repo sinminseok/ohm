@@ -1,4 +1,5 @@
 package ohm.ohm.entity.Manager;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,13 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 
-
 // ROLE은 MANAGER,TRAINER 두개로 구분
 //MANAGER는 헬스장 총 책임자(사장)
 //TRAINER는 헬스장 소속 트레이너(직원)
 @Entity
 @Getter
 @NoArgsConstructor
-public class Manager{
+public class Manager {
 
 
     @Id
@@ -51,13 +51,10 @@ public class Manager{
     //자기소개
     private String introduce;
 
+    private String position;
+
     //실제이름
     private String nickname;
-
-    private int age;
-
-
-    private String email;
 
 
     @ManyToMany
@@ -76,27 +73,26 @@ public class Manager{
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
-    public void register_profile(String profile,String profileOrignName){
+    public void register_profile(String profile, String profileOrignName) {
         this.profileUrl = profile;
         this.profileOrignName = profileOrignName;
     }
 
 
-    public void update(ManagerDto manager){
+    public void update(ManagerDto manager) {
 
+        this.position = manager.getPosition();
         this.name = manager.getName();
         this.lastModifiedTime = LocalDateTime.now();
         this.nickname = manager.getNickname();
-       // this.profileUrl = manager.profileUrl;
         this.oneline_introduce = manager.getOneline_introduce();
         this.introduce = manager.getIntroduce();
-        this.age = manager.getAge();
-        this.email = manager.getEmail();
     }
 
     @Builder
-    public Manager(Gym gym,String name,String profileOrignName, String password ,String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities){
+    public Manager(String position, Gym gym, String name, String profileOrignName, String password, String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities) {
         this.name = name;
+        this.position = position;
         this.gym = gym;
         this.profileOrignName = profileOrignName;
         this.createdTime = LocalDateTime.now();
@@ -105,11 +101,8 @@ public class Manager{
         this.profileUrl = profile;
         this.oneline_introduce = oneline_introduce;
         this.introduce = introduce;
-        this.age = age;
-        this.email = email;
         this.authorities = authorities;
     }
-
 
 
 }

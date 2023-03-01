@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 public class ManagerRequestDto {
     private String name;
 
+    private String position;
+
     private String email;
 
     private String password;

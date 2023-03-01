@@ -20,8 +20,6 @@ public class Question {
     @Column(name = "question_id")
     private Long id;
 
-    private String title;
-
     private String content;
 
     @JsonIgnore
@@ -34,8 +32,7 @@ public class Question {
     private Answer answer;
 
     @Builder
-    public Question(String title,String content,Gym gym,Answer answer){
-        this.title = title;
+    public Question(String content,Gym gym,Answer answer){
         this.content = content;
         this.gym = gym;
         this.answer = answer;

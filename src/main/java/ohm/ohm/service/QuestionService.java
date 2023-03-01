@@ -33,14 +33,11 @@ public class QuestionService {
         Optional<Gym> byId = gymRepository.findById(gymId);
 
         Question question = Question.builder()
-                .title(questionDto.getTitle())
                 .content(questionDto.getContent())
                 .gym(byId.get())
                 .build();
 
         Question save = questionRepository.save(question);
-        System.out.println(save);
-        System.out.println("Ddd");
 
         return save.getId();
 
