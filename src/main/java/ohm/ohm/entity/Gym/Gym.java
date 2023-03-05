@@ -12,6 +12,7 @@ import ohm.ohm.entity.Input.Input;
 import ohm.ohm.entity.Manager.Manager;
 import ohm.ohm.entity.Post.Post;
 import ohm.ohm.entity.Question.Question;
+import ohm.ohm.entity.Statistics.Statistics;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -62,6 +63,12 @@ public class Gym{
     private List<GymImg> imgs;
 
 
+    @OneToOne(mappedBy = "gym")
+    private Statistics statistics;
+
+//    @OneToOne
+//    @JoinColumn(name = "statistics_id")
+//    private Statistics statistics;
 
     @OneToOne
     @JoinColumn(name = "gymtime_id")

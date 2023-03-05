@@ -49,7 +49,7 @@ public class AnswerApiController {
     }
 
 
-    @ApiOperation(value = "Answer 삭제", response = Long.class)
+    @ApiOperation(value = "Answer 삭제", response = String.class)
     @DeleteMapping("/answer/{answerId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<String> delete(

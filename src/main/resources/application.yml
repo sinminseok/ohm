@@ -3,16 +3,18 @@ server:
   port: 8080
 
 
-
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/ohm?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: root
+#    password: sin981023@
   datasource:
-    url: jdbc:h2:tcp://localhost/~/jpashop;MODE=MYSQL
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-1.cyk7yfbo4hg6.us-east-2.rds.amazonaws.com:3306/ohmdb?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: admin
+    password: dudthfalstjr12
+
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -25,16 +27,42 @@ spring:
       max-request-size: 200MB
 
   jpa:
+    database: mysql   # 추가 해준 부분
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
+
 
     hibernate:
-      ddl-auto: create
+      naming:
+        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+
     properties:
       hibernate:
         show-sql:true
         format_sql = true
+cloud:
+  aws:
+    s3:
+      bucket: ohm-image
+    credentials:
+      access-key: AKIA2UIUJNLYHUKTE4GL
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
 
 logging.level:
   org.hirbernate.SQL: debug
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
 
 
 jwt:

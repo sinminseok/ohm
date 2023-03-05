@@ -43,8 +43,6 @@ public class ManagerApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
-
-
     @ApiOperation(value = "manager 회원가입", response = ManagerDto.class)
     @PostMapping("/manager/{gymId}")
     public ResponseEntity<ManagerDto> manager_signup(

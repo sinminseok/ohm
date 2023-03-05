@@ -37,8 +37,6 @@ public class FileHandlerUtils {
         List<GymImg> fileList = new ArrayList<>();
 
 
-
-
         if (multipartFiles.isEmpty()) {
             return fileList;
         }

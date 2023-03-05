@@ -1,4 +1,5 @@
 package ohm.ohm.service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
@@ -21,13 +22,19 @@ import ohm.ohm.repository.gym.GymPriceRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.gym.GymTimeRepository;
 import ohm.ohm.repository.input.InputRepository;
+import ohm.ohm.s3.AmazonS3ResourceStorage;
 import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -35,6 +42,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class GymService {
 
+
+    private final AmazonS3ResourceStorage amazonS3ResourceStorage;
     private final GymRepository gymRepository;
     private final GymImgRepository gymImgRepository;
     private final InputRepository inputRepository;
@@ -46,20 +55,20 @@ public class GymService {
 
 
     @Transactional
-    public void delete_price(List<Long> ids) throws Exception{
-        for(Long id : ids){
-           gymPriceRepository.delete(gymPriceRepository.findById(id).get());
+    public void delete_price(List<Long> ids) throws Exception {
+        for (Long id : ids) {
+            gymPriceRepository.delete(gymPriceRepository.findById(id).get());
         }
         return;
     }
 
 
     @Transactional
-    public void delete_img(List<Long> ids) throws Exception{
+    public void delete_img(List<Long> ids) throws Exception {
 
-        for(Long id : ids){
+        for (Long id : ids) {
             GymImg gymImg = gymImgRepository.findById(id).get();
-            fileHandler.delete_file(gymImg.getFilePath());
+            amazonS3ResourceStorage.deleteObjectByKey(gymImg.getFilePath());
             gymImgRepository.delete(gymImg);
         }
     }
@@ -69,7 +78,7 @@ public class GymService {
     @Transactional
     public Long save(GymRequestDto gymDto) throws Exception {
 
-       // gymRepository.checkCode(gymDto.getCode());
+        // gymRepository.checkCode(gymDto.getCode());
 
         //img save
         Gym gym = Gym.builder()
@@ -90,23 +99,33 @@ public class GymService {
 
     @Transactional
     public Long save_img(Long gymId, List<MultipartFile> files) throws Exception {
-
         Optional<Gym> gym = gymRepository.findById(gymId);
+        if (files == null) {
 
-        System.out.println(files);
+        } else {
 
-        if(files==null){
+            for (MultipartFile multipartFile : files) {
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter dateTimeFormatter =
+                        DateTimeFormatter.ofPattern("yyyyMMdd");
+                String current_date = now.format(dateTimeFormatter);
+                String uuid_string = UUID.randomUUID().toString();
 
-        }else{
-            List<GymImg> gymImgList = fileHandler.gymimg_parseFileInfo(gym.get(), files);
 
+                String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+                //url,orignName
 
-            if (!gymImgList.isEmpty()) {
-                for (GymImg gymImg : gymImgList) {
-                    //파일을 DB에 저장
-                    gymImgRepository.save(gymImg);
-                }
+                // 파일 DTO 생성
+                GymImg gymImg = GymImg.builder()
+                        .gym(gym.get())
+                        .origFileName(multipartFile.getOriginalFilename())
+                        .filePath(current_date + File.separator +uuid_string+ext)
+                        .build();
+
+                amazonS3ResourceStorage.upload(multipartFile, current_date,uuid_string+ext);
+                gymImgRepository.save(gymImg);
             }
+
         }
 
 
@@ -124,8 +143,8 @@ public class GymService {
         System.out.println(gyms.size());
         for (Gym gym : gyms) {
             List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
-            for(GymImg gymImg :gym.getImgs()){
-                gymImgDtos.add(appConfig.modelMapper().map(gymImg,GymImgResponseDto.class));
+            for (GymImg gymImg : gym.getImgs()) {
+                gymImgDtos.add(appConfig.modelMapper().map(gymImg, GymImgResponseDto.class));
             }
 
             GymResponseDto gymResponseDto = GymResponseDto.builder()
@@ -151,8 +170,8 @@ public class GymService {
 
         for (Gym gym : gyms) {
             List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
-            for(GymImg gymImg :gym.getImgs()){
-                gymImgDtos.add(appConfig.modelMapper().map(gymImg,GymImgResponseDto.class));
+            for (GymImg gymImg : gym.getImgs()) {
+                gymImgDtos.add(appConfig.modelMapper().map(gymImg, GymImgResponseDto.class));
             }
 
             GymResponseDto gymResponseDto = GymResponseDto.builder()
@@ -173,8 +192,8 @@ public class GymService {
     public GymResponseDto findById(Long id) throws Exception {
         Gym gym = gymRepository.findGymFetchJoin(id);
         List<GymImgResponseDto> gymImgDtos = new ArrayList<GymImgResponseDto>();
-        for(GymImg gymImg :gym.getImgs()){
-            gymImgDtos.add(appConfig.modelMapper().map(gymImg,GymImgResponseDto.class));
+        for (GymImg gymImg : gym.getImgs()) {
+            gymImgDtos.add(appConfig.modelMapper().map(gymImg, GymImgResponseDto.class));
         }
 
         GymResponseDto gymResponseDto = GymResponseDto.builder()
@@ -194,7 +213,6 @@ public class GymService {
     }
 
 
-
     public int findById_count(Long id) throws Exception {
         Optional<Gym> byId = gymRepository.findById(id);
         if (byId.isPresent()) {
@@ -203,8 +221,6 @@ public class GymService {
             throw new Exception();
         }
     }
-
-
 
 
 //    public CountResponseDto find_countresponse(Long gymId) throws Exception {
@@ -249,15 +265,27 @@ public class GymService {
 
     }
 
+    //현재 GYM 인원수 0으로 초기화
+    @Transactional
+    public void reset_count(Long id) throws Exception {
+        int count = gymRepository.reset_count(id);
+    }
+
     //현재 GYM 인원수 감소(1감소)
     @Transactional
     public void decrease_count(Long id) throws Exception {
-        int count = gymRepository.decrease_count(id);
+        Optional<Gym> byId = gymRepository.findById(id);
+        if (byId.get().getCurrent_count() == 0) {
+            return;
+        } else {
+            int count = gymRepository.decrease_count(id);
+        }
+
 
     }
 
     @Transactional
-    public Long register_price(Long gymId, GymPriceDto gymPriceDto){
+    public Long register_price(Long gymId, GymPriceDto gymPriceDto) {
 
         Optional<Gym> byId = gymRepository.findById(gymId);
 
@@ -272,7 +300,7 @@ public class GymService {
     }
 
     @Transactional
-    public Long register_time(Long gymId, GymTimeDto gymTimeDto){
+    public Long register_time(Long gymId, GymTimeDto gymTimeDto) {
 
         Optional<Gym> byId = gymRepository.findById(gymId);
 
@@ -286,7 +314,6 @@ public class GymService {
                 .build();
 
 
-
         GymTime save = gymTimeRepository.save(gymTime);
 
         //변경감지
@@ -296,49 +323,48 @@ public class GymService {
         return save.getId();
     }
 
-    public GymTimeDto get_time(Long gymId){
+    public GymTimeDto get_time(Long gymId) {
         Gym timeByGymId = gymRepository.findTimeByGymId(gymId);
         GymTime gymTime = timeByGymId.getGymTime();
-        return appConfig.modelMapper().map(gymTime,GymTimeDto.class);
+        return appConfig.modelMapper().map(gymTime, GymTimeDto.class);
     }
 
-    public List<GymPriceDto> get_prices(Long gymId){
+    public List<GymPriceDto> get_prices(Long gymId) {
         List<GymPrice> prices = gymPriceRepository.findPriceByGymId(gymId);
         List<GymPriceDto> priceDtos = new ArrayList<GymPriceDto>();
-        for(GymPrice gymPrice : prices){
-            priceDtos.add(appConfig.modelMapper().map(gymPrice,GymPriceDto.class));
+        for (GymPrice gymPrice : prices) {
+            priceDtos.add(appConfig.modelMapper().map(gymPrice, GymPriceDto.class));
         }
         return priceDtos;
     }
 
 
-    public Long check_code(int code) throws Exception{
+    public Long check_code(int code) throws Exception {
         Gym gym = gymRepository.find_code(code);
         return gym.getId();
     }
 
-    public boolean duplication_code(int code) throws Exception{
+    public boolean duplication_code(int code) throws Exception {
         Gym gym = gymRepository.checkCode(code);
-        if(gym == null){
+        if (gym == null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     @Transactional
-    public Optional<Gym> update_gym(GymDto gymDto){
+    public Optional<Gym> update_gym(GymDto gymDto) {
         Optional<Gym> byId = gymRepository.findById(gymDto.getId());
-        byId.get().update(appConfig.modelMapper().map(gymDto,Gym.class));
+        byId.get().update(appConfig.modelMapper().map(gymDto, Gym.class));
         return byId;
     }
 
     @Transactional
-    public Optional<GymTime> update_time(Long gymId, GymTimeDto gymTimeDto){
+    public Optional<GymTime> update_time(Long gymId, GymTimeDto gymTimeDto) {
 
         Optional<GymTime> byId = gymTimeRepository.findById(gymTimeDto.getId());
-        byId.get().update(appConfig.modelMapper().map(gymTimeDto,GymTime.class));
-
+        byId.get().update(appConfig.modelMapper().map(gymTimeDto, GymTime.class));
 
         return byId;
     }

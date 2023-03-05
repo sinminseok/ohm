@@ -37,7 +37,7 @@ public class QuestionApicontroller {
     }
 
 
-    @ApiOperation(value = "Question 한개 조회", response = Long.class)
+    @ApiOperation(value = "Question 한개 조회", response = QuestionDto.class)
     @GetMapping("/question/{questionId}")
     public ResponseEntity<QuestionDto> findById(
             @PathVariable Long questionId
@@ -50,7 +50,7 @@ public class QuestionApicontroller {
 
 
 
-    @ApiOperation(value = "Question 모두 조회", response = Long.class)
+    @ApiOperation(value = "Question 모두 조회", response = QuestionDto.class,responseContainer = "List")
     @GetMapping("/question/all/{gymId}")
     public ResponseEntity<List<QuestionDto>> findall(
             @PathVariable Long gymId

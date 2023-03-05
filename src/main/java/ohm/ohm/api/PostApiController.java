@@ -1,14 +1,10 @@
 package ohm.ohm.api;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.PostDto.PostDto;
-import ohm.ohm.dto.requestDto.ImageIdRequestDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
-import ohm.ohm.service.GymService;
-import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -82,18 +78,17 @@ public class PostApiController {
     }
 
 
-
     //Post img 수정
     @ApiOperation(value = "PostIMG 수정", response = String.class)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
-    @PatchMapping("/post/img/{postId}")
+    @PostMapping("/post/img/update/{postId}")
     public ResponseEntity<String> update_img(
             @RequestParam List<Long> imgIds,
             @PathVariable Long postId,
             @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) throws Exception {
         postService.delete_imgs(imgIds);
-        postService.save_img(postId,files);
+        postService.save_img(postId, files);
         return ResponseEntity.ok("Remove!");
     }
 

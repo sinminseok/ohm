@@ -89,17 +89,17 @@ public class InputService {
         return save.getId();
     }
 
-    //시간별 인원수 자료
-    @Transactional
-    public List<String> gettime_value(Long gymId) {
-        List<String> results = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            System.out.println(i);
-            results.add(inputRepository.sumcount(String.valueOf(i),gymId,dayofweek()).toString());
-        }
-
-        return results;
-    }
+//    //시간별 인원수 자료
+//    @Transactional
+//    public List<String> gettime_value(Long gymId) {
+//        List<String> results = new ArrayList<>();
+//        for (int i = 0; i < 24; i++) {
+//            System.out.println(i);
+//            results.add(inputRepository.sumcount(String.valueOf(i),gymId,dayofweek()).toString());
+//        }
+//
+//        return results;
+//    }
 
 
 }

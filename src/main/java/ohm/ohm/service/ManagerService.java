@@ -16,7 +16,9 @@ import ohm.ohm.entity.Post.PostImg;
 import ohm.ohm.repository.manager.CodeRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.manager.ManagerRepository;
+import ohm.ohm.s3.AmazonS3ResourceStorage;
 import ohm.ohm.utils.FileHandlerUtils;
+import ohm.ohm.utils.MultipartUtil;
 import ohm.ohm.utils.SecurityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,10 +31,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +42,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ManagerService implements UserDetailsService {
-
+    private final AmazonS3ResourceStorage amazonS3ResourceStorage;
     private final ManagerRepository managerRepository;
     private final GymRepository gymRepository;
     private final AppConfig appConfig;
@@ -59,27 +61,45 @@ public class ManagerService implements UserDetailsService {
     }
 
     @Transactional
-    public void profile_save(Long managerId, MultipartFile file) throws Exception {
+    public void profile_save(Long managerId, MultipartFile multipartFile) throws Exception {
         Optional<Manager> byId = managerRepository.findById(managerId);
-        String fileURL = fileHandler.profileimg_parseFileInfo(file);
-        byId.get().register_profile(fileURL, file.getOriginalFilename());
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter =
+                DateTimeFormatter.ofPattern("yyyyMMdd");
+        String current_date = now.format(dateTimeFormatter);
+        String uuid_string = UUID.randomUUID().toString();
+
+
+        String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+        //url,orignName
+        byId.get().register_profile(current_date + File.separator + uuid_string + ext, multipartFile.getOriginalFilename());
+        amazonS3ResourceStorage.upload(multipartFile, current_date, uuid_string + ext);
     }
 
     @Transactional
-    public void profile_edit(Long managerId, MultipartFile file) throws Exception {
+    public void profile_edit(Long managerId, MultipartFile multipartFile) throws Exception {
         Optional<Manager> byId = managerRepository.findById(managerId);
         String profileUrl = byId.get().getProfileUrl();
 
         if (profileUrl == null) {
 
         } else {
-            fileHandler.delete_file(profileUrl);
+            amazonS3ResourceStorage.deleteObjectByKey(byId.get().getProfileUrl());
         }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter =
+                DateTimeFormatter.ofPattern("yyyyMMdd");
+        String current_date = now.format(dateTimeFormatter);
+        String uuid_string = UUID.randomUUID().toString();
 
 
-        System.out.println("222");
-        String fileURL = fileHandler.profileimg_parseFileInfo(file);
-        byId.get().register_profile(fileURL, file.getOriginalFilename());
+        String ext = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+        //url,orignName
+        byId.get().register_profile(current_date + File.separator + uuid_string + ext, multipartFile.getOriginalFilename());
+        amazonS3ResourceStorage.upload(multipartFile, current_date, uuid_string + ext);
+
+
+        byId.get().register_profile(current_date + File.separator + uuid_string + ext, multipartFile.getOriginalFilename());
     }
 
     //Manager 회원가입
@@ -92,7 +112,6 @@ public class ManagerService implements UserDetailsService {
         Authority authority = Authority.builder()
                 .authorityName("ROLE_MANAGER")
                 .build();
-
 
         Manager manager = Manager.builder()
                 .position(managerDto.getPosition())

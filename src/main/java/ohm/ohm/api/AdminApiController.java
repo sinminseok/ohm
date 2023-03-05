@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@Api(tags = {"CEO API"})
+@Api(tags = {"ADMIN API"})
 @RequiredArgsConstructor
 public class AdminApiController {
 
@@ -56,7 +56,7 @@ public class AdminApiController {
     }
 
 
-    @ApiOperation(value = "profile 등록", response = Long.class)
+    @ApiOperation(value = "profile(image) 등록", response = String.class)
     @PostMapping("/admin/image/{managerId}")
     public ResponseEntity<String> save_img(
             @PathVariable Long managerId,
@@ -76,7 +76,7 @@ public class AdminApiController {
     }
 
 
-    @ApiOperation(value = "ID로 정보조회", response = ManagerDto.class)
+    @ApiOperation(value = "ID로 관리자 계정 정보조회", response = ManagerDto.class)
     @GetMapping("/admin/info/{managerId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<ManagerDto> getManagerInfoById(
@@ -87,7 +87,8 @@ public class AdminApiController {
         return ResponseEntity.ok(managerInfo);
     }
 
-    @ApiOperation(value = "profile 수정", response = Long.class)
+
+    @ApiOperation(value = "profile(image) 수정", response = String.class)
     @PatchMapping("/admin/image/{managerId}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     public ResponseEntity<String> profile_update(
@@ -112,7 +113,7 @@ public class AdminApiController {
     }
 
 
-    @ApiOperation(value = "Manager 회원탈퇴", response = String.class)
+    @ApiOperation(value = "ADMIN 회원탈퇴", response = String.class)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @DeleteMapping("/admin/{managerId}")
     public ResponseEntity<String> remove(@PathVariable Long managerId) {
@@ -120,7 +121,7 @@ public class AdminApiController {
         return ResponseEntity.ok("Remove!");
     }
 
-    @ApiOperation(value = "GymId로 해당 Gym에 소속된 manager모두조회", response = ManagerDto.class)
+    @ApiOperation(value = "GymId로 해당 Gym에 소속된 manager모두조회", response = TrainerResponseDto.class,responseContainer = "List")
     @GetMapping("/admin/findall/{gymId}")
     public ResponseEntity<List<TrainerResponseDto>> trainer_findall(
             @PathVariable Long gymId
@@ -129,7 +130,7 @@ public class AdminApiController {
         return ResponseEntity.ok(trainerResponseDtos);
     }
 
-    @ApiOperation(value = "Id로 Manager(ROLE이 Trainer)조회", response = ManagerDto.class)
+    @ApiOperation(value = "Id로 Manager(ROLE이 Trainer)조회", response = TrainerResponseDto.class)
     @GetMapping("/admin/{managerId}")
     public ResponseEntity<TrainerResponseDto> trainer_find(
             @PathVariable Long managerId
