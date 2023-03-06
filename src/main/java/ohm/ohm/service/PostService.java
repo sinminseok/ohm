@@ -13,7 +13,6 @@ import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.post.PostImgRepository;
 import ohm.ohm.repository.post.PostRepository;
 import ohm.ohm.s3.AmazonS3ResourceStorage;
-import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +35,6 @@ public class PostService {
     private final GymRepository gymRepository;
     private final PostImgRepository postImgRepository;
     private final AppConfig appConfig;
-    private final FileHandlerUtils fileHandler;
 
     @Transactional
     public void delete_imgs(List<Long> ids) throws Exception {
