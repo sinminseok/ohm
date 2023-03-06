@@ -12,13 +12,10 @@ import ohm.ohm.entity.Code;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Manager.Authority;
 import ohm.ohm.entity.Manager.Manager;
-import ohm.ohm.entity.Post.PostImg;
 import ohm.ohm.repository.manager.CodeRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.manager.ManagerRepository;
 import ohm.ohm.s3.AmazonS3ResourceStorage;
-import ohm.ohm.utils.FileHandlerUtils;
-import ohm.ohm.utils.MultipartUtil;
 import ohm.ohm.utils.SecurityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -48,7 +45,6 @@ public class ManagerService implements UserDetailsService {
     private final AppConfig appConfig;
     private final CodeRepository codeRepository;
     private final PasswordEncoder passwordEncoder;
-    private final FileHandlerUtils fileHandler;
 
 
     public boolean check_code(String code) {

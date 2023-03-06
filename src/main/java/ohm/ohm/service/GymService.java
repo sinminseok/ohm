@@ -23,7 +23,6 @@ import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.gym.GymTimeRepository;
 import ohm.ohm.repository.input.InputRepository;
 import ohm.ohm.s3.AmazonS3ResourceStorage;
-import ohm.ohm.utils.FileHandlerUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +47,6 @@ public class GymService {
     private final GymImgRepository gymImgRepository;
     private final InputRepository inputRepository;
     private final AppConfig appConfig;
-    private final FileHandlerUtils fileHandler;
     private final GymTimeRepository gymTimeRepository;
     private final GymPriceRepository gymPriceRepository;
     private final InputService inputService;
