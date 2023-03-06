@@ -1,13 +1,10 @@
 package ohm.ohm.api;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.dto.responseDto.PostResponseDto;
-import ohm.ohm.service.GymService;
-import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,14 +22,12 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-    private final ManagerService managerService;
-    private final GymService gymService;
 
 
     //manager or trainer가 등록
     @ApiOperation(value = "Post 저장", response = Long.class)
     @PostMapping(value = "/post/{gymId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_CEO','ROLE_TRAINER')")
     public ResponseEntity<Long> save_dto(
             @PathVariable Long gymId,
             @Valid @RequestBody PostDto para_postDto
@@ -44,7 +39,7 @@ public class PostApiController {
     //manager or trainer가 등록
     @ApiOperation(value = "Post image 저장", response = Long.class)
     @PostMapping(value = "/post/img/{postId}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_CEO','ROLE_TRAINER')")
     public ResponseEntity<Long> save_imgs(
             @PathVariable Long postId,
             @RequestPart(value = "images", required = false) List<MultipartFile> files
@@ -73,18 +68,33 @@ public class PostApiController {
 
     //Post 수정
     @ApiOperation(value = "Post 수정", response = String.class)
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @PatchMapping("/post")
     public ResponseEntity<String> update(
             @RequestBody PostDto postDto
-            ) {
+    ) {
         postService.update_post(postDto);
+        return ResponseEntity.ok("Update!");
+    }
+
+
+    //Post img 수정
+    @ApiOperation(value = "PostIMG 수정", response = String.class)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
+    @PostMapping("/post/img/update/{postId}")
+    public ResponseEntity<String> update_img(
+            @RequestParam List<Long> imgIds,
+            @PathVariable Long postId,
+            @RequestPart(value = "images", required = false) List<MultipartFile> files
+    ) throws Exception {
+        postService.delete_imgs(imgIds);
+        postService.save_img(postId, files);
         return ResponseEntity.ok("Remove!");
     }
 
     //Post 삭제
     @ApiOperation(value = "Post 삭제", response = String.class)
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_TRAINER','ROLE_CEO')")
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<String> remove(@PathVariable Long postId) {
         postService.delete(postId);

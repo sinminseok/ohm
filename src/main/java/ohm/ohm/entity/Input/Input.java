@@ -26,6 +26,9 @@ public class Input {
 
     private int count;
 
+    // input or output
+    private String type;
+
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,8 +37,9 @@ public class Input {
 
 
     @Builder
-    public Input(String time,String date,int count,Gym gym){
+    public Input(String time,String date,int count,Gym gym,String type){
         this.time = time;
+        this.type = type;
         this.date = date;
         this.count = count;
         this.gym = gym;

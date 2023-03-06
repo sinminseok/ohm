@@ -18,8 +18,9 @@ public class ManagerDto {
 
     private String name;
 
-    private String email;
+    private String position;
 
+    private String email;
 
     private String nickname;
 
@@ -38,15 +39,13 @@ public class ManagerDto {
     private Set<Authority> authorities;
 
     @Builder
-    public ManagerDto(String profile, String oneline_introduce, String introduce, String nickname, Long id, String name, String email, Integer age, GymDto gymDto, Set<Authority> authorities) {
+    public ManagerDto(String profile, String oneline_introduce, String introduce, String nickname, Long id, String name, GymDto gymDto, Set<Authority> authorities) {
         this.id = id;
         this.name = name;
         this.nickname = nickname;
         this.profile = profile;
         this.oneline_introduce = oneline_introduce;
         this.introduce = introduce;
-        this.email = email;
-        this.age = age;
         this.gymDto = gymDto;
         this.authorities = authorities;
     }
@@ -55,19 +54,16 @@ public class ManagerDto {
     public ManagerDto(Long id, String name, String email, String password, Integer age, GymDto gymDto, Set<Authority> authorities) {
         this.id = id;
         this.name = name;
-        this.age = age;
         this.gymDto = gymDto;
         this.authorities = authorities;
     }
 
     public ManagerDto(String name, String email) {
         this.name = name;
-        this.email = email;
     }
 
     public ManagerDto(Long id, String name, String email) {
         this.id = id;
         this.name = name;
-        this.email = email;
     }
 }

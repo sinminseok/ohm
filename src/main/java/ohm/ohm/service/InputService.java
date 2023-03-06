@@ -7,8 +7,6 @@ import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Input.Input;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.input.InputRepository;
-import ohm.ohm.utils.DateUtils;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,13 +59,14 @@ public class InputService {
     }
 
 
+
+
     @Transactional
-    public Long insert_data(int count, Long gymId) {
+    public Long insert_data(int count, Long gymId,String type) {
         Optional<Gym> gym = gymRepository.findById(gymId);
 
         LocalTime now = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH");
-        // 포맷 적용하기
         String formatedNow = now.format(formatter);
 
         String hour;
@@ -80,6 +79,7 @@ public class InputService {
         var day = dayofweek();
         Input input = Input.builder()
                 .date(day)
+                .type(type)
                 .count(count)
                 .gym(gym.get())
                 .time(hour)
@@ -89,16 +89,17 @@ public class InputService {
         return save.getId();
     }
 
-    @Transactional
-    public List<String> get_value(Long gymId) {
-        List<String> results = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            System.out.println(i);
-            results.add(inputRepository.sumcount(String.valueOf(i),gymId).toString());
-        }
-
-        return results;
-    }
+//    //시간별 인원수 자료
+//    @Transactional
+//    public List<String> gettime_value(Long gymId) {
+//        List<String> results = new ArrayList<>();
+//        for (int i = 0; i < 24; i++) {
+//            System.out.println(i);
+//            results.add(inputRepository.sumcount(String.valueOf(i),gymId,dayofweek()).toString());
+//        }
+//
+//        return results;
+//    }
 
 
 }
