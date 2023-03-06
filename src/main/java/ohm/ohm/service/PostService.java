@@ -13,6 +13,10 @@ import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.post.PostImgRepository;
 import ohm.ohm.repository.post.PostRepository;
 
+import ohm.ohm.s3.AmazonS3ResourceStorage;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,14 +98,6 @@ public class PostService {
             }
 
         }
-//        List<PostImg> postImgs = fileHandler.postimg_parseFileInfo(post.get(), files);
-//
-//        if(!postImgs.isEmpty()){
-//            for(PostImg postImg :postImgs){
-//                PostImg save = postImgRepository.save(postImg);
-//
-//            }
-//        }
 
         return post.get().getId();
 
@@ -114,12 +110,7 @@ public class PostService {
         Slice<Post> by_gymId = postRepository.findBy_gymId(gymid, pageRequest);
 
         Slice<PostResponseDto> postDtos = by_gymId.map(
-                p -> PostResponseDto.builder()
-                        .content(p.getContent())
-                        .id(p.getId())
-                        .title(p.getTitle()).build());
-
-
+                p -> appConfig.modelMapper().map(p,PostResponseDto.class));
         return postDtos;
     }
 
