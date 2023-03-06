@@ -15,6 +15,6 @@ public class GymPriceDto {
 
     private String price;
 
-    @JsonIgnore
-    private GymDto gym;
+//    @JsonIgnore
+//    private GymDto gym;
 }

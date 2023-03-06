@@ -20,15 +20,24 @@ public class GymResponseDto {
 
     private int current_count;
 
+    private int code;
+
+    private int trainer_count;
+
+
+
     private List<GymImgResponseDto> imgs;
 
     private String introduce;
 
+
     private String oneline_introduce;
 
     @Builder
-    public GymResponseDto(Long id,int current_count,String name,String address,int count,List<GymImgResponseDto> imgs,String introduce,String oneline_introduce){
+    public GymResponseDto(int code,int trainer_count,Long id,int current_count,String name,String address,int count,List<GymImgResponseDto> imgs,String introduce,String oneline_introduce){
         this.name = name;
+        this.code = code;
+        this.trainer_count = trainer_count;
         this.id = id;
         this.current_count = current_count;
         this.address = address;

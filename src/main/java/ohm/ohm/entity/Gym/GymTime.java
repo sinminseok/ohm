@@ -45,6 +45,18 @@ public class GymTime {
         this.holiday = HOLIDAY;
     }
 
+    public void update(GymTime gymTime){
+
+        this.id = gymTime.getId();
+        this.sunday = gymTime.sunday;
+       // this.gym = gym;
+        this.closeddays = gymTime.closeddays;
+        this.saturday = gymTime.saturday;
+        this.holiday = gymTime.holiday;
+        this.weekday = gymTime.weekday;
+
+    }
+
 
 
 

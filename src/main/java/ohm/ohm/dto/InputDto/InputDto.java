@@ -21,8 +21,9 @@ public class InputDto {
 
     private int count;
 
-    @JsonIgnore
-    private GymDto gym;
+    // input or output
+    private String type;
+
 
 
 

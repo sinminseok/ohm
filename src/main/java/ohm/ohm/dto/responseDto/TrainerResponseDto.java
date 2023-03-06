@@ -10,6 +10,9 @@ public class TrainerResponseDto {
 
     private Long id;
 
+    private String position;
+
+    //아이디
     private String name;
 
     private String profile;
@@ -18,6 +21,7 @@ public class TrainerResponseDto {
     //자기소개
     private String introduce;
 
+    //이름,닉내임
     private String nickname;
 
     private int age;
