@@ -10,10 +10,12 @@ spring:
 #    username: root
 #    password: sin981023@
   datasource:
+
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.cyk7yfbo4hg6.us-east-2.rds.amazonaws.com:3306/ohmdb?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: admin
     password: dudthfalstjr12
+
 
 
   thymeleaf:
