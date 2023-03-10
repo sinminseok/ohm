@@ -90,7 +90,7 @@ public class Manager {
     }
 
     @Builder
-    public Manager(String position, Gym gym, String name, String profileOrignName, String password, String nickname, String profile, String oneline_introduce, String introduce, Integer age, String email, Set<Authority> authorities) {
+    public Manager(String position, Gym gym, String name, String profileOrignName, String password, String nickname, String profile, String oneline_introduce, String introduce, Set<Authority> authorities) {
         this.name = name;
         this.position = position;
         this.gym = gym;

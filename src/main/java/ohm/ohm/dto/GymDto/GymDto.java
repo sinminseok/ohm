@@ -2,9 +2,7 @@ package ohm.ohm.dto.GymDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohm.ohm.dto.InputDto.InputDto;
 import ohm.ohm.dto.ManagerDto.ManagerDto;
-import ohm.ohm.dto.PostDto.PostDto;
 import ohm.ohm.entity.Post.Post;
 
 import javax.validation.constraints.NotNull;
@@ -55,8 +53,6 @@ public class GymDto {
     @JsonIgnore
     private GymPriceDto gymPrice;
 
-    @JsonIgnore
-    private List<InputDto> inputs;
 
 
     @JsonIgnore

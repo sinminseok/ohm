@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;import java.util.ArrayList;
 
 @Service
 @Slf4j
@@ -27,23 +25,22 @@ public class StatisticsService {
     private final AppConfig appConfig;
 
     public StatisticsDto get_statistics(Long gymId){
-        List<String> results = new ArrayList<>();
         Statistics statistics = statisticsRepository.get_statistics(gymId);
-
         return  appConfig.modelMapper().map(statistics, StatisticsDto.class);
     }
 
 
+    //초기 GYM등록시 테이블 생성후 연관관계 매핑
     @Transactional
     public void register_table(Long gymId){
-
         Statistics build = Statistics.builder()
                 .gym(gymRepository.findById(gymId).get())
                 .build();
-
         statisticsRepository.save(build);
     }
 
+
+    //회원 입 출입시 statistics 테이블 평균값 최신화
     @Transactional
     public void add_statistics(Long gymId, int count) {
         LocalTime now = LocalTime.now();
@@ -57,7 +54,6 @@ public class StatisticsService {
             hour = formatedNow.toString();
         }
 
-        System.out.println("시간 = "+hour);
         switch (Integer.parseInt(hour)) {
             case 1:
                 statisticsRepository.update_1(gymId, Double.valueOf(count));

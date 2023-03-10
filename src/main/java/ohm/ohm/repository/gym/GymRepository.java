@@ -15,8 +15,8 @@ public interface GymRepository extends JpaRepository<Gym,Long>, GymRepositoryCus
     @EntityGraph(attributePaths = "imgs")
     List<Gym> findByNameContaining(String name);
 
-//    @Query("select g from Gym g left join fetch g.imgs")
-//    List<Gym> findAllFetchJoin();
+    @Query("select distinct g from Gym g left join fetch g.imgs")
+    List<Gym> findAllFetchJoin();
 
     @Query("select g from Gym g left join fetch g.imgs where g.id = :id")
     Gym findGymFetchJoin(@Param("id")Long id);

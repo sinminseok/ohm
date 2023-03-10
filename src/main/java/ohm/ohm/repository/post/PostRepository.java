@@ -14,7 +14,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 //    @Query("select p from Post p where p.gym.id = :id")
 //    List<Post> findBy_gymId(@Param("id") Long id);
 
-    @Query("select p from Post p where p.gym.id = :id")
+    @Query("select distinct p from Post p where p.gym.id = :id")
     Slice<Post> findBy_gymId(@Param("id") Long id, Pageable pageable);
 
 }

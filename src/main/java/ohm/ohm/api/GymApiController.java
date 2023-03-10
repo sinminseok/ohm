@@ -11,7 +11,6 @@ import ohm.ohm.dto.Statistics.StatisticsDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.service.GymService;
-import ohm.ohm.service.InputService;
 import ohm.ohm.service.ManagerService;
 import ohm.ohm.service.StatisticsService;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +28,11 @@ import java.util.List;
 public class GymApiController {
 
     private final GymService gymService;
-    private final InputService inputService;
-    private  final StatisticsService statisticsService;
+    private final StatisticsService statisticsService;
     private final ManagerService managerService;
 
+
+    //-----admin api ------
 
     @ApiOperation(value = "Gym 등록(ROLE_CEO만 사용)", response = Long.class)
     @PostMapping("/gym")
@@ -65,75 +65,6 @@ public class GymApiController {
         return ResponseEntity.ok(aLong);
     }
 
-    //모든헬스장 조회
-    @ApiOperation(value = "모든 Gym 조회", response = GymResponseDto.class, responseContainer = "List")
-    @GetMapping("/gyms")
-    public ResponseEntity<List<GymResponseDto>> findall() throws Exception {
-        List<GymResponseDto> findall = gymService.findall();
-        return ResponseEntity.ok(findall);
-    }
-
-    @ApiOperation(value = "시간대별 평균 인원 조회", response = String.class, responseContainer = "List")
-    @GetMapping("/gym/avg/{gymId}")
-    public ResponseEntity<StatisticsDto> search_avg(
-            @PathVariable Long gymId
-
-    ) throws Exception {
-
-
-        StatisticsDto value = statisticsService.get_statistics(gymId);
-        return ResponseEntity.ok(value);
-    }
-
-
-    //이름으로 헬스장 조회
-    @ApiOperation(value = "이름으로 헬스장 조회", response = GymResponseDto.class, responseContainer = "List")
-    @GetMapping("/gym/name/{gymName}")
-    public ResponseEntity<List<GymResponseDto>> findByName(@PathVariable String gymName) throws Exception {
-        List<GymResponseDto> byName = gymService.findByName(gymName);
-        return ResponseEntity.ok(byName);
-    }
-
-    //ID로 헬스장 조회
-    @ApiOperation(value = "ID로 헬스장 조회", response = GymResponseDto.class)
-    @GetMapping("/gym/{gymId}")
-    public ResponseEntity<GymResponseDto> findById(@PathVariable Long gymId) throws Exception {
-        return ResponseEntity.ok(gymService.findById(gymId));
-    }
-
-
-    //현재 헬스장 인원
-    @ApiOperation(value = "현재 Gym에 있는 인원조회", response = Integer.class)
-    @GetMapping("/gym/count/{gymId}")
-    public ResponseEntity<Integer> current_count(@PathVariable Long gymId) throws Exception {
-        int current_count = gymService.current_count(gymId);
-        return ResponseEntity.ok(current_count);
-
-    }
-
-    //현재 헬스장 인원수 증가 api
-    @ApiOperation(value = "현재 Gym 인원증가", response = Integer.class)
-    @PostMapping("/gym/count-increase/{gymId}")
-    public ResponseEntity<Integer> increase_count(@PathVariable Long gymId) throws Exception {
-        gymService.increase_count(gymId);
-
-        int current_count = gymService.findById_count(gymId);
-        statisticsService.add_statistics(gymId,current_count);
-        return ResponseEntity.ok(current_count);
-    }
-
-    //헬스장 인원 감소 api
-    @ApiOperation(value = "현재 Gym 인원감소", response = Integer.class)
-    @PostMapping("/gym/count-decrease/{gymId}")
-    public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception {
-        gymService.decrease_count(gymId);
-        int current_count = gymService.findById_count(gymId);
-        statisticsService.add_statistics(gymId,current_count);
-       // inputService.insert_data(current_count, gymId, "output");
-        return ResponseEntity.ok(current_count);
-    }
-
-
     //Trainer가 회원가입시 code
     @ApiOperation(value = "code로 GymId조회", response = Long.class)
     @GetMapping("/gym/code/{code}")
@@ -160,22 +91,6 @@ public class GymApiController {
             return ResponseEntity.ok("NO");
         }
 
-    }
-
-
-    @ApiOperation(value = "gymId로 GymTime 조회", response = GymTimeDto.class)
-    @GetMapping("/gym/time/{gymId}")
-    public ResponseEntity<GymTimeDto> get_gymTime(@PathVariable Long gymId) throws Exception {
-        GymTimeDto time = gymService.get_time(gymId);
-        return ResponseEntity.ok(time);
-    }
-
-
-    @ApiOperation(value = "gymId로 GymPrice 조회", response = GymPriceDto.class, responseContainer = "List")
-    @GetMapping("/gym/price/{gymId}")
-    public ResponseEntity<List<GymPriceDto>> get_gymPrice(@PathVariable Long gymId) throws Exception {
-        List<GymPriceDto> prices = gymService.get_prices(gymId);
-        return ResponseEntity.ok(prices);
     }
 
 
@@ -258,6 +173,92 @@ public class GymApiController {
         gymService.reset_count(gymId);
 
         return ResponseEntity.ok("RESET!");
+    }
+
+
+    // ----- client & admin API
+
+    //모든헬스장 조회
+    @ApiOperation(value = "모든 Gym 조회", response = GymResponseDto.class, responseContainer = "List")
+    @GetMapping("/gyms")
+    public ResponseEntity<List<GymResponseDto>> findall() throws Exception {
+        List<GymResponseDto> findall = gymService.findall();
+        return ResponseEntity.ok(findall);
+    }
+
+    @ApiOperation(value = "시간대별 평균 인원 조회", response = String.class, responseContainer = "List")
+    @GetMapping("/gym/avg/{gymId}")
+    public ResponseEntity<StatisticsDto> search_avg(
+            @PathVariable Long gymId
+
+    ) {
+
+        StatisticsDto value = statisticsService.get_statistics(gymId);
+        return ResponseEntity.ok(value);
+    }
+
+
+    //이름으로 헬스장 조회
+    @ApiOperation(value = "이름으로 헬스장 조회", response = GymResponseDto.class, responseContainer = "List")
+    @GetMapping("/gym/name/{gymName}")
+    public ResponseEntity<List<GymResponseDto>> findByName(@PathVariable String gymName) throws Exception {
+        List<GymResponseDto> byName = gymService.findByName(gymName);
+        return ResponseEntity.ok(byName);
+    }
+
+    //ID로 헬스장 조회
+    @ApiOperation(value = "ID로 헬스장 조회", response = GymResponseDto.class)
+    @GetMapping("/gym/{gymId}")
+    public ResponseEntity<GymResponseDto> findById(@PathVariable Long gymId) throws Exception {
+        return ResponseEntity.ok(gymService.findById(gymId));
+    }
+
+
+    //현재 헬스장 인원
+    @ApiOperation(value = "현재 Gym에 있는 인원조회", response = Integer.class)
+    @GetMapping("/gym/count/{gymId}")
+    public ResponseEntity<Integer> current_count(@PathVariable Long gymId) throws Exception {
+        int current_count = gymService.current_count(gymId);
+        return ResponseEntity.ok(current_count);
+
+    }
+
+    //현재 헬스장 인원수 증가 api
+    @ApiOperation(value = "현재 Gym 인원증가", response = Integer.class)
+    @PostMapping("/gym/count-increase/{gymId}")
+    public ResponseEntity<Integer> increase_count(@PathVariable Long gymId) throws Exception {
+        gymService.increase_count(gymId);
+
+        int current_count = gymService.findById_count(gymId);
+        statisticsService.add_statistics(gymId, current_count);
+        return ResponseEntity.ok(current_count);
+    }
+
+    //헬스장 인원 감소 api
+    @ApiOperation(value = "현재 Gym 인원감소", response = Integer.class)
+    @PostMapping("/gym/count-decrease/{gymId}")
+    public ResponseEntity<Integer> decrease_count(@PathVariable Long gymId) throws Exception {
+        gymService.decrease_count(gymId);
+        int current_count = gymService.findById_count(gymId);
+        statisticsService.add_statistics(gymId, current_count);
+        // inputService.insert_data(current_count, gymId, "output");
+        return ResponseEntity.ok(current_count);
+    }
+
+
+    @ApiOperation(value = "gymId로 GymTime 조회", response = GymTimeDto.class)
+    @GetMapping("/gym/time/{gymId}")
+    public ResponseEntity<GymTimeDto> get_gymTime(@PathVariable Long gymId) throws Exception {
+        GymTimeDto time = gymService.get_time(gymId);
+        return ResponseEntity.ok(time);
+    }
+
+
+    @ApiOperation(value = "gymId로 GymPrice 조회", response = GymPriceDto.class, responseContainer = "List")
+    @GetMapping("/gym/price/{gymId}")
+    public ResponseEntity<List<GymPriceDto>> get_gymPrice(@PathVariable Long gymId) throws Exception {
+        List<GymPriceDto> prices = gymService.get_prices(gymId);
+        return ResponseEntity.ok(prices);
     }
 
 

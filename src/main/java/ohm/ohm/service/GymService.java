@@ -3,25 +3,20 @@ package ohm.ohm.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohm.ohm.config.AppConfig;
-import ohm.ohm.dto.AnswerDto.AnswerDto;
 import ohm.ohm.dto.GymDto.GymDto;
 import ohm.ohm.dto.GymDto.GymPriceDto;
 import ohm.ohm.dto.GymDto.GymTimeDto;
-import ohm.ohm.dto.QuestionDto.QuestionDto;
 import ohm.ohm.dto.requestDto.GymRequestDto;
-import ohm.ohm.dto.responseDto.CountResponseDto;
 import ohm.ohm.dto.responseDto.GymImgResponseDto;
 import ohm.ohm.dto.responseDto.GymResponseDto;
 import ohm.ohm.entity.Gym.Gym;
 import ohm.ohm.entity.Gym.GymImg;
 import ohm.ohm.entity.Gym.GymPrice;
 import ohm.ohm.entity.Gym.GymTime;
-import ohm.ohm.entity.Post.PostImg;
 import ohm.ohm.repository.gym.GymImgRepository;
 import ohm.ohm.repository.gym.GymPriceRepository;
 import ohm.ohm.repository.gym.GymRepository;
 import ohm.ohm.repository.gym.GymTimeRepository;
-import ohm.ohm.repository.input.InputRepository;
 import ohm.ohm.s3.AmazonS3ResourceStorage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,11 +40,9 @@ public class GymService {
     private final AmazonS3ResourceStorage amazonS3ResourceStorage;
     private final GymRepository gymRepository;
     private final GymImgRepository gymImgRepository;
-    private final InputRepository inputRepository;
     private final AppConfig appConfig;
     private final GymTimeRepository gymTimeRepository;
     private final GymPriceRepository gymPriceRepository;
-    private final InputService inputService;
 
 
     @Transactional
@@ -134,7 +127,7 @@ public class GymService {
 
     //모든 GYM 조회 App에서 List형식으로 조회
     public List<GymResponseDto> findall() {
-        List<Gym> gyms = gymRepository.findAllGymList();
+        List<Gym> gyms = gymRepository.findAllFetchJoin();
 
         List<GymResponseDto> gymDtos = new ArrayList<GymResponseDto>();
 
